@@ -8,7 +8,7 @@ namespace LibraryInventory.Model.Product
 {
     public class FinancialInfo
     {
-        private decimal fineAmount = 0.0m;
+        private decimal fineAmount;
         private FineType fineOccurrence = FineType.Daily;
         private decimal purchasedPrice;
         private decimal retailValue;

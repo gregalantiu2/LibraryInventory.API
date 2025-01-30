@@ -1,15 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LibraryInventory.Model.Product
+﻿namespace LibraryInventory.Model.Product
 {
     public abstract class ProductBase
     {
-        public MetaInfo MetaInfo { get; set; } = new MetaInfo();
-        public FinancialInfo FinancialInfo { get; set; } = new FinancialInfo();
-        public CheckoutInfo CheckoutInfo { get; set; } = new CheckoutInfo();
+        private MetaInfo _metaInfo = new MetaInfo();
+        private FinancialInfo _financialInfo = new FinancialInfo();
+        private CheckoutInfo _checkoutInfo = new CheckoutInfo();
+
+        public MetaInfo MetaInfo
+        {
+            get { return _metaInfo; }
+            set { _metaInfo = value; }
+        }
+
+        public FinancialInfo FinancialInfo
+        {
+            get { return _financialInfo; }
+            set { _financialInfo = value; }
+        }
+
+        public CheckoutInfo CheckoutInfo
+        {
+            get { return _checkoutInfo; }
+            set { _checkoutInfo = value; }
+        }
     }
 }

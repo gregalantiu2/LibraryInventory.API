@@ -10,7 +10,7 @@ namespace LibraryInventory.API.Controllers
     [ApiController]
     [Route("[controller]")]
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-    public class BorrowController : ControllerBase
+    public class CheckoutController : ControllerBase
     {
         // GET: api/<BorrowController>
         [HttpGet]
