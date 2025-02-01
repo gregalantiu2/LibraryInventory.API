@@ -5,12 +5,22 @@ namespace LibraryInventory.Model.Models.Product
     public class ItemPolicy
     {
         private readonly int _itemPolicyId;
-        private string _policyName = "Custom";
+        private string _policyName;
         private bool _allowedToCheckout;
         private int _maxRenewalsAllowed;
         private int _checkoutDays;
         private decimal _fineAmount;
         private FineType _fineOccurrence;
+
+        public ItemPolicy(string policyName, bool allowedToCheckout, int maxRenewalsAllowed, int checkoutDays, decimal fineAmount, FineType fineOccurrence)
+        {
+            _policyName = policyName;
+            _allowedToCheckout = allowedToCheckout;
+            _maxRenewalsAllowed = maxRenewalsAllowed;
+            _checkoutDays = checkoutDays;
+            _fineAmount = fineAmount;
+            _fineOccurrence = fineOccurrence;
+        }
 
         public int ItemPolicyId
         {
