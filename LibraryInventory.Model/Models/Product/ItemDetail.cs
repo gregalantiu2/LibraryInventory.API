@@ -2,7 +2,7 @@
 {
     public class ItemDetail
     {
-        private int _itemDetailId;
+        private readonly int _itemDetailId;
         private string _title;
         private string _description;
 

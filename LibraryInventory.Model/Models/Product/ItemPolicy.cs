@@ -4,7 +4,7 @@ namespace LibraryInventory.Model.Models.Product
 {
     public class ItemPolicy
     {
-        private int _itemPolicyId;
+        private readonly int _itemPolicyId;
         private string _policyName = "Custom";
         private bool _allowedToCheckout;
         private int _maxRenewalsAllowed;

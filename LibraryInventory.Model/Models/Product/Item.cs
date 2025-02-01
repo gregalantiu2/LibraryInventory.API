@@ -2,18 +2,18 @@
 {
     public abstract class Item
     {
-        private int _itemId;
+        private readonly int _itemId;
         private ItemDetail _itemDetail;
         private ItemPolicy? _itemPolicy;
-        private bool _isCheckedOut;
-        private DateTime? _checkedOutDate;
-        private DateTime? _dueBack;
-        private int _renewedCount;
+        private ItemBorrowStatus? _itemBorrowStatus;
+        private bool _lostOrSold;
 
-        public Item(ItemDetail itemDetail, ItemPolicy? itemPolicy = null)
+        public Item(ItemDetail itemDetail, ItemPolicy? itemPolicy = null, ItemBorrowStatus? itemBorrowStatus = null)
         {
             _itemDetail = itemDetail;
             _itemPolicy = itemPolicy;
+            _itemBorrowStatus = itemBorrowStatus;
+            _lostOrSold = false;
         }
         public int ItemId
         {
@@ -29,27 +29,18 @@
             get { return _itemPolicy; }
             set { _itemPolicy = value; }
         }
-        public bool IsCheckedOut
+        public ItemBorrowStatus? ItemBorrowStatus
         {
-            get { return _isCheckedOut; }
-            set { _isCheckedOut = value; }
+            get { return _itemBorrowStatus; }
+            set { _itemBorrowStatus = value; }
         }
-        public DateTime? CheckedOutDate
+        public bool LostOrSold
         {
-            get { return _checkedOutDate; }
-            set { _checkedOutDate = _isCheckedOut == false ? null : value; }
-        }
-        public DateTime? DueBack
-        {
-            get { return _dueBack; }
-            set { _dueBack = value; }
-        }
-        public int RenewedCount
-        {
-            get { return _renewedCount; }
-            set 
+            get { return _lostOrSold; }
+            set
             {
-                _renewedCount = _isCheckedOut == false ? 0 : value; 
+                _lostOrSold = value;
+                _itemBorrowStatus = _lostOrSold == true ? null : _itemBorrowStatus;
             }
         }
     }
