@@ -10,7 +10,7 @@ namespace LibraryInventory.API.Controllers
     [ApiController]
     [Route("[controller]")]
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-    public class ProductController : ControllerBase
+    public class ItemController : ControllerBase
     {
         // GET: api/<ProductController>
         [HttpGet]
