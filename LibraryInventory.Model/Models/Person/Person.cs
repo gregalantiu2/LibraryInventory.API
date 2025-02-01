@@ -1,10 +1,4 @@
 ﻿using LibraryInventory.Model.Models.Shared;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibraryInventory.Model.Models.Person
 {
@@ -14,6 +8,7 @@ namespace LibraryInventory.Model.Models.Person
         private string? _middleName;
         private string _lastName;
         private ContactInfo _contactinfo;
+        private bool _active;
 
         public Person(string firstName, string lastName, ContactInfo contactinfo, string? middeleName = null)
         {
@@ -41,6 +36,11 @@ namespace LibraryInventory.Model.Models.Person
         {
             get { return _contactinfo; }
             set { _contactinfo = value; }
+        }
+        public bool Active
+        {
+            get { return _active; }
+            set { _active = value; }
         }
     }
 }

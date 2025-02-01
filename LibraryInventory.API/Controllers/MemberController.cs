@@ -12,36 +12,39 @@ namespace LibraryInventory.API.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class MemberController : ControllerBase
     {
-        // GET: api/<MemberController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("search")]
+        public async Task<IEnumerable<string>> SearchMembers()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<MemberController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        [Route("getMember/{id}")]
+        public async Task<ActionResult> GetMember(int id)
         {
-            return "value";
+            return Ok();
         }
 
-        // POST api/<MemberController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("addMember")]
+        public async Task<ActionResult> AddMember([FromBody] string value)
         {
+            return Ok();
         }
 
-        // PUT api/<MemberController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        [Route("updateMember/{id}")]
+        public async Task<ActionResult> UpdateMember(int id, [FromBody] string value)
         {
+            return Ok();
         }
 
-        // DELETE api/<MemberController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPut]
+        [Route("inactivateMember/{id}")]
+        public async Task<ActionResult> InactivateMember(int id)
         {
+            return Ok();
         }
     }
 }
