@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibraryInventory.Service.Interfaces
+namespace LibraryInventory.Service
 {
-    public interface IPerson
+    public class ItemService
     {
     }
 }
