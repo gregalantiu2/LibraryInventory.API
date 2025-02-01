@@ -8,6 +8,7 @@ namespace LibraryInventory.Model.Models.Member
 {
     public class Member
     {
+        private readonly int _memberId;
 
     }
 }
