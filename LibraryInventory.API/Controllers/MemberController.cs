@@ -14,9 +14,9 @@ namespace LibraryInventory.API.Controllers
     {
         [HttpGet]
         [Route("search")]
-        public async Task<IEnumerable<string>> SearchMembers()
+        public async Task<ActionResult> SearchMembers()
         {
-            return new string[] { "value1", "value2" };
+            return Ok();
         }
 
         [HttpGet]

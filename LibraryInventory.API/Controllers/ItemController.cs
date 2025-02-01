@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LibraryInventory.API.RequestModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 namespace LibraryInventory.API.Controllers
@@ -9,11 +10,11 @@ namespace LibraryInventory.API.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class ItemController : ControllerBase
     {
-        [HttpGet]
-        [Route("search")]
-        public async Task<IEnumerable<string>> SearchItems()
+        [HttpPost]
+        [Route("search/{searchTerm}")]
+        public async Task<ActionResult> SearchItems([FromBody] SearchItemRequest searchItemRequest, string searchTerm)
         {
-            return new string[] { "value1", "value2" };
+            return Ok();
         }
 
         [HttpGet]
