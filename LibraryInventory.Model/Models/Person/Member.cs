@@ -5,6 +5,9 @@ namespace LibraryInventory.Model.Models.Person
     public class Member : Person
     {
         private readonly string _memberId;
+        private int _itemsBorrowed;
+        private decimal _fineAmountOwed;
+
         public Member(string firstName, string lastName, ContactInfo contactinfo) : base(firstName, lastName, contactinfo)
         {
 
@@ -12,6 +15,16 @@ namespace LibraryInventory.Model.Models.Person
         public string MemberId
         {
             get { return _memberId; }
+        }
+        public int ItemsBorrowed
+        {
+            get { return _itemsBorrowed; }
+            set { _itemsBorrowed = value; }
+        }
+        public decimal FineAmountOwed
+        {
+            get { return _fineAmountOwed; }
+            set { _fineAmountOwed = value; }
         }
     }
 }

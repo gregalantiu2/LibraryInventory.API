@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace LibraryInventory.API.Controllers
 {
     [Authorize]
@@ -12,36 +9,39 @@ namespace LibraryInventory.API.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class ItemController : ControllerBase
     {
-        // GET: api/<ProductController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("search")]
+        public async Task<IEnumerable<string>> SearchItems()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<ProductController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        [Route("getItem/{id}")]
+        public async Task<ActionResult> GetItem(int id)
         {
-            return "value";
+            return Ok();
         }
 
-        // POST api/<ProductController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("addItem")]
+        public async Task<ActionResult> AddItem([FromBody] string value)
         {
+            return Ok();
         }
 
-        // PUT api/<ProductController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        [Route("updateItem/{id}")]
+        public async Task<ActionResult> UpdateItem(int id, [FromBody] string value)
         {
+            return Ok();
         }
 
-        // DELETE api/<ProductController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        [Route("deleteItem/{id}")]
+        public async Task<ActionResult> DeleteItem(int id)
         {
+            return Ok();
         }
     }
 }

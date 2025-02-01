@@ -9,7 +9,13 @@ namespace LibraryInventory.API.Controllers
     [ApiController]
     [Route("[controller]")]
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-    public class TransactionController : ControllerBase
+    public class EmployeeController : ControllerBase
     {
+        [HttpGet]
+        [Route("search")]
+        public IEnumerable<string> SearchItems(bool? active)
+        {
+            return new string[] { "value1", "value2" };
+        }
     }
 }

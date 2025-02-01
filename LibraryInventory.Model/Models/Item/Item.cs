@@ -7,14 +7,14 @@
         private ItemPolicy? _itemPolicy;
         private ItemBorrowStatus? _itemBorrowStatus;
         private string _itemLocation;
-        private bool _itemLostOrSold;
+        private bool _itemActive;
 
         public Item(ItemDetail itemDetail, ItemPolicy? itemPolicy = null, ItemBorrowStatus? itemBorrowStatus = null)
         {
             _itemDetail = itemDetail;
             _itemPolicy = itemPolicy;
             _itemBorrowStatus = itemBorrowStatus;
-            _itemLostOrSold = false;
+            _itemActive = false;
         }
         public int ItemId
         {
@@ -42,11 +42,11 @@
         }
         public bool LostOrSold
         {
-            get { return _itemLostOrSold; }
+            get { return _itemActive; }
             set
             {
-                _itemLostOrSold = value;
-                _itemBorrowStatus = _itemLostOrSold == true ? null : _itemBorrowStatus;
+                _itemActive = value;
+                _itemBorrowStatus = _itemActive == true ? null : _itemBorrowStatus;
             }
         }
     }
