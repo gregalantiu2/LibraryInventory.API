@@ -10,6 +10,7 @@ namespace LibraryInventory.Model.Enums
     {
         Daily,
         Weekly,
-        Monthly
+        Monthly,
+        Yearly
     }
 }

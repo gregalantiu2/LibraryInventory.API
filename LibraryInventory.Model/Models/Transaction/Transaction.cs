@@ -8,16 +8,14 @@ namespace LibraryInventory.Model.Models.Transaction
         private TransactionType _transactionType;
         private DateTime _transactionDate;
         private int _itemId;
-        private int _memberId;
-        private string _createdBy;
+        private int? _memberId;
 
-        public Transaction(TransactionType transactionType, DateTime transactionDate, int itemId, int memberId, string createdBy)
+        public Transaction(TransactionType transactionType, DateTime transactionDate, int itemId, int? memberId = null)
         {
             _transactionType = transactionType;
             _transactionDate = transactionDate;
             _itemId = itemId;
             _memberId = memberId;
-            _createdBy = createdBy;
         }
 
         public int TransactionId
@@ -44,15 +42,10 @@ namespace LibraryInventory.Model.Models.Transaction
             set { _itemId = value; }
         }
 
-        public int MemberId
+        public int? MemberId
         {
             get { return _memberId; }
             set { _memberId = value; }
-        }
-
-        public string CreatedBy
-        {
-            get { return _createdBy; }
         }
     }
 }

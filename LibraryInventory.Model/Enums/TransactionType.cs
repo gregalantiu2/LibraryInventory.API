@@ -11,6 +11,10 @@ namespace LibraryInventory.Model.Enums
         CheckOut,
         CheckIn,
         Renewal,
+        Bought,
+        Sold,
+        DonatedToLibrary,
+        DonatedByLibrary,
         Lost
     }
 }

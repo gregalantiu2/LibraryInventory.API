@@ -1,4 +1,5 @@
 ﻿using LibraryInventory.Model.Enums;
+using LibraryInventory.Model.Models.Item;
 
 namespace LibraryInventory.Model.Models.Product
 {
@@ -9,10 +10,11 @@ namespace LibraryInventory.Model.Models.Product
         private string _itemDescription;
         private ItemType _itemType;
 
-        public ItemDetail(string title, string description)
+        public ItemDetail(string title, string description, ItemType itemType)
         {
             _itemTitle = title;
             _itemDescription = description;
+            _itemType = itemType;
         }
         public int ItemDetailId
         {
