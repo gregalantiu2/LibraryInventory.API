@@ -2,12 +2,15 @@
 
 namespace LibraryInventory.Service.Interfaces
 {
-    public interface IItemService<T>
+    public interface IItemService
     {
         IEnumerable<Item> SearchItems(string[] itemTypes, string[] propertyNames, string searchTerm);
-        T AddItem(T item);
-        T UpdateItem(T item);
+        Item AddItem(Item item);
+        Item UpdateItem(Item item);
         void DeleteItem(int itemId);
-        T GetItem(T item);
+        Item GetItem(int itemId);
+        ItemBorrowStatus GetItemBorrowStatus(int itemId);
+        ItemDetail GetItemDetail(int itemId);
+        ItemPolicy GetItemPolicy(int itemId);
     }
 }
