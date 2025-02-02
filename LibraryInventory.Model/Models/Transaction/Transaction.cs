@@ -5,19 +5,19 @@
         private int _transactionId;
         private TransactionType _transactionType;
         private DateTime _transactionDate;
-        private decimal? _transactionAmount;
+        private TransactionPayment? _transactionPayment;
         private int _itemId;
         private int? _memberId;
 
         public Transaction(TransactionType transactionType
                             ,DateTime transactionDate
                             ,int itemId
-                            ,decimal? transactionAmount = null
+                            , TransactionPayment? transactionPayment = null
                             ,int? memberId = null)
         {
             _transactionType = transactionType;
             _transactionDate = transactionDate;
-            _transactionAmount = transactionAmount;
+            _transactionPayment = transactionPayment;
             _itemId = itemId;
             _memberId = memberId;
         }
@@ -38,10 +38,10 @@
             get { return _transactionDate; }
             set { _transactionDate = value; }
         }
-        public decimal? TransactionAmount
+        public TransactionPayment? TransactionPayment
         {
-            get { return _transactionAmount; }
-            set { _transactionAmount = value; }
+            get { return _transactionPayment; }
+            set { _transactionPayment = value; }
         }
         public int ItemId
         {
