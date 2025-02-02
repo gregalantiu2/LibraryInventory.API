@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LibraryInventory.Data.Entities
 {
     [Table("ItemPolicy")]
-    public class ItemPolicyEntity
+    public class ItemPolicyEntity : BaseEntity
     {
         [Key]
         public int ItemPolicyId { get; set; }

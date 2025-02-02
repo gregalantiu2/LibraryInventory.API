@@ -5,7 +5,7 @@ using LibraryInventory.Data.Entities.Shared;
 namespace LibraryInventory.Data.Entities.Person
 {
     [Table("Member")]
-    public class MemberEntity
+    public class MemberEntity : BaseEntity
     {
         [Key]
         public int MemberId { get; set; }

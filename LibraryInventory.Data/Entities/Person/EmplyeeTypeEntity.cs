@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LibraryInventory.Data.Entities.Person
 {
     [Table("EmployeeType")]
-    public class EmployeeTypeEntity
+    public class EmployeeTypeEntity : BaseEntity
     {
         [Key]
         public int EmployeeTypeId { get; set; }

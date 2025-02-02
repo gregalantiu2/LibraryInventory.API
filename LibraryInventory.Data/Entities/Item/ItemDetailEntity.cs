@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace LibraryInventory.Data.Entities.Item
 {
     [Table("ItemDetail")]
-    public class ItemDetailEntity
+    public class ItemDetailEntity : BaseEntity
     {
         [Key]
         public int ItemDetailId { get; set; }

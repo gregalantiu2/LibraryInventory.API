@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LibraryInventory.Data.Entities
 {
     [Table("TransactionType")]
-    public class TransactionTypeEntity
+    public class TransactionTypeEntity : BaseEntity
     {
         [Key]
         public int TransactionTypeId { get; set; }

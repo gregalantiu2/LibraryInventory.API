@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace LibraryInventory.Data.Entities.Item
 {
     [Table("ItemFineOccurenceType")]
-    public class ItemFineOccurenceTypeEntity
+    public class ItemFineOccurenceTypeEntity : BaseEntity
     {
         [Key]
         public int ItemFineOccurenceTypeId { get; set; }

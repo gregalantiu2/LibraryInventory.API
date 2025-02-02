@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LibraryInventory.Data.Entities.Shared
 {
     [Table("ContactInfo")]
-    public class ContactInfoEntity
+    public class ContactInfoEntity : BaseEntity
     {
         [Key]
         public int ContactInfoId { get; set; }
