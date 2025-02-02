@@ -8,7 +8,13 @@ namespace LibraryInventory.Model.Models.Shared
 {
     public class ContactInfo
     {
-        public ContactInfo(string phoneNumber, string email, string street, string city, string state, string zipCode, string country)
+        public ContactInfo(string phoneNumber
+                            ,string email
+                            ,string street
+                            ,string city
+                            ,string state
+                            ,string zipCode,
+                             string country)
         {
             _phoneNumber = phoneNumber;
             _email = email;

@@ -1,4 +1,5 @@
 ﻿using LibraryInventory.Model.Enums;
+using LibraryInventory.Model.Models.Item;
 
 namespace LibraryInventory.Model.Models.Product
 {
@@ -10,7 +11,7 @@ namespace LibraryInventory.Model.Models.Product
         private int _maxRenewalsAllowed;
         private int _checkoutDays;
         private decimal _fineAmount;
-        private FineType _fineOccurrence;
+        private ItemFineOccurenceType _fineOccurrence;
 
         public ItemPolicy(string policyName, bool allowedToCheckout, int maxRenewalsAllowed, int checkoutDays, decimal fineAmount, FineType fineOccurrence)
         {
@@ -54,7 +55,7 @@ namespace LibraryInventory.Model.Models.Product
             set { _fineAmount = value; }
         }
 
-        public FineType FineOccurrence
+        public ItemFineOccurenceType FineOccurrence
         {
             get { return _fineOccurrence; }
             set { _fineOccurrence = value; }

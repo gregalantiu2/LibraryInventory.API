@@ -10,7 +10,10 @@ namespace LibraryInventory.Model.Models.Person
         private ContactInfo _contactinfo;
         private bool _active;
 
-        public Person(string firstName, string lastName, ContactInfo contactinfo, string? middeleName = null)
+        public Person(string firstName
+                        ,string lastName
+                        ,ContactInfo contactinfo
+                        ,string? middeleName = null)
         {
             _firstName = firstName;
             _middleName = middeleName;

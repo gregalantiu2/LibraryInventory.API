@@ -1,19 +1,23 @@
-﻿using LibraryInventory.Model.Enums;
-
-namespace LibraryInventory.Model.Models.Transaction
+﻿namespace LibraryInventory.Model.Models.Transaction
 {
     public class Transaction
     {
         private int _transactionId;
         private TransactionType _transactionType;
         private DateTime _transactionDate;
+        private decimal? _transactionAmount;
         private int _itemId;
         private int? _memberId;
 
-        public Transaction(TransactionType transactionType, DateTime transactionDate, int itemId, int? memberId = null)
+        public Transaction(TransactionType transactionType
+                            ,DateTime transactionDate
+                            ,int itemId
+                            ,decimal? transactionAmount = null
+                            ,int? memberId = null)
         {
             _transactionType = transactionType;
             _transactionDate = transactionDate;
+            _transactionAmount = transactionAmount;
             _itemId = itemId;
             _memberId = memberId;
         }
@@ -29,19 +33,21 @@ namespace LibraryInventory.Model.Models.Transaction
             get { return _transactionType; }
             set { _transactionType = value; }
         }
-
         public DateTime TransactionDate
         {
             get { return _transactionDate; }
             set { _transactionDate = value; }
         }
-
+        public decimal? TransactionAmount
+        {
+            get { return _transactionAmount; }
+            set { _transactionAmount = value; }
+        }
         public int ItemId
         {
             get { return _itemId; }
             set { _itemId = value; }
         }
-
         public int? MemberId
         {
             get { return _memberId; }

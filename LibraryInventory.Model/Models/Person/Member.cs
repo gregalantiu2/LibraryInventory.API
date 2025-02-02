@@ -8,7 +8,9 @@ namespace LibraryInventory.Model.Models.Person
         private int _itemsBorrowed;
         private decimal _fineAmountOwed;
 
-        public Member(string firstName, string lastName, ContactInfo contactinfo) : base(firstName, lastName, contactinfo)
+        public Member(string firstName
+                        ,string lastName
+                        ,ContactInfo contactinfo) : base(firstName, lastName, contactinfo)
         {
 
         }

@@ -1,5 +1,4 @@
-﻿using LibraryInventory.Model.Enums;
-using LibraryInventory.Model.Models.Item;
+﻿using LibraryInventory.Model.Models.Item;
 
 namespace LibraryInventory.Model.Models.Product
 {

@@ -1,14 +1,17 @@
-﻿using LibraryInventory.Model.Enums;
-using LibraryInventory.Model.Models.Shared;
+﻿using LibraryInventory.Model.Models.Shared;
 
 namespace LibraryInventory.Model.Models.Person
 {
     public class Employee : Person
     {
-        private readonly string _employeeId;
+        private readonly string? _employeeId;
         private EmployeeType _employeeType;
-        public Employee(string firstName, string lastName, ContactInfo contactinfo) : base(firstName, lastName, contactinfo)
+        public Employee(string firstName
+                        ,string lastName
+                        ,ContactInfo contactinfo
+                        ,EmployeeType employeeType) : base(firstName, lastName, contactinfo)
         {
+            _employeeType = employeeType;
         }
         public string EmployeeId
         {
