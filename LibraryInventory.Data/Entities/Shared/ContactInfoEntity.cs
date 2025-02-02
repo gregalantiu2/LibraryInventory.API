@@ -9,10 +9,10 @@ namespace LibraryInventory.Data.Entities.Shared
         [Key]
         public int ContactInfoId { get; set; }
    
-        [MaxLength(15)]
+        [MaxLength(20)]
         public required string PhoneNumber { get; set; }
         
-        [MaxLength(50)]
+        [MaxLength(255)]
         public required string Email { get; set; }
         
         [MaxLength(100)]
@@ -21,7 +21,7 @@ namespace LibraryInventory.Data.Entities.Shared
         [MaxLength(50)]
         public required string City { get; set; }
         
-        [MaxLength(50)]
+        [MaxLength(2)]
         public required string State { get; set; }
         
         [MaxLength(10)]

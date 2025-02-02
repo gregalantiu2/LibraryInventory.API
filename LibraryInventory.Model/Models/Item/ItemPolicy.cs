@@ -1,5 +1,4 @@
-﻿using LibraryInventory.Model.Enums;
-using LibraryInventory.Model.Models.Item;
+﻿using LibraryInventory.Model.Models.Item;
 
 namespace LibraryInventory.Model.Models.Product
 {
@@ -13,7 +12,7 @@ namespace LibraryInventory.Model.Models.Product
         private decimal _fineAmount;
         private ItemFineOccurenceType _fineOccurrence;
 
-        public ItemPolicy(string policyName, bool allowedToCheckout, int maxRenewalsAllowed, int checkoutDays, decimal fineAmount, FineType fineOccurrence)
+        public ItemPolicy(string policyName, bool allowedToCheckout, int maxRenewalsAllowed, int checkoutDays, decimal fineAmount, ItemFineOccurenceType fineOccurrence)
         {
             _policyName = policyName;
             _allowedToCheckout = allowedToCheckout;

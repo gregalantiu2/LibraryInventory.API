@@ -9,6 +9,7 @@ namespace LibraryInventory.Data.Entities
         [Key]
         public int TransactionPaymentId { get; set; }
 
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal PaymentAmount { get; set; }
 
         public int TransactionPaymentTypeId { get; set; }
