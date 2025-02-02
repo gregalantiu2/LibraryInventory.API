@@ -9,8 +9,9 @@ namespace LibraryInventory.Data.Entities
     {
         [Key]
         public int ItemPolicyId { get; set; }
-
-        public required string Name { get; set; }
+        
+        [MaxLength(50)]
+        public required string ItemPolicyName { get; set; }
 
         public bool AllowedToCheckout { get; set; }
 
@@ -28,7 +29,6 @@ namespace LibraryInventory.Data.Entities
 
 
         // Navigation properties
-        [ForeignKey("ItemId")]
-        public ItemEntity Item { get; set; }
+        public ICollection<ItemEntity>? Item { get; set; }
     }
 }

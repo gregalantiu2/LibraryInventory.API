@@ -9,7 +9,10 @@ namespace LibraryInventory.Data.Entities.Person
         [Key]
         public int EmployeeTypeId { get; set; }
         
-        [MaxLength(50)]
+        [MaxLength(25)]
         public required string EmployeeTypeName { get; set; }
+
+        // Navigation properties
+        public ICollection<EmployeeEntity>? Employee { get; set; }
     }
 }

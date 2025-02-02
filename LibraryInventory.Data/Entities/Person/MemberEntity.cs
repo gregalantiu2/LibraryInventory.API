@@ -26,6 +26,6 @@ namespace LibraryInventory.Data.Entities.Person
 
         // Navigation properties
         [ForeignKey("ContactInfoId")]
-        public ContactInfoEntity ContactInfo { get; set; }
+        public required ContactInfoEntity ContactInfo { get; set; }
     }
 }

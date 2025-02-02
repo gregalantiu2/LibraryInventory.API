@@ -18,16 +18,13 @@ namespace LibraryInventory.Data.Entities.Item
 
         public required string ItemDescription { get; set; }
 
-        public int ItemId { get; set; }
-
         public int ItemTypeId { get; set; }
 
 
         // Navigation properties
         [ForeignKey("ItemTypeId")]
-        public ItemTypeEntity ItemType { get; set; }
+        public required ItemTypeEntity ItemType { get; set; }
 
-        [ForeignKey("ItemId")]
-        public ItemEntity Item { get; set; }
+        public ICollection<ItemEntity>? Item { get; set; }
     }
 }

@@ -18,11 +18,17 @@ namespace LibraryInventory.Data.Entities
         public string? Location { get; set; }
 
         public bool IsActive { get; set; }
+        public int ItemPolicyId { get; set; }
+        public int ItemDetailId { get; set; }
 
 
         // Navigation properties
+        [ForeignKey("ItemDetailId")]
         public ItemDetailEntity? ItemDetail { get; set; }
+
+        [ForeignKey("ItemPolicyId")]
         public ItemPolicyEntity? ItemPolicy { get; set; }
+
         public ItemBorrowStatusEntity? ItemBorrowStatus { get; set; }
     }
 }

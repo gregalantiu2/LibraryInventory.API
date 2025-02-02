@@ -4,6 +4,7 @@ using LibraryInventory.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryInventory.Data.Migrations
 {
     [DbContext(typeof(LibraryInvetoryDbContext))]
-    partial class LibraryInvetoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250202210744_AddedAuditFields")]
+    partial class AddedAuditFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,8 +35,7 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -41,6 +43,9 @@ namespace LibraryInventory.Data.Migrations
                     b.Property<string>("ItemDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ItemTitle")
                         .IsRequired()
@@ -50,15 +55,18 @@ namespace LibraryInventory.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ItemDetailId");
 
-                    b.HasIndex("ItemTypeId");
+                    b.HasIndex("ItemId")
+                        .IsUnique();
+
+                    b.HasIndex("ItemTypeId")
+                        .IsUnique();
 
                     b.ToTable("ItemDetail");
                 });
@@ -76,8 +84,7 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -92,8 +99,7 @@ namespace LibraryInventory.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
@@ -119,8 +125,7 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -128,27 +133,16 @@ namespace LibraryInventory.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ItemDetailId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ItemPolicyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ItemId");
-
-                    b.HasIndex("ItemDetailId");
-
-                    b.HasIndex("ItemPolicyId");
 
                     b.ToTable("Item");
                 });
@@ -169,8 +163,7 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -184,22 +177,23 @@ namespace LibraryInventory.Data.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ItemPolicyName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<int>("MaxRenewalsAllowed")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ItemPolicyId");
+
+                    b.HasIndex("ItemId")
+                        .IsUnique();
 
                     b.ToTable("ItemPolicy");
                 });
@@ -217,23 +211,20 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ItemTypeName")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ItemTypeId");
 
@@ -253,8 +244,7 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -273,8 +263,7 @@ namespace LibraryInventory.Data.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
@@ -298,20 +287,18 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EmployeeTypeName")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
@@ -334,8 +321,7 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -357,8 +343,7 @@ namespace LibraryInventory.Data.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
@@ -390,8 +375,7 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -402,8 +386,7 @@ namespace LibraryInventory.Data.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
@@ -443,8 +426,7 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -456,8 +438,7 @@ namespace LibraryInventory.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
@@ -490,15 +471,13 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
@@ -531,23 +510,20 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("TransactionPaymentTypeName")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TransactionPaymentTypeId");
 
@@ -564,23 +540,20 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("TransactionTypeName")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TransactionTypeId");
 
@@ -589,11 +562,19 @@ namespace LibraryInventory.Data.Migrations
 
             modelBuilder.Entity("LibraryInventory.Data.Entities.Item.ItemDetailEntity", b =>
                 {
-                    b.HasOne("LibraryInventory.Data.Entities.ItemTypeEntity", "ItemType")
-                        .WithMany("ItemDetail")
-                        .HasForeignKey("ItemTypeId")
+                    b.HasOne("LibraryInventory.Data.Entities.ItemEntity", "Item")
+                        .WithOne("ItemDetail")
+                        .HasForeignKey("LibraryInventory.Data.Entities.Item.ItemDetailEntity", "ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("LibraryInventory.Data.Entities.ItemTypeEntity", "ItemType")
+                        .WithOne("ItemDetail")
+                        .HasForeignKey("LibraryInventory.Data.Entities.Item.ItemDetailEntity", "ItemTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
 
                     b.Navigation("ItemType");
                 });
@@ -609,23 +590,15 @@ namespace LibraryInventory.Data.Migrations
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("LibraryInventory.Data.Entities.ItemEntity", b =>
+            modelBuilder.Entity("LibraryInventory.Data.Entities.ItemPolicyEntity", b =>
                 {
-                    b.HasOne("LibraryInventory.Data.Entities.Item.ItemDetailEntity", "ItemDetail")
-                        .WithMany("Item")
-                        .HasForeignKey("ItemDetailId")
+                    b.HasOne("LibraryInventory.Data.Entities.ItemEntity", "Item")
+                        .WithOne("ItemPolicy")
+                        .HasForeignKey("LibraryInventory.Data.Entities.ItemPolicyEntity", "ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryInventory.Data.Entities.ItemPolicyEntity", "ItemPolicy")
-                        .WithMany("Item")
-                        .HasForeignKey("ItemPolicyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ItemDetail");
-
-                    b.Navigation("ItemPolicy");
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("LibraryInventory.Data.Entities.Person.EmployeeEntity", b =>
@@ -637,7 +610,7 @@ namespace LibraryInventory.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("LibraryInventory.Data.Entities.Person.EmployeeTypeEntity", "EmployeeType")
-                        .WithMany("Employee")
+                        .WithMany()
                         .HasForeignKey("EmployeeTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -696,29 +669,18 @@ namespace LibraryInventory.Data.Migrations
                     b.Navigation("TransactionPaymentType");
                 });
 
-            modelBuilder.Entity("LibraryInventory.Data.Entities.Item.ItemDetailEntity", b =>
-                {
-                    b.Navigation("Item");
-                });
-
             modelBuilder.Entity("LibraryInventory.Data.Entities.ItemEntity", b =>
                 {
                     b.Navigation("ItemBorrowStatus");
-                });
 
-            modelBuilder.Entity("LibraryInventory.Data.Entities.ItemPolicyEntity", b =>
-                {
-                    b.Navigation("Item");
+                    b.Navigation("ItemDetail");
+
+                    b.Navigation("ItemPolicy");
                 });
 
             modelBuilder.Entity("LibraryInventory.Data.Entities.ItemTypeEntity", b =>
                 {
                     b.Navigation("ItemDetail");
-                });
-
-            modelBuilder.Entity("LibraryInventory.Data.Entities.Person.EmployeeTypeEntity", b =>
-                {
-                    b.Navigation("Employee");
                 });
 #pragma warning restore 612, 618
         }

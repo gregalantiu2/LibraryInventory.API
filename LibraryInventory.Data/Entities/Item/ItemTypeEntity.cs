@@ -10,13 +10,14 @@ namespace LibraryInventory.Data.Entities
     {
         [Key]
         public int ItemTypeId { get; set; }
-
-        public required string Name { get; set; }
+        
+        [MaxLength(25)]
+        public required string ItemTypeName { get; set; }
 
         public string? AdditionalProperties { get; set; }
 
 
         // Navigation properties
-        public ItemDetailEntity? ItemDetail { get; set; }
+        public ICollection<ItemDetailEntity>? ItemDetail { get; set; }
     }
 }
