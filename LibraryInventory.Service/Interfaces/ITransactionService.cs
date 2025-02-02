@@ -8,5 +8,10 @@ namespace LibraryInventory.Service.Interfaces
 {
     public interface ITransactionService
     {
+        //Checkout
+        //Return
+        //Renew
+        //sell
+        //buy
     }
 }

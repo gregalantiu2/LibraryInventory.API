@@ -4,10 +4,12 @@ namespace LibraryInventory.Service.Interfaces
 {
     public interface IMemberService
     {
-        IEnumerable<Member> SearchMembers(string searchTerm);
-        Member AddMember(Member member);
-        Member UpdateItem(Member member);
-        void InactivateMember(int memberId);
-        Member GetMember(string memberId);
+        Task<IEnumerable<Member>> SearchMembersAsync(string searchTerm);
+        Task<Member> AddMemberAsync(Member member);
+        Task<Member> UpdateMemberAsync(Member member);
+        Task InactivateMemberAsync(string memberId);
+        Task DeleteMemberAsync(string memberId);
+        Task<Member> GetMemberAsync(string memberId);
+        Task<bool> MemberExistsAsync(string memberId);
     }
 }

@@ -1,16 +1,19 @@
-﻿using LibraryInventory.Model.Models.Product;
+﻿using LibraryInventory.Model.Models.Person;
+using LibraryInventory.Model.Models.Product;
 
 namespace LibraryInventory.Service.Interfaces
 {
     public interface IItemService
     {
-        IEnumerable<Item> SearchItems(string[] itemTypes, string[] propertyNames, string searchTerm);
-        Item AddItem(Item item);
-        Item UpdateItem(Item item);
-        void DeleteItem(int itemId);
-        Item GetItem(int itemId);
-        ItemBorrowStatus GetItemBorrowStatus(int itemId);
-        ItemDetail GetItemDetail(int itemId);
-        ItemPolicy GetItemPolicy(int itemId);
+        Task<IEnumerable<Item>> SearchItemsAsync(string searchTerm);
+        Task<Item> AddItemAsync(Item Item);
+        Task<Item> UpdateItemAsync(Item Item);
+        Task InactivateItemAsync(string ItemId);
+        Task DeleteItemAsync(string ItemId);
+        Task<Item> GetItemAsync(string ItemId);
+        Task<bool> ItemExistsAsync(string ItemId);
+        Task<ItemBorrowStatus> GetItemBorrowStatusAsync(int itemId);
+        Task<ItemDetail> GetItemDetailAsync(int itemId);
+        Task<ItemPolicy> GetItemPolicyAsync(int itemId);
     }
 }

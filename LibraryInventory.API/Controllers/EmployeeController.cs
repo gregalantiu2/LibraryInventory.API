@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LibraryInventory.Model.Models.Person;
+using LibraryInventory.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -11,6 +13,12 @@ namespace LibraryInventory.API.Controllers
     [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class EmployeeController : ControllerBase
     {
+        private readonly IEmployeeService _employeeService;
+        public EmployeeController(IEmployeeService employeeService)
+        {
+            _employeeService = employeeService;
+        }
+
         [HttpGet]
         [Route("search")]
         public async Task<ActionResult> SearchEmployees()
@@ -19,31 +27,71 @@ namespace LibraryInventory.API.Controllers
         }
 
         [HttpGet]
-        [Route("getEmployee/{id}")]
-        public async Task<ActionResult> GetEmployee(int id)
+        [Route("getEmployee/{employeeId}")]
+        public async Task<ActionResult> GetEmployee(string employeeId)
         {
-            return Ok();
+            var employee = await _employeeService.GetEmployeeAsync(employeeId);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(employee);
         }
+
+        // Admin level endpoints 
 
         [HttpPost]
         [Route("addEmployee")]
-        public async Task<ActionResult> AddEmployee([FromBody] string value)
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+        public async Task<ActionResult> AddEmployee([FromBody] Employee newEmployee)
         {
-            return Ok();
+            var employee = await _employeeService.AddEmployeeAsync(newEmployee);
+            return Ok(employee);
         }
 
         [HttpPut]
-        [Route("updateEmployee/{id}")]
-        public async Task<ActionResult> UpdateEmployee(int id, [FromBody] string value)
+        [Route("updateEmployee")]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+        public async Task<ActionResult> UpdateEmployee([FromBody] Employee employee)
         {
-            return Ok();
+            var updatedEmployee = await _employeeService.UpdateEmployeeAsync(employee);
+
+            if (updatedEmployee == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedEmployee);
         }
 
         [HttpPut]
         [Route("inactivateEmployee/{id}")]
-        public async Task<ActionResult> InactivateEmployee(int id)
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+        public async Task<ActionResult> InactivateEmployee(string id)
         {
-            return Ok();
+            if (await _employeeService.EmployeeExistsAsync(id) == false)
+            {
+                return NotFound();
+            }
+
+            await _employeeService.InactivateEmployeeAsync(id);
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Route("deleteEmployee/{id}")]
+        [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+        public async Task<ActionResult> DeleteEmployee(string id)
+        {
+            if (await _employeeService.EmployeeExistsAsync(id) == false)
+            {
+                return NotFound();
+            }
+
+            await _employeeService.DeleteEmployeeAsync(id);
+            return NoContent();
         }
     }
 }
