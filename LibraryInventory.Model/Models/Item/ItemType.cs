@@ -10,13 +10,13 @@ namespace LibraryInventory.Model.Models.Item
     {
         private readonly int _itemTypeId;
         private string _itemTypeName;
-        private Dictionary<string, object> _itemProperties;
+        private Dictionary<string, object> _itemAdditionalProperties;
 
-        public ItemType(int itemTypeId, string itemTypeName, Dictionary<string, object> itemProperties)
+        public ItemType(int itemTypeId, string itemTypeName, Dictionary<string, object> itemAdditionalProperties)
         {
             _itemTypeId = itemTypeId;
             _itemTypeName = itemTypeName;
-            _itemProperties = itemProperties;
+            _itemAdditionalProperties = itemAdditionalProperties;
         }
         public int ItemTypeId
         {
@@ -29,8 +29,8 @@ namespace LibraryInventory.Model.Models.Item
         }
         public Dictionary<string, object> ItemProperties
         {
-            get { return _itemProperties; }
-            set { _itemProperties = value; }
+            get { return _itemAdditionalProperties; }
+            set { _itemAdditionalProperties = value; }
         }
     }
 }

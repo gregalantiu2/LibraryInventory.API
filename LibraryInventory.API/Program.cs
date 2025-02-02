@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Authentication;
+using LibraryInventory.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 
@@ -25,11 +26,11 @@ builder.Services.AddSwaggerGen(
             {
                 AuthorizationCode = new OpenApiOAuthFlow
                 {
-                    AuthorizationUrl = new Uri(builder.Configuration["SwaggerAuth:AuthorizationUrl"] ?? string.Empty),
-                    TokenUrl = new Uri(builder.Configuration["SwaggerAuth:TokenUrl"] ?? string.Empty),
+                    AuthorizationUrl = new Uri(builder.Configuration["SwaggerAuth:AuthorizationUrl"] ?? throw new ArgumentNullException("Swagger authorizationUrl not found")),
+                    TokenUrl = new Uri(builder.Configuration["SwaggerAuth:TokenUrl"] ?? throw new ArgumentNullException("Swagger tokenUrl not found")),
                     Scopes = new Dictionary<string, string>
                     {
-                        { builder.Configuration["SwaggerAuth:Scope"] ?? string.Empty, "Access API as User" }
+                        { builder.Configuration["SwaggerAuth:Scope"] ?? throw new ArgumentNullException("Swagger scopes not found"), "Access API as User" }
                     }
                 }
             }
@@ -49,6 +50,9 @@ builder.Services.AddSwaggerGen(
             }
         });
     });
+
+builder.Services.AddDbContext<LibraryInvetoryDbContext>(options => 
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:LibraryInventoryDb"] ?? throw new ArgumentNullException("LibraryInventoryDb connection string not found")));
 
 var app = builder.Build();
 
