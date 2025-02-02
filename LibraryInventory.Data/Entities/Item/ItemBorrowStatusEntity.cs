@@ -13,15 +13,20 @@ namespace LibraryInventory.Data.Entities
     {
         [Key]
         public int ItemBorrowStatusId { get; set; }
+
         public bool IsCheckedOut { get; set; }
+
         public DateTime? CheckedOutDate { get; set; }
+
         public DateTime? DueBack { get; set; }
+
         public int RenewedCount { get; set; }
+
         public int ItemId { get; set; }
+
 
         // Navigation properties
         [ForeignKey("ItemId")]
-        [InverseProperty("ItemBorrowStatus")]
         public ItemEntity? Item { get; set; }
     }
 }

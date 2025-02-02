@@ -14,15 +14,18 @@ namespace LibraryInventory.Model.Models.Person
         {
 
         }
+
         public string MemberId
         {
             get { return _memberId; }
         }
+
         public int ItemsBorrowed
         {
             get { return _itemsBorrowed; }
             set { _itemsBorrowed = value; }
         }
+
         public decimal FineAmountOwed
         {
             get { return _fineAmountOwed; }

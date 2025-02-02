@@ -12,15 +12,18 @@
             _itemTypeName = itemTypeName;
             _itemAdditionalProperties = itemAdditionalProperties;
         }
+
         public int ItemTypeId
         {
             get { return _itemTypeId; }
         }
+
         public string ItemTypeName
         {
             get { return _itemTypeName; }
             set { _itemTypeName = value; }
         }
+
         public Dictionary<string, object> ItemProperties
         {
             get { return _itemAdditionalProperties; }

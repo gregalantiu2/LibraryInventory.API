@@ -14,6 +14,7 @@
         {
             get { return _itemPolicyFineTypeId; }
         }
+
         public string ItemPolicyFineTypeName
         {
             get { return _itemPolicyFineTypeName; }

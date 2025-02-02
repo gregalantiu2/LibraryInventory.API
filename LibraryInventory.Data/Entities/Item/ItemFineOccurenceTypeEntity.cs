@@ -13,8 +13,6 @@ namespace LibraryInventory.Data.Entities.Item
     {
         [Key]
         public int ItemFineOccurenceTypeId { get; set; }
-        [Required(ErrorMessage = "FineOccurenceTypeName is required.")]
-
         public required string FineOccurenceTypeName { get; set; }
     }
 }

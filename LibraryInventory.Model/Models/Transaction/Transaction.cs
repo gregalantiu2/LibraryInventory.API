@@ -2,7 +2,7 @@
 {
     public class Transaction
     {
-        private int _transactionId;
+        private readonly int _transactionId;
         private TransactionType _transactionType;
         private DateTime _transactionDate;
         private TransactionPayment? _transactionPayment;
@@ -25,7 +25,6 @@
         public int TransactionId
         {
             get { return _transactionId; }
-            set { _transactionId = value; }
         }
 
         public TransactionType TransactionType
@@ -33,21 +32,25 @@
             get { return _transactionType; }
             set { _transactionType = value; }
         }
+
         public DateTime TransactionDate
         {
             get { return _transactionDate; }
             set { _transactionDate = value; }
         }
+
         public TransactionPayment? TransactionPayment
         {
             get { return _transactionPayment; }
             set { _transactionPayment = value; }
         }
+
         public int ItemId
         {
             get { return _itemId; }
             set { _itemId = value; }
         }
+
         public int? MemberId
         {
             get { return _memberId; }

@@ -22,11 +22,13 @@ namespace LibraryInventory.Model.Models.Transaction
         {
             get { return _transactionPaymentId; }
         }
+
         public decimal PaymentAmount
         {
             get { return _paymentAmount; }
             set { _paymentAmount = value; }
         }
+
         public TransactionPaymentType TransactionPaymentType
         {
             get { return _transactionPaymentType; }

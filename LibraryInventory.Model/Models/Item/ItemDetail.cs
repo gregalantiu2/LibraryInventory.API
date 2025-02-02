@@ -15,20 +15,24 @@ namespace LibraryInventory.Model.Models.Product
             _itemDescription = description;
             _itemType = itemType;
         }
+
         public int ItemDetailId
         {
             get { return _itemDetailId; }
         }
+
         public string ItemTitle
         {
             get { return _itemTitle; }
             set { _itemTitle = value; }
         }
+
         public string ItemDescription
         {
             get { return _itemDescription; }
             set { _itemDescription = value; }
         }
+
         public ItemType ItemType
         {
             get { return _itemType; }

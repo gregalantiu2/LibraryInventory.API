@@ -14,8 +14,11 @@ namespace LibraryInventory.Data.Entities
     {
         [Key]
         public int ItemId { get; set; }
+
         public string? Location { get; set; }
+
         public bool IsActive { get; set; }
+
 
         // Navigation properties
         public ItemDetailEntity? ItemDetail { get; set; }

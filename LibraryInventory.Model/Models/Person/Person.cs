@@ -25,21 +25,25 @@ namespace LibraryInventory.Model.Models.Person
             get { return _firstName; }
             set { _firstName = value; }
         }
+
         public string? MiddleName
         {
             get { return _middleName; }
             set { _middleName = value; }
         }
+
         public string LastName
         {
             get { return _lastName; }
             set { _lastName = value; }
         }
+
         public ContactInfo ContactInfo
         {
             get { return _contactinfo; }
             set { _contactinfo = value; }
         }
+
         public bool Active
         {
             get { return _active; }
