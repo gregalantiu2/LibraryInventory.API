@@ -1,12 +1,6 @@
 ﻿using LibraryInventory.Data.Entities.Item;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace LibraryInventory.Data.Entities
 {
     [Table("Item")]
@@ -18,7 +12,9 @@ namespace LibraryInventory.Data.Entities
         public string? Location { get; set; }
 
         public bool IsActive { get; set; }
+
         public int ItemPolicyId { get; set; }
+
         public int ItemDetailId { get; set; }
 
         public int ItemBorrowStatusId { get; set; }
