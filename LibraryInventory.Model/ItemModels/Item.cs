@@ -2,7 +2,7 @@
 {
     public class Item
     {
-        private readonly int _itemId;
+        private readonly int? _itemId;
         private ItemDetail _itemDetail;
         private ItemPolicy? _itemPolicy;
         private ItemBorrowStatus? _itemBorrowStatus;
@@ -17,7 +17,7 @@
             _itemBorrowStatus = itemBorrowStatus;
             _itemActive = false;
         }
-        public int ItemId
+        public int? ItemId
         {
             get { return _itemId; }
         }
@@ -26,25 +26,21 @@
             get { return _itemDetail; }
             set { _itemDetail = value; }
         }
-
         public ItemPolicy? ItemPolicy
         {
             get { return _itemPolicy; }
             set { _itemPolicy = value; }
         }
-
         public ItemBorrowStatus? ItemBorrowStatus
         {
             get { return _itemBorrowStatus; }
             set { _itemBorrowStatus = value; }
         }
-
         public string? ItemLocation
         {
             get { return _itemLocation; }
             set { _itemLocation = value; }
         }
-
         public bool LostOrSold
         {
             get { return _itemActive; }

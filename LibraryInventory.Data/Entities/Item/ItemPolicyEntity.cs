@@ -9,20 +9,15 @@ namespace LibraryInventory.Data.Entities
     {
         [Key]
         public int ItemPolicyId { get; set; }
-        
+
         [MaxLength(50)]
         public required string ItemPolicyName { get; set; }
-
         public bool AllowedToCheckout { get; set; }
-
         public int MaxRenewalsAllowed { get; set; }
-
         public int CheckoutDays { get; set; }
-
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal FineAmount { get; set; }
-
         public int FineOccurrence { get; set; }
 
         public int ItemId { get; set; }

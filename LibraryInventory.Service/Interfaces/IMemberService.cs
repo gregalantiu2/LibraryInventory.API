@@ -10,9 +10,9 @@ namespace LibraryInventory.Service.Interfaces
         Task<Member> UpdateMemberAsync(Member member);
         Task InactivateMemberAsync(string memberId);
         Task DeleteMemberAsync(string memberId);
-        Task<Member> GetMemberAsync(string memberId);
+        Task<Member> GetMemberbyMemberIdAsync(string memberId);
         Task<ContactInfo> GetMemberContactInfoAsync(string memberId);
-        Task<decimal> GetTotalAmountOwed(string memberId);
+        Task<decimal> GetMemberTotalAmountOwed(string memberId);
         Task<bool> MemberExistsAsync(string memberId);
     }
 }

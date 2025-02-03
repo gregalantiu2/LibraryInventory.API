@@ -12,7 +12,6 @@ namespace LibraryInventory.Data.Entities
         
         [MaxLength(25)]
         public required string ItemTypeName { get; set; }
-
         public string? AdditionalProperties { get; set; }
 
 

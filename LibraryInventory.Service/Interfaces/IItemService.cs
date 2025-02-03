@@ -7,10 +7,10 @@ namespace LibraryInventory.Service.Interfaces
         Task<IEnumerable<Item>> SearchItemsAsync(string searchTerm);
         Task<Item> AddItemAsync(Item Item);
         Task<Item> UpdateItemAsync(Item Item);
-        Task InactivateItemAsync(string ItemId);
-        Task DeleteItemAsync(string ItemId);
-        Task<Item> GetItemAsync(string ItemId);
-        Task<bool> ItemExistsAsync(string ItemId);
+        Task InactivateItemAsync(int itemId);
+        Task DeleteItemAsync(int itemId);
+        Task<Item> GetItemAsync(int itemId);
+        Task<bool> ItemExistsAsync(int itemId);
         Task<ItemBorrowStatus> GetItemBorrowStatusAsync(int itemId);
         Task<ItemDetail> GetItemDetailAsync(int itemId);
         Task<ItemPolicy> GetItemPolicyAsync(int itemId);

@@ -4,7 +4,7 @@ namespace LibraryInventory.Service.Interfaces
 {
     public interface ITransactionService
     {
-        Task<Transaction> GetTransactionAsync(string transactionId);
+        Task<Transaction> GetTransactionAsync(int transactionId);
         Task<IEnumerable<Transaction>> GetTransactionsByMemberAsync(int memberId, int? daysToLookBack = null);
         Task<IEnumerable<Transaction>> GetTransactionsByItemAsync(int itemId, int? daysToLookBack = null);
         Task<IEnumerable<TransactionType>> GetTransactionTypesAsync();
@@ -14,7 +14,6 @@ namespace LibraryInventory.Service.Interfaces
         Task PerformRenewal(int itemId, string memberId);
         Task PaymentOnOwedAmount(decimal amount, string memberId);
 
-        //Sell
-        //Buy
+        // todo: Buy and Sell
     }
 }

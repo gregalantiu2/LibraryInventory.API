@@ -1,7 +1,7 @@
-﻿using LibraryInventory.Model.PersonModels;
+﻿using LibraryInventory.API.Extensions;
+using LibraryInventory.Model.PersonModels;
 using LibraryInventory.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 
@@ -34,7 +34,7 @@ namespace LibraryInventory.API.Controllers
 
             if (employee == null)
             {
-                return NotFound();
+                return NotFound(MessageHelper<Employee>.NotFound(employeeId));
             }
 
             return Ok(employee);
@@ -47,50 +47,68 @@ namespace LibraryInventory.API.Controllers
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<ActionResult> AddEmployee([FromBody] Employee newEmployee)
         {
+            if (newEmployee == null)
+            {
+                return BadRequest(MessageHelper<Employee>.ObjectNull());
+            }
+
             var employee = await _employeeService.AddEmployeeAsync(newEmployee);
+
             return Ok(employee);
         }
 
         [HttpPut]
-        [Route("updateEmployee")]
+        [Route("updateEmployee/{employeeId}")]
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-        public async Task<ActionResult> UpdateEmployee([FromBody] Employee employee)
+        public async Task<ActionResult> UpdateEmployee(string employeeId, [FromBody] Employee employee)
         {
-            var updatedEmployee = await _employeeService.UpdateEmployeeAsync(employee);
-
-            if (updatedEmployee == null)
+            if (employee == null)
             {
-                return NotFound();
+                return BadRequest(MessageHelper<Employee>.ObjectNull());
             }
+
+            if (employeeId != employee.EmployeeId)
+            {
+                return BadRequest(MessageHelper<Employee>.MismatchIds(employeeId, employee.EmployeeId));
+            }
+
+            if (await _employeeService.EmployeeExistsAsync(employeeId) == false)
+            {
+                return NotFound(MessageHelper<Employee>.NotFound(employeeId));
+            }
+
+            var updatedEmployee = await _employeeService.UpdateEmployeeAsync(employee);
 
             return Ok(updatedEmployee);
         }
 
         [HttpPut]
-        [Route("inactivateEmployee/{id}")]
+        [Route("inactivateEmployee/{employeeId}")]
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-        public async Task<ActionResult> InactivateEmployee(string id)
+        public async Task<ActionResult> InactivateEmployee(string employeeId)
         {
-            if (await _employeeService.EmployeeExistsAsync(id) == false)
+            if (await _employeeService.EmployeeExistsAsync(employeeId) == false)
             {
-                return NotFound();
+                return NotFound(MessageHelper<Employee>.NotFound(employeeId));
             }
 
-            await _employeeService.InactivateEmployeeAsync(id);
+            await _employeeService.InactivateEmployeeAsync(employeeId);
+
             return NoContent();
         }
 
         [HttpDelete]
-        [Route("deleteEmployee/{id}")]
+        [Route("deleteEmployee/{employeeId}")]
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-        public async Task<ActionResult> DeleteEmployee(string id)
+        public async Task<ActionResult> DeleteEmployee(string employeeId)
         {
-            if (await _employeeService.EmployeeExistsAsync(id) == false)
+            if (await _employeeService.EmployeeExistsAsync(employeeId) == false)
             {
-                return NotFound();
+                return NotFound(MessageHelper<Employee>.NotFound(employeeId));
             }
 
-            await _employeeService.DeleteEmployeeAsync(id);
+            await _employeeService.DeleteEmployeeAsync(employeeId);
+
             return NoContent();
         }
     }

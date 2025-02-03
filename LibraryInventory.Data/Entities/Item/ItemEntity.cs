@@ -8,15 +8,10 @@ namespace LibraryInventory.Data.Entities
     {
         [Key]
         public int ItemId { get; set; }
-
         public string? Location { get; set; }
-
         public bool IsActive { get; set; }
-
         public int ItemPolicyId { get; set; }
-
         public int ItemDetailId { get; set; }
-
         public int ItemBorrowStatusId { get; set; }
 
 
