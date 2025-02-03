@@ -94,7 +94,7 @@ namespace LibraryInventory.API.Controllers
 
             await _employeeService.InactivateEmployeeAsync(employeeId);
 
-            return NoContent();
+            return Ok(MessageHelper<Employee>.Success());
         }
 
         [HttpDelete]
@@ -109,7 +109,7 @@ namespace LibraryInventory.API.Controllers
 
             await _employeeService.DeleteEmployeeAsync(employeeId);
 
-            return NoContent();
+            return Ok(MessageHelper<Employee>.Success());
         }
     }
 }

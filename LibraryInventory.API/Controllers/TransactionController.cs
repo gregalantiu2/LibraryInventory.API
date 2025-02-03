@@ -77,7 +77,7 @@ namespace LibraryInventory.API.Controllers
         {
             await _transactionService.PerformCheckout(itemId, memberId);
 
-            return NoContent();
+            return Ok(MessageHelper<Transaction>.Success());
         }
 
         [HttpPost]
@@ -86,7 +86,7 @@ namespace LibraryInventory.API.Controllers
         {
             await _transactionService.PerformReturn(itemId, memberId);
 
-            return NoContent();
+            return Ok(MessageHelper<Transaction>.Success());
         }
 
         [HttpPost]
@@ -95,7 +95,7 @@ namespace LibraryInventory.API.Controllers
         {
             await _transactionService.PerformRenewal(itemId, memberId);
 
-            return NoContent();
+            return Ok(MessageHelper<Transaction>.Success());
         }
 
         [HttpPost]
@@ -104,7 +104,7 @@ namespace LibraryInventory.API.Controllers
         {
             await _transactionService.PaymentOnOwedAmount(amount, memberId);
 
-            return NoContent();
+            return Ok(MessageHelper<Transaction>.Success());
         }
     }
 }

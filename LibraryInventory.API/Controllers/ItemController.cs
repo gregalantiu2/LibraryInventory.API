@@ -88,7 +88,7 @@ namespace LibraryInventory.API.Controllers
 
             await _itemService.InactivateItemAsync(itemId);
 
-            return NoContent();
+            return Ok(MessageHelper<Item>.Success());
         }
 
         [HttpDelete]
@@ -102,7 +102,7 @@ namespace LibraryInventory.API.Controllers
 
             await _itemService.DeleteItemAsync(itemId);
 
-            return NoContent();
+            return Ok(MessageHelper<Item>.Success());
         }
 
         [HttpGet]

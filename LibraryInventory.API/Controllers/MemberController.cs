@@ -87,7 +87,7 @@ namespace LibraryInventory.API.Controllers
 
             await _memberService.InactivateMemberAsync(memberId);
 
-            return NoContent();
+            return Ok(MessageHelper<Member>.Success());
         }
 
         [HttpDelete]
@@ -101,7 +101,7 @@ namespace LibraryInventory.API.Controllers
 
             await _memberService.DeleteMemberAsync(memberId);
 
-            return NoContent();
+            return Ok(MessageHelper<Member>.Success());
         }
 
         [HttpGet]

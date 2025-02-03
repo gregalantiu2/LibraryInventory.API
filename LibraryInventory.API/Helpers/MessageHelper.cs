@@ -21,5 +21,9 @@ namespace LibraryInventory.API.Extensions
 
             return $"{memberName}: query param ({Id}) does not match {typeof(T)}Id in resource object ({resourceId})";
         }
+        public static string Success([CallerMemberName] string memberName = "")
+        {
+            return $"{memberName}: Success";
+        }
     }
 }
