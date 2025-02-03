@@ -1,6 +1,6 @@
-﻿using LibraryInventory.Model.Models.Shared;
+﻿using LibraryInventory.Model.SharedModels;
 
-namespace LibraryInventory.Model.Models.Person
+namespace LibraryInventory.Model.PersonModels
 {
     public class Employee : Person
     {
@@ -13,7 +13,7 @@ namespace LibraryInventory.Model.Models.Person
         {
             _employeeType = employeeType;
         }
-        public string EmployeeId
+        public string? EmployeeId
         {
             get { return _employeeId; }
         }

@@ -1,6 +1,4 @@
-﻿using LibraryInventory.Model.Models.Item;
-
-namespace LibraryInventory.Model.Models.Product
+﻿namespace LibraryInventory.Model.ItemModels
 {
     public class ItemPolicy
     {

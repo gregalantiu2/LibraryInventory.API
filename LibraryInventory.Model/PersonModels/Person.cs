@@ -1,6 +1,6 @@
-﻿using LibraryInventory.Model.Models.Shared;
+﻿using LibraryInventory.Model.SharedModels;
 
-namespace LibraryInventory.Model.Models.Person
+namespace LibraryInventory.Model.PersonModels
 {
     public abstract class Person
     {
@@ -11,9 +11,9 @@ namespace LibraryInventory.Model.Models.Person
         private bool _active;
 
         public Person(string firstName
-                        ,string lastName
-                        ,ContactInfo contactinfo
-                        ,string? middeleName = null)
+                        , string lastName
+                        , ContactInfo contactinfo
+                        , string? middeleName = null)
         {
             _firstName = firstName;
             _middleName = middeleName;

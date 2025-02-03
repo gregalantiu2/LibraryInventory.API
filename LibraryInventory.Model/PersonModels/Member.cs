@@ -1,26 +1,27 @@
-﻿using LibraryInventory.Model.Models.Shared;
+﻿using LibraryInventory.Model.ItemModels;
+using LibraryInventory.Model.SharedModels;
 
-namespace LibraryInventory.Model.Models.Person
+namespace LibraryInventory.Model.PersonModels
 {
     public class Member : Person
     {
-        private readonly string _memberId;
-        private int _itemsBorrowed;
+        private readonly string? _memberId;
+        private List<Item> _itemsBorrowed; 
         private decimal _fineAmountOwed;
 
         public Member(string firstName
-                        ,string lastName
-                        ,ContactInfo contactinfo) : base(firstName, lastName, contactinfo)
+                        , string lastName
+                        , ContactInfo contactinfo) : base(firstName, lastName, contactinfo)
         {
 
         }
 
-        public string MemberId
+        public string? MemberId
         {
             get { return _memberId; }
         }
 
-        public int ItemsBorrowed
+        public List<Item> ItemsBorrowed
         {
             get { return _itemsBorrowed; }
             set { _itemsBorrowed = value; }

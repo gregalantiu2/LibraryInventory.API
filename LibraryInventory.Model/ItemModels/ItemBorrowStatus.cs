@@ -1,4 +1,4 @@
-﻿namespace LibraryInventory.Model.Models.Product
+﻿namespace LibraryInventory.Model.ItemModels
 {
     public class ItemBorrowStatus
     {

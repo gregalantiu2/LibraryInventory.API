@@ -1,4 +1,4 @@
-﻿using LibraryInventory.Model.Models.Person;
+﻿using LibraryInventory.Model.PersonModels;
 using LibraryInventory.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

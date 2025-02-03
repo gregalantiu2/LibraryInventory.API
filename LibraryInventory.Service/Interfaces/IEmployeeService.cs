@@ -1,4 +1,4 @@
-﻿using LibraryInventory.Model.Models.Person;
+﻿using LibraryInventory.Model.PersonModels;
 
 namespace LibraryInventory.Service.Interfaces
 {

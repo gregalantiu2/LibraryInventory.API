@@ -1,4 +1,4 @@
-﻿namespace LibraryInventory.Model.Models.Item
+﻿namespace LibraryInventory.Model.ItemModels
 {
     public class ItemFineOccurenceType
     {

@@ -1,4 +1,4 @@
-﻿namespace LibraryInventory.Model.Models.Transaction
+﻿namespace LibraryInventory.Model.TransactionModels
 {
     public class Transaction
     {
@@ -10,10 +10,10 @@
         private int? _memberId;
 
         public Transaction(TransactionType transactionType
-                            ,DateTime transactionDate
-                            ,int itemId
+                            , DateTime transactionDate
+                            , int itemId
                             , TransactionPayment? transactionPayment = null
-                            ,int? memberId = null)
+                            , int? memberId = null)
         {
             _transactionType = transactionType;
             _transactionDate = transactionDate;

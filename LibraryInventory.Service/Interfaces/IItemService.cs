@@ -1,5 +1,4 @@
-﻿using LibraryInventory.Model.Models.Person;
-using LibraryInventory.Model.Models.Product;
+﻿using LibraryInventory.Model.ItemModels;
 
 namespace LibraryInventory.Service.Interfaces
 {

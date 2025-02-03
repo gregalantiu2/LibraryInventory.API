@@ -22,7 +22,7 @@ namespace LibraryInventory.API.Controllers
         [Route("search/{searchTerm}")]
         public async Task<ActionResult> SearchItems([FromBody] SearchItemRequest searchItemRequest, string searchTerm)
         {
-            var result = _itemService.SearchItems(searchItemRequest.ItemTypes, searchItemRequest.Properties, searchTerm);
+            //var result = await _itemService.SearchItemsAsync(searchItemRequest.ItemTypes, searchItemRequest.Properties, searchTerm);
             return Ok();
         }
 
