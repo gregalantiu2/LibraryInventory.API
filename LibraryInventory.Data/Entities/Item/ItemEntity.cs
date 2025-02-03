@@ -21,6 +21,8 @@ namespace LibraryInventory.Data.Entities
         public int ItemPolicyId { get; set; }
         public int ItemDetailId { get; set; }
 
+        public int ItemBorrowStatusId { get; set; }
+
 
         // Navigation properties
         [ForeignKey("ItemDetailId")]
@@ -29,6 +31,7 @@ namespace LibraryInventory.Data.Entities
         [ForeignKey("ItemPolicyId")]
         public ItemPolicyEntity? ItemPolicy { get; set; }
 
+        [ForeignKey("ItemBorrowStatusId")]
         public ItemBorrowStatusEntity? ItemBorrowStatus { get; set; }
     }
 }

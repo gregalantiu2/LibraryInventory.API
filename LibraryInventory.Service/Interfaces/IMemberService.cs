@@ -1,4 +1,5 @@
 ﻿using LibraryInventory.Model.PersonModels;
+using LibraryInventory.Model.SharedModels;
 
 namespace LibraryInventory.Service.Interfaces
 {
@@ -10,6 +11,8 @@ namespace LibraryInventory.Service.Interfaces
         Task InactivateMemberAsync(string memberId);
         Task DeleteMemberAsync(string memberId);
         Task<Member> GetMemberAsync(string memberId);
+        Task<ContactInfo> GetMemberContactInfoAsync(string memberId);
+        Task<decimal> GetTotalAmountOwed(string memberId);
         Task<bool> MemberExistsAsync(string memberId);
     }
 }

@@ -22,11 +22,11 @@ namespace LibraryInventory.Data.Entities
 
         public int RenewedCount { get; set; }
 
-        public int ItemId { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal FineAmountAccrued { get; set; }
 
 
         // Navigation properties
-        [ForeignKey("ItemId")]
         public ItemEntity? Item { get; set; }
     }
 }
