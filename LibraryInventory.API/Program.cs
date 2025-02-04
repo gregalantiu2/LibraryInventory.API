@@ -1,3 +1,4 @@
+using LibraryInventory.API.Helpers;
 using LibraryInventory.API.Middleware;
 using LibraryInventory.Data;
 using LibraryInventory.Service.MapperProfiles;
@@ -10,12 +11,10 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();
 
-// Add services to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(
     c =>
@@ -60,6 +59,8 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddDbContext<LibraryInventoryDbContext>(options => 
     options.UseSqlServer(builder.Configuration["ConnectionStrings:LibraryInventoryDb"] ?? throw new ArgumentNullException("LibraryInventoryDb connection string not found")));
 
+DependancyRegisterHelper.RegisterDependancies(builder.Services);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -80,9 +81,9 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.MapControllers();
+
 app.UseMiddleware<ExceptionHandlingMiddleWare>();
 app.UseMiddleware<UserContextMiddleware>();
-
-app.MapControllers();
 
 app.Run();
