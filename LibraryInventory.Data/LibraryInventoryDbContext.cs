@@ -35,7 +35,6 @@ namespace LibraryInventory.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
         }
     }
 }
