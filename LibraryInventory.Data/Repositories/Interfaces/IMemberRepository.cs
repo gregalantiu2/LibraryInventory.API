@@ -12,13 +12,15 @@ namespace LibraryInventory.Data.Repositories.Interfaces
 {
     public interface IMemberRepository
     {
-        Task<IEnumerable<MemberEntity>> GetMembers(string? memberType = null);
+        Task<IEnumerable<MemberEntity>> SearchMembersAsync(string searchTerm);
         Task<MemberEntity> AddMemberAsync(MemberEntity member);
         Task<MemberEntity> UpdateMemberAsync(MemberEntity member);
         Task InactivateMemberAsync(string memberId);
         Task DeleteMemberAsync(string memberId);
-        Task<MemberEntity> GetMemberAsync(string memberId);
-        Task<ContactInfoEntity> GetMemberContactInfo(string memberId);
+        Task<MemberEntity> GetMemberbyMemberIdAsync(string memberId);
+        Task<ContactInfo> GetMemberContactInfoAsync(string memberId);
+        Task<decimal> GetMemberTotalAmountOwed(string memberId);
         Task<bool> MemberExistsAsync(string memberId);
+
     }
 }
