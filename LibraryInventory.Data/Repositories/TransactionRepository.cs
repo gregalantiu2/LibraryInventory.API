@@ -1,31 +1,31 @@
-﻿using LibraryInventory.Model.TransactionModels;
-using LibraryInventory.Service.Interfaces;
+﻿using LibraryInventory.Data.Entities;
+using LibraryInventory.Data.Repositories.Interfaces;
 
-namespace LibraryInventory.Service
+namespace LibraryInventory.Data.Repositories
 {
-    public class TransactionService : ITransactionService
+    public class TransactionRepository : ITransactionRepository
     {
-        public Task<Transaction> GetTransactionAsync(int transactionId)
+        public Task<TransactionEntity> GetTransactionAsync(int transactionId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Transaction>> GetTransactionsByItemAsync(int itemId, int? daysToLookBack = null)
+        public Task<IEnumerable<TransactionEntity>> GetTransactionsByItemAsync(int itemId, int? daysToLookBack = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Transaction>> GetTransactionsByMemberAsync(int memberId, int? daysToLookBack = null)
+        public Task<IEnumerable<TransactionEntity>> GetTransactionsByMemberAsync(int memberId, int? daysToLookBack = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Transaction>> GetTransactionsByTypeAsync(int transactionTypeId, int? daysToLookBack = null)
+        public Task<IEnumerable<TransactionEntity>> GetTransactionsByTypeAsync(int transactionTypeId, int? daysToLookBack = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<TransactionType>> GetTransactionTypesAsync()
+        public Task<IEnumerable<TransactionTypeEntity>> GetTransactionTypesAsync()
         {
             throw new NotImplementedException();
         }

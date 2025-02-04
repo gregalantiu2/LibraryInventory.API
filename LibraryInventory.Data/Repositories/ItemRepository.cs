@@ -1,11 +1,17 @@
-﻿using LibraryInventory.Model.ItemModels;
-using LibraryInventory.Service.Interfaces;
+﻿using LibraryInventory.Data.Entities;
+using LibraryInventory.Data.Entities.Item;
+using LibraryInventory.Data.Repositories.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace LibraryInventory.Service
+namespace LibraryInventory.Data.Repositories
 {
-    public class ItemService : IItemService
+    public class ItemRepository : IItemRepository
     {
-        public Task<Item> AddItemAsync(Item Item)
+        public Task<ItemEntity> AddItemAsync(ItemEntity Item)
         {
             throw new NotImplementedException();
         }
@@ -15,22 +21,22 @@ namespace LibraryInventory.Service
             throw new NotImplementedException();
         }
 
-        public Task<Item> GetItemAsync(int itemId)
+        public Task<ItemEntity> GetItemAsync(int itemId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ItemBorrowStatus> GetItemBorrowStatusAsync(int itemId)
+        public Task<ItemBorrowStatusEntity> GetItemBorrowStatusAsync(int itemId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ItemDetail> GetItemDetailAsync(int itemId)
+        public Task<ItemDetailEntity> GetItemDetailAsync(int itemId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ItemPolicy> GetItemPolicyAsync(int itemId)
+        public Task<ItemPolicyEntity> GetItemPolicyAsync(int itemId)
         {
             throw new NotImplementedException();
         }
@@ -45,12 +51,12 @@ namespace LibraryInventory.Service
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Item>> SearchItemsAsync(string searchTerm)
+        public Task<IEnumerable<ItemEntity>> SearchItemsAsync(string searchTerm)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Item> UpdateItemAsync(Item Item)
+        public Task<ItemEntity> UpdateItemAsync(ItemEntity Item)
         {
             throw new NotImplementedException();
         }

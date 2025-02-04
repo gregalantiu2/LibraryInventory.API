@@ -1,12 +1,5 @@
 ﻿using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Data.Entities.Shared;
-using LibraryInventory.Model.PersonModels;
-using LibraryInventory.Model.SharedModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibraryInventory.Data.Repositories.Interfaces
 {
