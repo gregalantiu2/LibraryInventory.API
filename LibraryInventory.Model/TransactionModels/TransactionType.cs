@@ -2,19 +2,19 @@
 {
     public class TransactionType
     {
-        private readonly int _transactionId;
+        private readonly int? _transactionTypeId;
         private string _transactionTypeName;
 
-        public TransactionType(string transactionTypeName)
+        public TransactionType(string transactionTypeName, int? transactionTypeId = null)
         {
             _transactionTypeName = transactionTypeName;
+            _transactionTypeId = transactionTypeId;
         }
 
-        public int TransactionId
+        public int? TransactionTypeId
         {
-            get { return _transactionId; }
+            get { return _transactionTypeId; }
         }
-
         public string TransactionTypeName
         {
             get { return _transactionTypeName; }

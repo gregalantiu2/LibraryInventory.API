@@ -1,18 +1,17 @@
-﻿using LibraryInventory.Data.Entities;
+﻿using LibraryInventory.Data.Audit.Interfaces;
+using LibraryInventory.Data.Entities;
 using LibraryInventory.Data.Entities.Item;
 using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Data.Entities.Shared;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibraryInventory.Data
 {
     public class LibraryInventoryDbContext : DbContext
     {
+        private readonly IUserContext _userContext;
+
         public DbSet<ItemEntity> Items { get; set; }
         public DbSet<ItemTypeEntity> ItemTypes { get; set; }
         public DbSet<ItemDetailEntity> ItemDetails { get; set; }
@@ -28,13 +27,43 @@ namespace LibraryInventory.Data
         public DbSet<ContactInfoEntity> ContactInfos { get; set; }
 
 
-        public LibraryInventoryDbContext(DbContextOptions<LibraryInventoryDbContext> options)
+        public LibraryInventoryDbContext(DbContextOptions<LibraryInventoryDbContext> options, IUserContext userContext)
             : base(options)
         {
+            _userContext = userContext;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker.Entries().Where(e => e.Entity is BaseEntity &&
+                (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+            foreach (var entityEntry in entries)
+            {
+                var trackable = (BaseEntity)entityEntry.Entity;
+
+                var userId = _userContext.UserId;
+
+                if (userId.IsNullOrEmpty())
+                {
+                    throw new SecurityTokenException("User Id is not set.");
+                }
+
+                if (entityEntry.State == EntityState.Added)
+                {
+                    trackable.CreatedBy = userId!;
+                    trackable.CreatedDate = DateTime.Now;
+                }
+
+                trackable.ModifiedBy = userId!;
+                trackable.ModifiedDate = DateTime.Now;
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
         }
     }
 }

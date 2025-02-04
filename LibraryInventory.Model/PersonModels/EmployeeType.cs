@@ -6,8 +6,9 @@
         private string _employeeTypeName;
 
         // Encapsulate the fields
-        public EmployeeType(string employeeTypeName)
+        public EmployeeType(string employeeTypeName, int? employeeTypeId = null)
         {
+            _employeeTypeId = employeeTypeId;
             _employeeTypeName = employeeTypeName;
         }
         public int? EmployeeTypeId

@@ -9,8 +9,10 @@ namespace LibraryInventory.Model.PersonModels
         public Employee(string firstName
                         ,string lastName
                         ,ContactInfo contactinfo
+                        ,string employeeId
                         ,EmployeeType employeeType) : base(firstName, lastName, contactinfo)
         {
+            _employeeId = employeeId;
             _employeeType = employeeType;
         }
         public string? EmployeeId

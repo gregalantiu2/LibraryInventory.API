@@ -2,18 +2,18 @@
 {
     public class ItemType
     {
-        private readonly int _itemTypeId;
+        private readonly int? _itemTypeId;
         private string _itemTypeName;
         private Dictionary<string, object> _itemAdditionalProperties;
 
-        public ItemType(int itemTypeId, string itemTypeName, Dictionary<string, object> itemAdditionalProperties)
+        public ItemType(int? itemTypeId, string itemTypeName, Dictionary<string, object> itemAdditionalProperties)
         {
             _itemTypeId = itemTypeId;
             _itemTypeName = itemTypeName;
             _itemAdditionalProperties = itemAdditionalProperties;
         }
 
-        public int ItemTypeId
+        public int? ItemTypeId
         {
             get { return _itemTypeId; }
         }

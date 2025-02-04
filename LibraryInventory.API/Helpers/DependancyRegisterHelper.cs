@@ -1,4 +1,6 @@
-﻿using LibraryInventory.Data.Repositories;
+﻿using LibraryInventory.Data.Audit;
+using LibraryInventory.Data.Audit.Interfaces;
+using LibraryInventory.Data.Repositories;
 using LibraryInventory.Data.Repositories.Interfaces;
 using LibraryInventory.Service;
 using LibraryInventory.Service.Interfaces;
@@ -9,6 +11,9 @@ namespace LibraryInventory.API.Helpers
     {
         public static void RegisterDependancies(IServiceCollection services)
         {
+            // Audit
+            services.AddScoped<IUserContext, UserContext>();
+
             // Services
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IMemberService, MemberService>();

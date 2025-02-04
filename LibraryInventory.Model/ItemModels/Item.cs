@@ -9,14 +9,20 @@
         private string? _itemLocation;
         private bool _itemActive;
 
-        public Item(ItemDetail itemDetail, string? itemLocation = null, ItemPolicy? itemPolicy = null, ItemBorrowStatus? itemBorrowStatus = null)
+        public Item(ItemDetail itemDetail
+                    ,string? itemLocation = null
+                    ,ItemPolicy? itemPolicy = null
+                    ,ItemBorrowStatus? itemBorrowStatus = null
+                    ,int? itemId = null)
         {
             _itemDetail = itemDetail;
             _itemLocation = itemLocation;
             _itemPolicy = itemPolicy;
             _itemBorrowStatus = itemBorrowStatus;
-            _itemActive = false;
+            _itemActive = true;
+            _itemId = itemId;
         }
+
         public int? ItemId
         {
             get { return _itemId; }
@@ -41,13 +47,15 @@
             get { return _itemLocation; }
             set { _itemLocation = value; }
         }
-        public bool LostOrSold
+        public bool ItemActive
         {
             get { return _itemActive; }
             set
             {
                 _itemActive = value;
-                _itemBorrowStatus = _itemActive == true ? null : _itemBorrowStatus;
+                _itemBorrowStatus = _itemActive == false ? null : _itemBorrowStatus;
+                _itemLocation = null;
+                _itemPolicy = null;
             }
         }
     }

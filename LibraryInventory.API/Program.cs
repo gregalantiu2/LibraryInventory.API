@@ -1,7 +1,6 @@
 using LibraryInventory.API.Helpers;
 using LibraryInventory.API.Middleware;
 using LibraryInventory.Data;
-using LibraryInventory.Service.MapperProfiles;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
@@ -54,7 +53,7 @@ builder.Services.AddSwaggerGen(
         });
     });
 
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddAutoMapper(Assembly.Load("LibraryInventory.Service"));
 
 builder.Services.AddDbContext<LibraryInventoryDbContext>(options => 
     options.UseSqlServer(builder.Configuration["ConnectionStrings:LibraryInventoryDb"] ?? throw new ArgumentNullException("LibraryInventoryDb connection string not found")));

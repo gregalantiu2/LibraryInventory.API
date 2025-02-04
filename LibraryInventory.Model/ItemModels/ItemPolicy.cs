@@ -2,7 +2,7 @@
 {
     public class ItemPolicy
     {
-        private readonly int _itemPolicyId;
+        private readonly int? _itemPolicyId;
         private string _policyName;
         private bool _allowedToCheckout;
         private int _maxRenewalsAllowed;
@@ -10,17 +10,25 @@
         private decimal _fineAmount;
         private ItemFineOccurenceType _fineOccurrence;
 
-        public ItemPolicy(string policyName, bool allowedToCheckout, int maxRenewalsAllowed, int checkoutDays, decimal fineAmount, ItemFineOccurenceType fineOccurrence)
+        public ItemPolicy(string policyName
+                           ,bool allowedToCheckout
+                           ,int maxRenewalsAllowed
+                           ,int checkoutDays
+                           ,decimal fineAmount
+                           ,ItemFineOccurenceType fineOccurrence
+                           ,int? itemPolicyId = null)
         {
+
             _policyName = policyName;
             _allowedToCheckout = allowedToCheckout;
             _maxRenewalsAllowed = maxRenewalsAllowed;
             _checkoutDays = checkoutDays;
             _fineAmount = fineAmount;
             _fineOccurrence = fineOccurrence;
+            _itemPolicyId = itemPolicyId;
         }
 
-        public int ItemPolicyId
+        public int? ItemPolicyId
         {
             get { return _itemPolicyId; }
         }

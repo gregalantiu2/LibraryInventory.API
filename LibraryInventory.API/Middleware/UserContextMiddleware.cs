@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using LibraryInventory.Data.Audit.Interfaces;
+using System.Security.Claims;
 
 namespace LibraryInventory.API.Middleware
 {
@@ -13,17 +14,17 @@ namespace LibraryInventory.API.Middleware
             _logger = logger;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, IUserContext userContextService)
         {
             if (context.User?.Identity?.IsAuthenticated == true)
             {
                 var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (string.IsNullOrEmpty(userId))
                 {
-                    _logger.LogError("User ID claim not found.");
-                    throw new InvalidOperationException("User ID claim not found.");
+                    _logger.LogError("User Id claim not found.");
+                    throw new InvalidOperationException("User Id claim not found.");
                 }
-                context.Items["UserId"] = userId;
+                userContextService.UserId = userId;
             }
             else
             {

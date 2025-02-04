@@ -16,8 +16,9 @@
                             ,string street
                             ,string city
                             ,string state
-                            ,string zipCode,
-                             string country)
+                            ,string zipCode
+                            ,string country
+                            ,int? contactInfoId = null)
         {
             _phoneNumber = phoneNumber;
             _email = email;
@@ -26,6 +27,7 @@
             _state = state;
             _zipCode = zipCode;
             _country = country;
+            _contactInfoId = contactInfoId;
         }
 
         public int? ContactInfoId

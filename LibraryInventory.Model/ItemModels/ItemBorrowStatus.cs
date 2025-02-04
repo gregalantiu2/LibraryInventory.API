@@ -2,12 +2,32 @@
 {
     public class ItemBorrowStatus
     {
+        private readonly int? _itemBorrowStatusId;
         private bool _isCheckedOut;
         private DateTime? _checkedOutDate;
         private DateTime? _dueBack;
         private int _renewedCount;
         private decimal _fineAmountAccrued;
 
+        public ItemBorrowStatus(int itemBorrowStatusId, 
+                                bool isCheckedOut
+                                ,DateTime? checkedOutDate
+                                ,DateTime? dueBack
+                                ,int renewedCount
+                                ,decimal fineAmountAccrued)
+        {
+            _itemBorrowStatusId = itemBorrowStatusId;
+            _isCheckedOut = isCheckedOut;
+            _checkedOutDate = checkedOutDate;
+            _dueBack = dueBack;
+            _renewedCount = renewedCount;
+            _fineAmountAccrued = fineAmountAccrued;
+        }
+
+        public int? ItemBorrowStatusId
+        {
+            get { return _itemBorrowStatusId; }
+        }
         public bool IsCheckedOut
         {
             get { return _isCheckedOut; }
@@ -39,10 +59,7 @@
         public int RenewedCount
         {
             get { return _renewedCount; }
-            set
-            {
-                _renewedCount = value;
-            }
+            set { _renewedCount = value; }
         }
 
         public decimal FineAmountAccrued

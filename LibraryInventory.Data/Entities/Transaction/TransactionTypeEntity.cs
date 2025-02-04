@@ -8,6 +8,7 @@ namespace LibraryInventory.Data.Entities
     {
         [Key]
         public int TransactionTypeId { get; set; }
+
         [MaxLength(25)]
         public required string TransactionTypeName { get; set; }
     }

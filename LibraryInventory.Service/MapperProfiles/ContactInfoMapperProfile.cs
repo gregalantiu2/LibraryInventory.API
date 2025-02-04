@@ -11,7 +11,9 @@ namespace LibraryInventory.Service.MapperProfiles
     {
         public ContactInfoMapperProfile()
         {
-            CreateMap<ContactInfoEntity, ContactInfo>().ReverseMap();
+            CreateMap<ContactInfoEntity, ContactInfo>()
+                .ForCtorParam("contactInfoId", opt => opt.MapFrom(src => src.ContactInfoId))
+                .ReverseMap();
         }
     }
 }

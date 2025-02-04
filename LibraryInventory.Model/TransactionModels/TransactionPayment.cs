@@ -2,17 +2,19 @@
 {
     public class TransactionPayment
     {
-        private readonly int _transactionPaymentId;
+        private readonly int? _transactionPaymentId;
         private decimal _paymentAmount;
         private TransactionPaymentType _transactionPaymentType;
 
-        public TransactionPayment(decimal paymentAmount, TransactionPaymentType transactionPaymentType)
+        public TransactionPayment(decimal paymentAmount
+                                    ,TransactionPaymentType transactionPaymentType
+                                    ,int? transactionPaymentId = null)
         {
             _paymentAmount = paymentAmount;
             _transactionPaymentType = transactionPaymentType;
         }
 
-        public int TransactionPaymentId
+        public int? TransactionPaymentId
         {
             get { return _transactionPaymentId; }
         }

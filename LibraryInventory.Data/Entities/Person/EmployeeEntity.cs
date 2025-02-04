@@ -9,10 +9,15 @@ namespace LibraryInventory.Data.Entities.Person
     {
         [Key]
         public int EmployeeKeyId { get; set; }
+
+        [MaxLength(50)]
         public string? EmployeeId { get; set; }
 
         [MaxLength(50)]
         public required string FirstName { get; set; }
+
+        [MaxLength(50)]
+        public string? MiddleName { get; set; }
 
         [MaxLength(100)]
         public required string LastName { get; set; }
