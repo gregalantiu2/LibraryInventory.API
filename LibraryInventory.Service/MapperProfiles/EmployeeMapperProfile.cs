@@ -24,8 +24,6 @@ namespace LibraryInventory.Service.MapperProfiles
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
                 .ForMember(dest => dest.Active, opt => opt.MapFrom(src => src.Active));
 
-            CreateMap<ContactInfoEntity, ContactInfo>().ReverseMap();
-
             CreateMap<EmployeeTypeEntity, EmployeeType>().ReverseMap();
         }
     }

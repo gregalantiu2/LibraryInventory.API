@@ -3,14 +3,14 @@ using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Data.Entities.Shared;
 using LibraryInventory.Model.PersonModels;
 using LibraryInventory.Model.SharedModels;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace LibraryInventory.Service.MapperProfiles
 {
-    public class MemberProfileMapper : Profile
+    public class ContactInfoMapperProfile : Profile
     {
-        public MemberProfileMapper()
+        public ContactInfoMapperProfile()
         {
-            CreateMap<MemberEntity, Member>().ReverseMap();
             CreateMap<ContactInfoEntity, ContactInfo>().ReverseMap();
         }
     }
