@@ -33,13 +33,19 @@ namespace LibraryInventory.Service
             return await _employeeRepository.EmployeeExistsAsync(employeeId);
         }
 
-        public async Task<Employee> GetEmployeeAsync(string employeeId)
+        public async Task<Employee?> GetEmployeeAsync(string employeeId)
         {
             var result = await _employeeRepository.GetEmployeeAsync(employeeId);
+
+            if (result == null)
+            {
+                return null;
+            }
+
             return _mapper.Map<Employee>(result);
         }
 
-        public async Task<ContactInfo> GetEmployeeContactInfo(string employeeId)
+        public async Task<ContactInfo?> GetEmployeeContactInfo(string employeeId)
         {
             var result = await _employeeRepository.GetEmployeeContactInfo(employeeId);
             return _mapper.Map<ContactInfo>(result);

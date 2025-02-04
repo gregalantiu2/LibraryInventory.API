@@ -1,5 +1,6 @@
 ﻿using LibraryInventory.API.Extensions;
 using LibraryInventory.Model.PersonModels;
+using LibraryInventory.Model.SharedModels;
 using LibraryInventory.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +39,20 @@ namespace LibraryInventory.API.Controllers
             }
 
             return Ok(employee);
+        }
+
+        [HttpGet]
+        [Route("getEmployeeContactInfo/{employeeId}")]
+        public async Task<ActionResult> GetEmployeeContactInfo(string employeeId)
+        {
+            var contactInfo = await _employeeService.GetEmployeeContactInfo(employeeId);
+
+            if (contactInfo == null)
+            {
+                return NotFound(MessageHelper<ContactInfo>.NotFound(employeeId));
+            }
+
+            return Ok(contactInfo);
         }
 
         // Admin level endpoints 

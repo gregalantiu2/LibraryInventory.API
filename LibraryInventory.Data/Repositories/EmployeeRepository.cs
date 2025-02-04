@@ -1,54 +1,84 @@
 ﻿using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Data.Entities.Shared;
 using LibraryInventory.Data.Repositories.Interfaces;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LibraryInventory.Data.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        public Task<EmployeeEntity> AddEmployeeAsync(EmployeeEntity employee)
+        private readonly LibraryInventoryDbContext _context;
+
+        public EmployeeRepository(LibraryInventoryDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task DeleteEmployeeAsync(string employeeId)
+        public async Task<EmployeeEntity> AddEmployeeAsync(EmployeeEntity employee)
         {
-            throw new NotImplementedException();
+            await _context.Employees.AddAsync(employee);
+            await _context.SaveChangesAsync();
+            return employee;
         }
 
-        public Task<bool> EmployeeExistsAsync(string employeeId)
+        public async Task DeleteEmployeeAsync(string employeeId)
         {
-            throw new NotImplementedException();
+            var employee = await _context.Employees.FindAsync(employeeId);
+            
+            if (employee != null)
+            {
+                _context.Employees.Remove(employee);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task<EmployeeEntity> GetEmployeeAsync(string employeeId)
+        public async Task<bool> EmployeeExistsAsync(string employeeId)
         {
-            throw new NotImplementedException();
+            return await _context.Employees.AnyAsync(e => e.EmployeeId == employeeId);
         }
 
-        public Task<ContactInfoEntity> GetEmployeeContactInfo(string employeeId)
+        public async Task<EmployeeEntity?> GetEmployeeAsync(string employeeId)
         {
-            throw new NotImplementedException();
+            return await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
         }
 
-        public Task<IEnumerable<EmployeeEntity>> GetEmployees(string? employeeType = null)
+        public async Task<ContactInfoEntity?> GetEmployeeContactInfo(string employeeId)
         {
-            throw new NotImplementedException();
+            return await _context.Employees.Where(e => e.EmployeeId == employeeId).Select(e => e.ContactInfo).FirstOrDefaultAsync();
         }
 
-        public Task InactivateEmployeeAsync(string employeeId)
+        public async Task<IEnumerable<EmployeeEntity>> GetEmployees(string? employeeType = null)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(employeeType))
+            {
+                return await _context.Employees.ToListAsync();
+            }
+
+            return await _context.Employees.Where(e => e.EmployeeType.EmployeeTypeName == employeeType).ToListAsync();
         }
 
-        public Task<EmployeeEntity> UpdateEmployeeAsync(EmployeeEntity employee)
+        public async Task InactivateEmployeeAsync(string employeeId)
         {
-            throw new NotImplementedException();
+            var employee = await _context.Employees.FindAsync(employeeId);
+
+            if (employee != null)
+            {
+                employee.Active = false;
+
+                _context.Employees.Update(employee);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<EmployeeEntity> UpdateEmployeeAsync(EmployeeEntity employee)
+        {
+            _context.Employees.Update(employee);
+            await _context.SaveChangesAsync();
+
+            return employee;
         }
     }
 }
