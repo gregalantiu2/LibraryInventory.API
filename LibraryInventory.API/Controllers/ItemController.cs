@@ -1,5 +1,4 @@
-﻿using LibraryInventory.API.RequestModels;
-using LibraryInventory.Service.Interfaces;
+﻿using LibraryInventory.Service.Interfaces;
 using LibraryInventory.Model.ItemModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using LibraryInventory.API.Extensions;
 using LibraryInventory.Model.PersonModels;
+using LibraryInventory.Model.RequestModels;
 namespace LibraryInventory.API.Controllers
 {
     [Authorize]

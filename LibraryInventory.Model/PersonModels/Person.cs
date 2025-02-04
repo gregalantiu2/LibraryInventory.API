@@ -11,14 +11,15 @@ namespace LibraryInventory.Model.PersonModels
         private bool _active;
 
         public Person(string firstName
-                        , string lastName
-                        , ContactInfo contactinfo
-                        , string? middeleName = null)
+                        ,string lastName
+                        ,ContactInfo contactinfo
+                        ,string? middeleName = null)
         {
             _firstName = firstName;
             _middleName = middeleName;
             _lastName = lastName;
             _contactinfo = contactinfo;
+            _active = true;
         }
         public string FirstName
         {

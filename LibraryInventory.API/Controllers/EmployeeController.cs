@@ -1,5 +1,7 @@
-﻿using LibraryInventory.API.Extensions;
+﻿using AutoMapper;
+using LibraryInventory.API.Extensions;
 using LibraryInventory.Model.PersonModels;
+using LibraryInventory.Model.RequestModels;
 using LibraryInventory.Model.SharedModels;
 using LibraryInventory.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -15,9 +17,12 @@ namespace LibraryInventory.API.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
-        public EmployeeController(IEmployeeService employeeService)
+        private readonly IMapper _mapper;
+
+        public EmployeeController(IEmployeeService employeeService, IMapper mapper)
         {
             _employeeService = employeeService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -60,14 +65,14 @@ namespace LibraryInventory.API.Controllers
         [HttpPost]
         [Route("addEmployee")]
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-        public async Task<ActionResult> AddEmployee([FromBody] Employee newEmployee)
+        public async Task<ActionResult> AddEmployee([FromBody] EmployeeRequest newEmployee)
         {
             if (newEmployee == null)
             {
                 return BadRequest(MessageHelper<Employee>.ObjectNull());
             }
 
-            var employee = await _employeeService.AddEmployeeAsync(newEmployee);
+            var employee = await _employeeService.AddEmployeeAsync(_mapper.Map<Employee>(newEmployee));
 
             return Ok(employee);
         }
@@ -75,7 +80,7 @@ namespace LibraryInventory.API.Controllers
         [HttpPut]
         [Route("updateEmployee/{employeeId}")]
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-        public async Task<ActionResult> UpdateEmployee(string employeeId, [FromBody] Employee employee)
+        public async Task<ActionResult> UpdateEmployee(string employeeId, [FromBody] EmployeeRequest employee)
         {
             if (employee == null)
             {
@@ -92,7 +97,7 @@ namespace LibraryInventory.API.Controllers
                 return NotFound(MessageHelper<Employee>.NotFound(employeeId));
             }
 
-            var updatedEmployee = await _employeeService.UpdateEmployeeAsync(employee);
+            var updatedEmployee = await _employeeService.UpdateEmployeeAsync(_mapper.Map<Employee>(employee));
 
             return Ok(updatedEmployee);
         }

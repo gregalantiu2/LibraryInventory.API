@@ -19,6 +19,14 @@ namespace LibraryInventory.Data.Repositories
 
         public async Task<EmployeeEntity> AddEmployeeAsync(EmployeeEntity employee)
         {
+            var employeeType = await _context.EmployeeTypes.FirstOrDefaultAsync(e => e.EmployeeTypeId == employee.EmployeeTypeId);
+
+            if (employeeType == null)
+            {
+                throw new InvalidOperationException($"EmployeeType {employee.EmployeeTypeId} not found");
+            }
+
+            employee.EmployeeType = employeeType;
             await _context.Employees.AddAsync(employee);
             await _context.SaveChangesAsync();
             return employee;
