@@ -2,6 +2,15 @@
 {
     public class ContactInfo
     {
+        private readonly int? _contactInfoId;
+        private string _phoneNumber;
+        private string _email;
+        private string _street;
+        private string _city;
+        private string _state;
+        private string _zipCode;
+        private string _country;
+
         public ContactInfo(string phoneNumber
                             ,string email
                             ,string street
@@ -19,26 +28,20 @@
             _country = country;
         }
 
-        private string _phoneNumber;
-        private string _email;
-        private string _street;
-        private string _city;
-        private string _state;
-        private string _zipCode;
-        private string _country;
-
+        public int? ContactInfoId
+        {
+            get { return _contactInfoId; }
+        }
         public string PhoneNumber
         {
             get { return _phoneNumber; }
             set { _phoneNumber = value; }
         }
-
         public string Email
         {
             get { return _email; }
             set { _email = value; }
         }
-
         public string Street
         {
             get { return _street; }
@@ -64,7 +67,6 @@
             get { return _country; }
             set { _country = value; }
         }
-
         public string Address
         {
             get

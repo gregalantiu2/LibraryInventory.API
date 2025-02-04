@@ -22,6 +22,7 @@ namespace LibraryInventory.Data.Entities.Person
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal FineAmountOwed { get; set; }
+        public bool Active { get; set; }
 
 
         // Navigation properties

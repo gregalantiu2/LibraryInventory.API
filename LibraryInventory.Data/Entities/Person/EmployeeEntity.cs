@@ -8,16 +8,16 @@ namespace LibraryInventory.Data.Entities.Person
     public class EmployeeEntity : BaseEntity
     {
         [Key]
-        public int EmployeeId { get; set; }
+        public int EmployeeKeyId { get; set; }
+        public string? EmployeeId { get; set; }
 
         [MaxLength(50)]
         public required string FirstName { get; set; }
 
         [MaxLength(100)]
         public required string LastName { get; set; }
-
+        public bool Active { get; set; }
         public int ContactInfoId { get; set; }
-
         public int EmployeeTypeId { get; set; }
 
 

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LibraryInventory.Data.Migrations
 {
-    [DbContext(typeof(LibraryInvetoryDbContext))]
+    [DbContext(typeof(LibraryInventoryDbContext))]
     [Migration("20250203021539_ChangedFKItemtoItemBorrowStatus")]
     partial class ChangedFKItemtoItemBorrowStatus
     {

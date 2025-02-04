@@ -2,7 +2,7 @@
 {
     public class EmployeeType
     {
-        private readonly int _employeeTypeId;
+        private readonly int? _employeeTypeId;
         private string _employeeTypeName;
 
         // Encapsulate the fields
@@ -10,7 +10,7 @@
         {
             _employeeTypeName = employeeTypeName;
         }
-        public int EmployeeTypeId
+        public int? EmployeeTypeId
         {
             get { return _employeeTypeId; }
         }

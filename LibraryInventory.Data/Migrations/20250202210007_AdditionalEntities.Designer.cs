@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LibraryInventory.Data.Migrations
 {
-    [DbContext(typeof(LibraryInvetoryDbContext))]
+    [DbContext(typeof(LibraryInventoryDbContext))]
     [Migration("20250202210007_AdditionalEntities")]
     partial class AdditionalEntities
     {

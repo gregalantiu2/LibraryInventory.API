@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LibraryInventory.Data.Migrations
 {
-    [DbContext(typeof(LibraryInvetoryDbContext))]
+    [DbContext(typeof(LibraryInventoryDbContext))]
     partial class LibraryInvetoryDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

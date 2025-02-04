@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace LibraryInventory.Data
 {
-    public class LibraryInvetoryDbContext : DbContext
+    public class LibraryInventoryDbContext : DbContext
     {
         public DbSet<ItemEntity> Items { get; set; }
         public DbSet<ItemTypeEntity> ItemTypes { get; set; }
@@ -28,7 +28,7 @@ namespace LibraryInventory.Data
         public DbSet<ContactInfoEntity> ContactInfos { get; set; }
 
 
-        public LibraryInvetoryDbContext(DbContextOptions<LibraryInvetoryDbContext> options)
+        public LibraryInventoryDbContext(DbContextOptions<LibraryInventoryDbContext> options)
             : base(options)
         {
         }
