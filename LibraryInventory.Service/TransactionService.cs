@@ -1,51 +1,54 @@
-﻿using LibraryInventory.Model.TransactionModels;
+﻿using LibraryInventory.Data.Entities;
+using LibraryInventory.Model.ItemModels;
+using LibraryInventory.Model.PersonModels;
+using LibraryInventory.Model.TransactionModels;
 using LibraryInventory.Service.Interfaces;
 
 namespace LibraryInventory.Service
 {
     public class TransactionService : ITransactionService
     {
-        public Task<Transaction> GetTransactionAsync(int transactionId)
+        public Task CheckoutItemTransaction(Item item, Member member)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Transaction>> GetTransactionsByItemAsync(int itemId, int? daysToLookBack = null)
+        public Task<TransactionEntity> GetTransactionAsync(int transactionId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Transaction>> GetTransactionsByMemberAsync(int memberId, int? daysToLookBack = null)
+        public Task<IEnumerable<TransactionEntity>> GetTransactionsByItemAsync(int itemId, int? daysToLookBack = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Transaction>> GetTransactionsByTypeAsync(int transactionTypeId, int? daysToLookBack = null)
+        public Task<IEnumerable<TransactionEntity>> GetTransactionsByMemberAsync(int memberId, int? daysToLookBack = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<TransactionType>> GetTransactionTypesAsync()
+        public Task<IEnumerable<TransactionEntity>> GetTransactionsByTypeAsync(int transactionTypeId, int? daysToLookBack = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task PaymentOnOwedAmount(decimal amount, string memberId)
+        public Task<IEnumerable<TransactionTypeEntity>> GetTransactionTypesAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task PerformCheckout(int itemId, string memberId)
+        public Task PaymentOfFineTransaction(decimal amount, Member member)
         {
             throw new NotImplementedException();
         }
 
-        public Task PerformRenewal(int itemId, string memberId)
+        public Task RenewItemTransaction(Item item, Member member)
         {
             throw new NotImplementedException();
         }
 
-        public Task PerformReturn(int itemId, string memberId)
+        public Task ReturnItemTransaction(Item item, Member member)
         {
             throw new NotImplementedException();
         }

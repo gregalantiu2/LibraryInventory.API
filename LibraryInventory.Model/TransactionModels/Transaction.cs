@@ -28,31 +28,26 @@
         {
             get { return _transactionId; }
         }
-
         public TransactionType TransactionType
         {
             get { return _transactionType; }
             set { _transactionType = value; }
         }
-
         public DateTime TransactionDate
         {
             get { return _transactionDate; }
             set { _transactionDate = value; }
         }
-
         public TransactionPayment? TransactionPayment
         {
             get { return _transactionPayment; }
             set { _transactionPayment = value; }
         }
-
         public int ItemId
         {
             get { return _itemId; }
             set { _itemId = value; }
         }
-
         public int? MemberId
         {
             get { return _memberId; }

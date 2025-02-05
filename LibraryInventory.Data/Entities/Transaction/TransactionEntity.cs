@@ -1,4 +1,4 @@
-using System;
+using LibraryInventory.Data.Entities.Person;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,15 +9,9 @@ namespace LibraryInventory.Data.Entities
     {
         [Key]
         public int TransactionId { get; set; }
-
         public int TransactionTypeId { get; set; }
-
         public DateTime TransactionDate { get; set; }
-
         public int ItemId { get; set; }
-
-        public int? TransactionPaymentId { get; set; }
-
         public int? MemberId { get; set; }
 
 
@@ -27,5 +21,10 @@ namespace LibraryInventory.Data.Entities
 
         [ForeignKey("ItemId")]
         public required ItemEntity Item { get; set; }
+
+        [ForeignKey("MemberId")]
+        public MemberEntity? Member { get; set; }
+
+        public IEnumerable<TransactionPaymentEntity>? Payments { get; set; }
     }
 }

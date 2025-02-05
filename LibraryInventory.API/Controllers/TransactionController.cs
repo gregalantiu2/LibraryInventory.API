@@ -1,11 +1,14 @@
-﻿using LibraryInventory.API.Extensions;
+﻿using AutoMapper.Execution;
+using LibraryInventory.API.Extensions;
+using LibraryInventory.Model.ItemModels;
 using LibraryInventory.Model.PersonModels;
+using LibraryInventory.Model.RequestModels.Transaction;
 using LibraryInventory.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using System.Transactions;
+using Member = LibraryInventory.Model.PersonModels.Member;
 
 namespace LibraryInventory.API.Controllers
 {
@@ -16,9 +19,14 @@ namespace LibraryInventory.API.Controllers
     public class TransactionController : ControllerBase
     {
         private readonly ITransactionService _transactionService;
-        public TransactionController(ITransactionService transactionService)
+        private readonly IItemService _itemService;
+        private readonly IMemberService _memberService;
+
+        public TransactionController(ITransactionService transactionService, IItemService itemService, IMemberService memberService)
         {
             _transactionService = transactionService;
+            _itemService = itemService;
+            _memberService = memberService;
         }
 
         [HttpGet]
@@ -72,37 +80,86 @@ namespace LibraryInventory.API.Controllers
         }
 
         [HttpPost]
-        [Route("performCheckout")]
-        public async Task<ActionResult> PerformCheckout(int itemId, string memberId)
+        [Route("checkoutItemTransaction")]
+        public async Task<ActionResult> CheckoutItemTransaction(int itemId, string memberId)
         {
-            await _transactionService.PerformCheckout(itemId, memberId);
+            var item = await _itemService.GetItemAsync(itemId);
+
+            if (item == null)
+            {
+                return NotFound(MessageHelper<Item>.NotFound(itemId.ToString()));
+            }
+
+            var member = await _memberService.GetMemberbyMemberIdAsync(memberId);
+
+            if (member == null)
+            {
+                return NotFound(MessageHelper<Member>.NotFound(memberId));
+            }
+
+            await _transactionService.CheckoutItemTransaction(item, member);
 
             return Ok(MessageHelper<Transaction>.Success());
         }
 
         [HttpPost]
-        [Route("performReturn")]
-        public async Task<ActionResult> PerformReturn(int itemId, string memberId)
+        [Route("returnItemTransaction")]
+        public async Task<ActionResult> ReturnItemTransaction([FromBody] TransactionRequest request)
         {
-            await _transactionService.PerformReturn(itemId, memberId);
+            var item = await _itemService.GetItemAsync(request.ItemId);
+
+            if (item == null)
+            {
+                return NotFound(MessageHelper<Item>.NotFound(request.ItemId.ToString()));
+            }
+
+            var member = await _memberService.GetMemberbyMemberIdAsync(request.MemberId);
+
+            if (member == null)
+            {
+                return NotFound(MessageHelper<Member>.NotFound(request.MemberId));
+            }
+
+            await _transactionService.ReturnItemTransaction(request.ItemId, request.MemberId);
 
             return Ok(MessageHelper<Transaction>.Success());
         }
 
         [HttpPost]
-        [Route("performRenewal")]
-        public async Task<ActionResult> PerformRenewal(int itemId, string memberId)
+        [Route("renewItemTranaction")]
+        public async Task<ActionResult> RenewItemTransaction([FromBody] TransactionRequest request)
         {
-            await _transactionService.PerformRenewal(itemId, memberId);
+            var item = await _itemService.GetItemAsync(request.ItemId);
+
+            if (item == null)
+            {
+                return NotFound(MessageHelper<Item>.NotFound(request.ItemId.ToString()));
+            }
+
+            var member = await _memberService.GetMemberbyMemberIdAsync(request.MemberId);
+
+            if (member == null)
+            {
+                return NotFound(MessageHelper<Member>.NotFound(request.MemberId));
+            }
+
+            await _transactionService.RenewItemTransaction(request.ItemId, request.MemberId);
 
             return Ok(MessageHelper<Transaction>.Success());
         }
 
         [HttpPost]
-        [Route("paymentOnOwedAmount")]
-        public async Task<ActionResult> PaymentOnOwedAmount(decimal amount, string memberId)
+        [Route("paymentOfFineTransaction")]
+        public async Task<ActionResult> PaymentOfFineTransaction(TransactionPaymenetRequest request)
         {
-            await _transactionService.PaymentOnOwedAmount(amount, memberId);
+            var member = await _memberService.GetMemberbyMemberIdAsync(request.MemberId);
+
+            if (member == null)
+            {
+                return NotFound(MessageHelper<Member>.NotFound(request.MemberId));
+            }
+
+            await _transactionService.PaymentOfFineTransaction(request.Amount, member);
 
             return Ok(MessageHelper<Transaction>.Success());
         }

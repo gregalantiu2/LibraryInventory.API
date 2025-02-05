@@ -47,7 +47,7 @@ namespace LibraryInventory.Data.Repositories
                 .Include(i => i.ItemBorrowStatus)
                 .Include(i => i.ItemType)
                 .ThenInclude(i => i.ItemTypeProperties)
-                .FirstOrDefaultAsync(i => i.ItemId == itemId);
+                .FirstOrDefaultAsync(i => i.ItemId == itemId && i.ItemActive);
         }
 
         public async Task<ItemBorrowStatusEntity?> GetItemBorrowStatusAsync(int itemId)

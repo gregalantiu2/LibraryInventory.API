@@ -1,53 +1,138 @@
 ﻿using LibraryInventory.Data.Entities;
 using LibraryInventory.Data.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryInventory.Data.Repositories
 {
     public class TransactionRepository : ITransactionRepository
     {
-        public Task<TransactionEntity> GetTransactionAsync(int transactionId)
+        private readonly LibraryInventoryDbContext _context;
+
+        public TransactionRepository(LibraryInventoryDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<IEnumerable<TransactionEntity>> GetTransactionsByItemAsync(int itemId, int? daysToLookBack = null)
+        public async Task AddTransactionType(TransactionTypeEntity transactionType)
         {
-            throw new NotImplementedException();
+            _context.TransactionTypes.Add(transactionType);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<TransactionEntity>> GetTransactionsByMemberAsync(int memberId, int? daysToLookBack = null)
+        public async Task CreateTransaction(TransactionEntity transaction)
         {
-            throw new NotImplementedException();
+            _context.Transactions.Add(transaction);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<TransactionEntity>> GetTransactionsByTypeAsync(int transactionTypeId, int? daysToLookBack = null)
+        public async Task DeleteTransaction(int transactionId)
         {
-            throw new NotImplementedException();
+            var transactionEntity = await _context.Transactions.FindAsync(transactionId);
+
+            if (transactionEntity != null)
+            {
+                _context.Transactions.Remove(transactionEntity);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task<IEnumerable<TransactionTypeEntity>> GetTransactionTypesAsync()
+        public async Task DeleteTransactionType(int transactionTypeId)
         {
-            throw new NotImplementedException();
+            var transactionType = await _context.TransactionTypes.FindAsync(transactionTypeId);
+
+            if (transactionType != null)
+            {
+                _context.TransactionTypes.Remove(transactionType);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task PaymentOnOwedAmount(decimal amount, string memberId)
+        public async Task<TransactionEntity> GetTransactionAsync(int transactionId)
         {
-            throw new NotImplementedException();
+            var transaction = await _context.Transactions
+                    .Include(t => t.TransactionType)
+                    .Include(t => t.Item)
+                    .Include(t => t.Member)
+                    .FirstOrDefaultAsync(t => t.TransactionId == transactionId);
+
+            if (transaction == null)
+            {
+                throw new InvalidOperationException($"Transaction {transactionId} not found");
+            }
+
+            return transaction;
         }
 
-        public Task PerformCheckout(int itemId, string memberId)
+        public async Task<IEnumerable<TransactionEntity>> GetTransactionsByItemAsync(int itemId, int? daysToLookBack = null)
         {
-            throw new NotImplementedException();
+            var query = _context.Transactions
+                .Include(t => t.TransactionType)
+                .Include(t => t.Item)
+                .Include(t => t.Member)
+                .Where(t => t.ItemId == itemId);
+
+            if (daysToLookBack == null)
+            {
+                var pastDate = DateTime.UtcNow.AddDays(-daysToLookBack.Value);
+
+                return _context.Transactions
+                            .Include(t => t.TransactionType)
+                            .Include(t => t.Item)
+                            .Include(t => t.Member)
+                            .Where(t => t.ItemId == itemId && t.CreatedDate >= pastDate);
+            }
+
+            return _context.Transactions
+                        .Include(t => t.TransactionType)
+                        .Include(t => t.Item)
+                        .Include(t => t.Member)
+                        .Where(t => t.ItemId == itemId);
         }
 
-        public Task PerformRenewal(int itemId, string memberId)
+        public async Task<IEnumerable<TransactionEntity>> GetTransactionsByMemberAsync(int memberId, int? daysToLookBack = null)
         {
-            throw new NotImplementedException();
+            if (daysToLookBack == null)
+            {
+                var pastDate = DateTime.UtcNow.AddDays(-daysToLookBack.Value);
+
+                return _context.Transactions
+                            .Include(t => t.TransactionType)
+                            .Include(t => t.Item)
+                            .Include(t => t.Member)
+                            .Where(t => t.MemberId == memberId && t.CreatedDate >= pastDate);
+            }
+
+            return _context.Transactions
+                        .Include(t => t.TransactionType)
+                        .Include(t => t.Item)
+                        .Include(t => t.Member)
+                        .Where(t => t.MemberId == memberId);
         }
 
-        public Task PerformReturn(int itemId, string memberId)
+        public async Task<IEnumerable<TransactionEntity>> GetTransactionsByTypeAsync(int transactionTypeId, int? daysToLookBack = null)
         {
-            throw new NotImplementedException();
+
+            if (daysToLookBack == null)
+            {
+                var pastDate = DateTime.UtcNow.AddDays(-daysToLookBack.Value);
+
+                return _context.Transactions
+                    .Include(t => t.TransactionType)
+                    .Include(t => t.Item)
+                    .Include(t => t.Member)
+                    .Where(t => t.TransactionTypeId == transactionTypeId && t.CreatedDate >= pastDate);
+            }
+
+            return _context.Transactions
+                .Include(t => t.TransactionType)
+                .Include(t => t.Item)
+                .Include(t => t.Member)
+                .Where(t => t.TransactionTypeId == transactionTypeId);
+        }
+
+        public async Task<IEnumerable<TransactionTypeEntity>> GetTransactionTypesAsync()
+        {
+            return await _context.TransactionTypes.ToListAsync();
         }
     }
 }
