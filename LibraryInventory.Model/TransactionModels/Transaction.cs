@@ -6,12 +6,12 @@
         private TransactionType _transactionType;
         private DateTime _transactionDate;
         private IEnumerable<TransactionPayment>? _transactionPayments;
-        private int _itemId;
+        private int? _itemId;
         private int? _memberId;
 
         public Transaction(TransactionType transactionType
                             ,DateTime transactionDate
-                            ,int itemId
+                            ,int? itemId
                             ,IEnumerable<TransactionPayment>? transactionPayments = null
                             ,int? memberId = null
                             ,int? transactionId = null)
@@ -43,7 +43,7 @@
             get { return _transactionPayments; }
             set { _transactionPayments = value; }
         }
-        public int ItemId
+        public int? ItemId
         {
             get { return _itemId; }
             set { _itemId = value; }

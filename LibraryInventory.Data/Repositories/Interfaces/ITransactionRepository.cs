@@ -1,4 +1,5 @@
 ﻿using LibraryInventory.Data.Entities;
+using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Model.TransactionModels;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,11 @@ namespace LibraryInventory.Data.Repositories.Interfaces
         Task<IEnumerable<TransactionEntity>> GetTransactionsByItemAsync(int itemId, int? daysToLookBack = null);
         Task<IEnumerable<TransactionTypeEntity>> GetTransactionTypesAsync();
         Task<IEnumerable<TransactionEntity>> GetTransactionsByTypeAsync(int transactionTypeId, int? daysToLookBack = null);
-        Task AddTransactionType(TransactionTypeEntity transactionType);
-        Task DeleteTransactionType(int transactionTypeId);
-        Task CreateTransaction(TransactionEntity transaction);
-        Task DeleteTransaction(int transactionId);
+        Task AddTransactionTypeAsync(TransactionTypeEntity transactionType);
+        Task DeleteTransactionTypeAsync(int transactionTypeId);
+        Task CreateTransactionAsync(TransactionEntity transaction);
+        Task DeleteTransactionAsync(int transactionId);
+        Task<TransactionTypeEntity> GetTransactionTypesByNameAsync(string transactionType);
+        Task PaymentOfFineTransactionAsync(TransactionEntity transaction, MemberEntity member);
     }
 }

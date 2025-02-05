@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
+using LibraryInventory.Data.Entities;
+using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Data.Repositories.Interfaces;
 using LibraryInventory.Model.ItemModels;
 using LibraryInventory.Model.TransactionModels;
@@ -56,22 +59,40 @@ namespace LibraryInventory.Service
             return _mapper.Map<IEnumerable<TransactionType>>(transactionTypes);
         }
 
-        public async Task CheckoutItemTransaction(Item item, Member member)
+        public async Task CheckoutItemTransactionAsync(Item item, Member member)
         {
             throw new NotImplementedException();
         }
 
-        public async Task PaymentOfFineTransaction(decimal amount, Member member)
+        public async Task PaymentOfFineTransactionAsync(decimal amount, int paymentTypeId, Member member)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentException("Amount must be greater than 0.");
+            }
+
+            if (amount > member.FineAmountOwed)
+            {
+                throw new ArgumentException("Amount must be less than or equal to the fine amount owed.");
+            }
+
+            member.FineAmountOwed -= amount;
+
+            // Creating the transaction
+            var transactionType = _mapper.Map<TransactionType>(await _transactionRepository.GetTransactionTypesByNameAsync("Payment"));
+            var paymentType = new TransactionPaymentType(paymentTypeId);
+            var payment = new TransactionPayment(amount, paymentType);
+            var transaction = new Transaction(transactionType, DateTime.Now, null, transactionPayments: new List<TransactionPayment>() { payment });
+
+            await _transactionRepository.PaymentOfFineTransactionAsync(_mapper.Map<TransactionEntity>(transaction), _mapper.Map<MemberEntity>(member));
+        }
+
+        public async Task RenewItemTransactionAsync(Item item, Member member)
         {
             throw new NotImplementedException();
         }
 
-        public async Task RenewItemTransaction(Item item, Member member)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task ReturnItemTransaction(Item item, Member member)
+        public async Task ReturnItemTransactionAsync(Item item, Member member)
         {
             throw new NotImplementedException();
         }

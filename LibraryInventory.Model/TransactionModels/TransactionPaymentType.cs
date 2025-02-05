@@ -11,6 +11,11 @@
             _transactionPaymentTypeId = transctionPaymentId;
         }
 
+        public TransactionPaymentType(int transctionPaymentId)
+        {
+            _transactionPaymentTypeId = transctionPaymentId;
+        }
+
         public int? TransactionPaymentTypeId
         {
             get { return _transactionPaymentTypeId; }

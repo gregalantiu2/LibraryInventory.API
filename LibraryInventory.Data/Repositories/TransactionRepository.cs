@@ -134,5 +134,17 @@ namespace LibraryInventory.Data.Repositories
         {
             return await _context.TransactionTypes.ToListAsync();
         }
+
+        public async Task<TransactionTypeEntity> GetTransactionTypesByNameAsync(string transactionType)
+        {
+            var type = await _context.TransactionTypes.FirstOrDefaultAsync(t => t.TransactionTypeName == transactionType);
+
+            if (type == null)
+            {
+                throw new InvalidOperationException($"Transaction type {transactionType} not found");
+            }
+
+            return type;
+        }
     }
 }

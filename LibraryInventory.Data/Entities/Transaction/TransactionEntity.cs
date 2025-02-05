@@ -11,7 +11,7 @@ namespace LibraryInventory.Data.Entities
         public int TransactionId { get; set; }
         public int TransactionTypeId { get; set; }
         public DateTime TransactionDate { get; set; }
-        public int ItemId { get; set; }
+        public int? ItemId { get; set; }
         public int? MemberId { get; set; }
 
 
@@ -20,7 +20,7 @@ namespace LibraryInventory.Data.Entities
         public required TransactionTypeEntity TransactionType { get; set; }
 
         [ForeignKey("ItemId")]
-        public required ItemEntity Item { get; set; }
+        public ItemEntity? Item { get; set; }
 
         [ForeignKey("MemberId")]
         public MemberEntity? Member { get; set; }

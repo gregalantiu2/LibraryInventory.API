@@ -11,9 +11,9 @@ namespace LibraryInventory.Service.Interfaces
         Task<IEnumerable<Transaction>> GetTransactionsByItemAsync(int itemId, int? daysToLookBack = null);
         Task<IEnumerable<TransactionType>> GetTransactionTypesAsync();
         Task<IEnumerable<Transaction>> GetTransactionsByTypeAsync(int transactionTypeId, int? daysToLookBack = null);
-        Task CheckoutItemTransaction(Item item, Member member);
-        Task ReturnItemTransaction(Item item, Member member);
-        Task RenewItemTransaction(Item item, Member member);
-        Task PaymentOfFineTransaction(decimal amount, Member member);
+        Task CheckoutItemTransactionAsync(Item item, Member member);
+        Task ReturnItemTransactionAsync(Item item, Member member);
+        Task RenewItemTransactionAsync(Item item, Member member);
+        Task PaymentOfFineTransactionAsync(decimal amount, int paymentTypeId, Member member);
     }
 }
