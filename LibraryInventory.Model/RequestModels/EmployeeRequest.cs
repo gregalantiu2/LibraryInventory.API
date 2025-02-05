@@ -4,7 +4,7 @@ namespace LibraryInventory.Model.RequestModels
 {
     public class EmployeeRequest
     {
-        public string? EmployeeId { get; set; } = null;
+        public string? EmployeeId { get; set; }
         public required int EmployeeTypeId { get; set; }
         public required string FirstName { get; set; }
         public string? MiddleName { get; set; }

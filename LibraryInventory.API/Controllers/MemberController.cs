@@ -1,6 +1,8 @@
-﻿using LibraryInventory.API.Extensions;
+﻿using AutoMapper;
+using LibraryInventory.API.Extensions;
 using LibraryInventory.Model.ItemModels;
 using LibraryInventory.Model.PersonModels;
+using LibraryInventory.Model.RequestModels;
 using LibraryInventory.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +17,12 @@ namespace LibraryInventory.API.Controllers
     public class MemberController : ControllerBase
     {
         private readonly IMemberService _memberService;
-        public MemberController(IMemberService memberService)
+        private readonly IMapper _mapper;
+
+        public MemberController(IMemberService memberService, IMapper mapper)
         {
             _memberService = memberService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -45,28 +50,28 @@ namespace LibraryInventory.API.Controllers
 
         [HttpPost]
         [Route("addMember")]
-        public async Task<ActionResult> AddMember([FromBody] Member newMember)
+        public async Task<ActionResult> AddMember([FromBody] MemberRequest newMember)
         {
             if (newMember == null)
             {
                 return BadRequest(MessageHelper<Member>.ObjectNull());
             }
 
-            var member = await _memberService.AddMemberAsync(newMember);
+            var member = await _memberService.AddMemberAsync(_mapper.Map<Member>(newMember));
 
             return Ok(member);
         }
 
         [HttpPut]
         [Route("updateMember/{memberId}")]
-        public async Task<ActionResult> UpdateMember(string memberId, [FromBody] Member member)
+        public async Task<ActionResult> UpdateMember(string memberId, [FromBody] MemberRequest member)
         {
             if (memberId != member.MemberId)
             {
                 return BadRequest($"{memberId} query param does not match memberId in resource object");
             }
 
-            var updatedMember = await _memberService.UpdateMemberAsync(member);
+            var updatedMember = await _memberService.UpdateMemberAsync(_mapper.Map<Member>(member));
 
             if (updatedMember == null)
             {

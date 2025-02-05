@@ -12,7 +12,7 @@ namespace LibraryInventory.Model.PersonModels
         public Member(string firstName
                         ,string lastName
                         ,ContactInfo contactinfo
-                        ,decimal fineAmountOwed
+                        ,decimal fineAmountOwed = 0.0m
                         ,string? memberId = null
                         ,ICollection<Item>? itemsBorrowed = null) : base(firstName, lastName, contactinfo)
         {

@@ -51,11 +51,6 @@ namespace LibraryInventory.Service.MapperProfiles
             CreateMap<EmployeeTypeEntity, EmployeeType>()
                 .ForCtorParam("employeeTypeId", opt => opt.MapFrom(src => src.EmployeeTypeId))
                 .ForCtorParam("employeeTypeName", opt => opt.MapFrom(src => src.EmployeeTypeName));
-
-            CreateMap<EmployeeEntity, EmployeeEntity>()
-                .ForMember(dest => dest.EmployeeKeyId, opt => opt.Ignore())
-                .ForMember(dest => dest.EmployeeType, opt => opt.Ignore())
-                .ForMember(dest => dest.ContactInfo, opt => opt.Ignore());
         }
     }
 }

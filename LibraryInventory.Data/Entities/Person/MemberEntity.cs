@@ -24,8 +24,6 @@ namespace LibraryInventory.Data.Entities.Person
 
         public int ContactInfoId { get; set; }
 
-        public int ItemsBorrowed { get; set; }
-
         [Column(TypeName = "decimal(18, 2)")]
         public decimal FineAmountOwed { get; set; }
         public bool Active { get; set; }

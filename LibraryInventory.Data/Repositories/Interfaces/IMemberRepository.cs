@@ -18,7 +18,7 @@ namespace LibraryInventory.Data.Repositories.Interfaces
         Task InactivateMemberAsync(string memberId);
         Task DeleteMemberAsync(string memberId);
         Task<MemberEntity> GetMemberbyMemberIdAsync(string memberId);
-        Task<ContactInfo> GetMemberContactInfoAsync(string memberId);
+        Task<ContactInfoEntity> GetMemberContactInfoAsync(string memberId);
         Task<decimal> GetMemberTotalAmountOwed(string memberId);
         Task<bool> MemberExistsAsync(string memberId);
 
