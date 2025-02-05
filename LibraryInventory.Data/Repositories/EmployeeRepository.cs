@@ -80,43 +80,59 @@ namespace LibraryInventory.Data.Repositories
 
         public async Task<EmployeeEntity> UpdateEmployeeAsync(EmployeeEntity updateEmployee)
         {
-            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == updateEmployee.EmployeeId);
-
-            if (employee == null)
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                throw new InvalidOperationException($"Employee {updateEmployee.EmployeeId} not found");
+                var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == updateEmployee.EmployeeId);
+
+                if (employee == null)
+                {
+                    throw new InvalidOperationException($"Employee {updateEmployee.EmployeeId} not found");
+                }
+
+                employee.FirstName = updateEmployee.FirstName;
+                employee.MiddleName = updateEmployee.MiddleName;
+                employee.LastName = updateEmployee.LastName;
+                employee.EmployeeTypeId = updateEmployee.EmployeeTypeId;
+
+                var contactInfo = await _context.ContactInfos.FirstOrDefaultAsync(c => c.ContactInfoId == employee.ContactInfoId);
+
+                if (contactInfo == null)
+                {
+                    await _context.ContactInfos.AddAsync(updateEmployee.ContactInfo);
+                    await _context.SaveChangesAsync();
+                    employee.ContactInfoId = updateEmployee.ContactInfo.ContactInfoId;
+                }
+                else
+                {
+                    contactInfo.Email = updateEmployee.ContactInfo.Email;
+                    contactInfo.PhoneNumber = updateEmployee.ContactInfo.PhoneNumber;
+                    contactInfo.Street = updateEmployee.ContactInfo.Street;
+                    contactInfo.City = updateEmployee.ContactInfo.City;
+                    contactInfo.State = updateEmployee.ContactInfo.State;
+                    contactInfo.ZipCode = updateEmployee.ContactInfo.ZipCode;
+                    contactInfo.Country = updateEmployee.ContactInfo.Country;
+                }
+
+                var lookupEmployeeType = await _context.EmployeeTypes.FirstOrDefaultAsync(e => e.EmployeeTypeId == employee.EmployeeTypeId);
+
+                if (lookupEmployeeType == null)
+                {
+                    throw new InvalidOperationException($"EmployeeType {updateEmployee.EmployeeTypeId} not found");
+                }
+
+                employee.EmployeeType = lookupEmployeeType;
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return employee;
             }
-
-            employee.FirstName = updateEmployee.FirstName;
-            employee.MiddleName = updateEmployee.MiddleName;
-            employee.LastName = updateEmployee.LastName;
-            employee.EmployeeTypeId = updateEmployee.EmployeeTypeId;
-
-            var contactInfo = await _context.ContactInfos.FirstOrDefaultAsync(c => c.ContactInfoId == employee.ContactInfoId);
-
-            if (contactInfo != null)
+            catch
             {
-                contactInfo.Email = updateEmployee.ContactInfo.Email;
-                contactInfo.PhoneNumber = updateEmployee.ContactInfo.PhoneNumber;
-                contactInfo.Street = updateEmployee.ContactInfo.Street;
-                contactInfo.City = updateEmployee.ContactInfo.City;
-                contactInfo.State = updateEmployee.ContactInfo.State;
-                contactInfo.ZipCode = updateEmployee.ContactInfo.ZipCode;
-                contactInfo.Country = updateEmployee.ContactInfo.Country;
+                await transaction.RollbackAsync();
+                throw;
             }
-
-            var lookupEmployeeType = await _context.EmployeeTypes.FirstOrDefaultAsync(e => e.EmployeeTypeId == employee.EmployeeTypeId);
-
-            if (lookupEmployeeType == null)
-            {
-                throw new InvalidOperationException($"EmployeeType {updateEmployee.EmployeeTypeId} not found");
-            }
-
-            employee.EmployeeType = lookupEmployeeType;
-
-            await _context.SaveChangesAsync();
-
-            return employee;
         }
     }
 }
