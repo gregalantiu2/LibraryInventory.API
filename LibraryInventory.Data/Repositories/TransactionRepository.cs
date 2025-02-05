@@ -1,5 +1,7 @@
 ﻿using LibraryInventory.Data.Entities;
+using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Data.Repositories.Interfaces;
+using LibraryInventory.Model.TransactionModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryInventory.Data.Repositories
@@ -7,10 +9,12 @@ namespace LibraryInventory.Data.Repositories
     public class TransactionRepository : ITransactionRepository
     {
         private readonly LibraryInventoryDbContext _context;
+        private readonly IMemberRepository _memberRepository;
 
-        public TransactionRepository(LibraryInventoryDbContext context)
+        public TransactionRepository(LibraryInventoryDbContext context, IMemberRepository memberRepository)
         {
             _context = context;
+            _memberRepository = memberRepository;
         }
 
         public async Task AddTransactionType(TransactionTypeEntity transactionType)
@@ -19,13 +23,18 @@ namespace LibraryInventory.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task CreateTransaction(TransactionEntity transaction)
+        public Task AddTransactionTypeAsync(TransactionTypeEntity transactionType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task CreateTransactionAsync(TransactionEntity transaction)
         {
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteTransaction(int transactionId)
+        public async Task DeleteTransactionAsync(int transactionId)
         {
             var transactionEntity = await _context.Transactions.FindAsync(transactionId);
 
@@ -36,7 +45,7 @@ namespace LibraryInventory.Data.Repositories
             }
         }
 
-        public async Task DeleteTransactionType(int transactionTypeId)
+        public async Task DeleteTransactionTypeAsync(int transactionTypeId)
         {
             var transactionType = await _context.TransactionTypes.FindAsync(transactionTypeId);
 
@@ -145,6 +154,26 @@ namespace LibraryInventory.Data.Repositories
             }
 
             return type;
+        }
+
+        public async Task PaymentOfFineTransactionAsync(TransactionEntity transaction, MemberEntity member)
+        {
+            using (var wrapTransaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    _context.Transactions.Add(transaction);
+                    await _memberRepository.UpdateMemberAsync(member);
+                    await _context.SaveChangesAsync();
+
+                    await wrapTransaction.CommitAsync();
+                }
+                catch
+                {
+                    await wrapTransaction.RollbackAsync();
+                    throw;
+                }
+            }
         }
     }
 }
