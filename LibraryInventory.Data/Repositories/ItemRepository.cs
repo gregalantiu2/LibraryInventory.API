@@ -129,16 +129,21 @@ namespace LibraryInventory.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<ItemEntity> UpdateItemAsync(ItemEntity item)
+        public async Task<ItemEntity> UpdateItemAsync(ItemEntity updateItem)
         {
+            var item = await _context.Items.FirstOrDefaultAsync(i => i.ItemId == updateItem.ItemId);
+
+            if (item == null)
+            {
+                throw new InvalidOperationException($"Item {updateItem.ItemId} not found");
+            }
+
             var policyType = await _context.ItemPolicies.FirstOrDefaultAsync(i => i.ItemPolicyId == item.ItemPolicyId);
 
             if (policyType == null)
             {
                 throw new InvalidOperationException($"ItemPolicy {item.ItemPolicyId} not found");
             }
-
-            item.ItemPolicy = policyType;
 
             var itemType = await _context.ItemTypes.FirstOrDefaultAsync(i => i.ItemTypeId == item.ItemTypeId);
 
@@ -148,8 +153,11 @@ namespace LibraryInventory.Data.Repositories
             }
 
             item.ItemType = itemType;
+            item.ItemPolicy = policyType;
+            item.ItemTitle = updateItem.ItemTitle;
+            item.ItemDescription = updateItem.ItemDescription;
+            item.ItemLocation = updateItem.ItemLocation;
 
-            _context.Items.Update(item);
             await _context.SaveChangesAsync();
             return item;
         }
