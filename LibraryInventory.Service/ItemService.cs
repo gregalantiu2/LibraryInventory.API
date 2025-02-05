@@ -51,12 +51,6 @@ namespace LibraryInventory.Service
             return _mapper.Map<ItemBorrowStatus>(result);
         }
 
-        public async Task<ItemDetail> GetItemDetailAsync(int itemId)
-        {
-            var result = await _itemRepository.GetItemDetailAsync(itemId);
-            return _mapper.Map<ItemDetail>(result);
-        }
-
         public async Task<ItemPolicy> GetItemPolicyAsync(int itemId)
         {
             var result = await _itemRepository.GetItemPolicyAsync(itemId);

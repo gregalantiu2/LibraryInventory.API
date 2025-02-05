@@ -24,7 +24,6 @@ namespace LibraryInventory.Data.Repositories
         public async Task<ItemEntity?> GetItemAsync(int itemId)
         {
             return await _context.Items
-                .Include(i => i.ItemDetail)
                 .Include(i => i.ItemPolicy)
                 .Include(i => i.ItemBorrowStatus)
                 .FirstOrDefaultAsync(i => i.ItemId == itemId);
@@ -37,25 +36,6 @@ namespace LibraryInventory.Data.Repositories
                 .FirstOrDefaultAsync(i => i.ItemId == itemId);
 
             return item?.ItemBorrowStatus;
-        }
-
-        public async Task<ItemDetailEntity> GetItemDetailAsync(int itemId)
-        {
-            var item = await _context.Items
-                .Include(i => i.ItemDetail)
-                .FirstOrDefaultAsync(i => i.ItemId == itemId);
-
-            if (item == null)
-            {
-                throw new KeyNotFoundException($"Item {itemId} was not found");
-            }
-
-            if (item.ItemDetail == null)
-            {
-                throw new InvalidOperationException($"Item {itemId} does not have any details");
-            }
-
-            return item.ItemDetail;
         }
 
         public async Task<ItemPolicyEntity> GetItemPolicyAsync(int itemId)
@@ -115,7 +95,7 @@ namespace LibraryInventory.Data.Repositories
         public async Task<IEnumerable<ItemEntity>> SearchItemsAsync(string searchTerm)
         {
             return await _context.Items
-                .Where(i => i.ItemDetail.ItemTitle.Contains(searchTerm) || i.ItemDetail.ItemDescription.Contains(searchTerm))
+                .Where(i => i.ItemTitle.Contains(searchTerm) || i.ItemDescription.Contains(searchTerm))
                 .ToListAsync();
         }
 

@@ -8,15 +8,17 @@ namespace LibraryInventory.Data.Entities
     {
         [Key]
         public int ItemId { get; set; }
+        public required string ItemTitle { get; set; }
+        public required string ItemDescription { get; set; }
+        public int ItemTypeId { get; set; }
         public string? Location { get; set; }
         public bool IsActive { get; set; }
         public int ItemPolicyId { get; set; }
-        public int ItemDetailId { get; set; }
 
 
         // Navigation properties
-        [ForeignKey("ItemDetailId")]
-        public ItemDetailEntity? ItemDetail { get; set; }
+        [ForeignKey("ItemTypeId")]
+        public required ItemTypeEntity ItemType { get; set; }
 
         [ForeignKey("ItemPolicyId")]
         public ItemPolicyEntity? ItemPolicy { get; set; }

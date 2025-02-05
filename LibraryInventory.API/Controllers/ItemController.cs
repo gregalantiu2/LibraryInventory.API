@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using LibraryInventory.API.Extensions;
 using LibraryInventory.Model.RequestModels;
+using AutoMapper;
 namespace LibraryInventory.API.Controllers
 {
     [Authorize]
@@ -14,9 +15,12 @@ namespace LibraryInventory.API.Controllers
     public class ItemController : ControllerBase
     {
         private readonly IItemService _itemService;
-        public ItemController(IItemService itemService)
+        private readonly IMapper _mapper;
+
+        public ItemController(IItemService itemService, IMapper mapper)
         {
             _itemService = itemService;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -44,21 +48,21 @@ namespace LibraryInventory.API.Controllers
 
         [HttpPost]
         [Route("addItem")]
-        public async Task<ActionResult> AddItem([FromBody] Item newItem)
+        public async Task<ActionResult> AddItem([FromBody] ItemRequest newItem)
         {
             if (newItem == null)
             {
                 return BadRequest(MessageHelper<Item>.ObjectNull());
             }
 
-            var item = await _itemService.AddItemAsync(newItem);
+            var item = await _itemService.AddItemAsync(_mapper.Map<Item>(newItem));
 
             return Ok(item);
         }
 
         [HttpPut]
         [Route("updateItem/{itemId}")]
-        public async Task<ActionResult> UpdateItem(int itemId, [FromBody] Item item)
+        public async Task<ActionResult> UpdateItem(int itemId, [FromBody] ItemRequest item)
         {
             if (itemId != item.ItemId)
             {
@@ -70,7 +74,7 @@ namespace LibraryInventory.API.Controllers
                 return NotFound(MessageHelper<Item>.NotFound(itemId.ToString()));
             }
 
-            var updatedItem = await _itemService.UpdateItemAsync(item);
+            var updatedItem = await _itemService.UpdateItemAsync(_mapper.Map<Item>(item));
 
             return Ok(updatedItem);
         }
@@ -110,15 +114,6 @@ namespace LibraryInventory.API.Controllers
             var status = await _itemService.GetItemBorrowStatusAsync(itemId);
 
             return Ok(status);
-        }
-
-        [HttpGet]
-        [Route("getItemDetail/{itemId}")]
-        public async Task<ActionResult> GetItemDetail(int itemId)
-        {
-            var detail = await _itemService.GetItemDetailAsync(itemId);
-
-            return Ok(detail);
         }
 
         [HttpGet]

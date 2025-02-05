@@ -12,7 +12,6 @@ namespace LibraryInventory.Service.Interfaces
         Task<Item> GetItemAsync(int itemId);
         Task<bool> ItemExistsAsync(int itemId);
         Task<ItemBorrowStatus> GetItemBorrowStatusAsync(int itemId);
-        Task<ItemDetail> GetItemDetailAsync(int itemId);
         Task<ItemPolicy> GetPolicyForItemAsync(int itemId);
         Task<ItemPolicy> GetItemPolicyAsync(int itemId);
         Task<ItemPolicy> UpdateItemPolicyAsync(ItemPolicy itemPolicy);

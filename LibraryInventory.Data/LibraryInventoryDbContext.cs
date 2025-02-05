@@ -15,7 +15,6 @@ namespace LibraryInventory.Data
 
         public DbSet<ItemEntity> Items { get; set; }
         public DbSet<ItemTypeEntity> ItemTypes { get; set; }
-        public DbSet<ItemDetailEntity> ItemDetails { get; set; }
         public DbSet<ItemPolicyEntity> ItemPolicies { get; set; }
         public DbSet<ItemBorrowStatusEntity> ItemBorrowStatuses { get; set; }
         public DbSet<EmployeeEntity> Employees { get; set; }

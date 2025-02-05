@@ -3,19 +3,25 @@
     public class Item
     {
         private readonly int? _itemId;
-        private ItemDetail _itemDetail;
+        private string _itemTitle;
+        private string _itemDescription;
+        private ItemType _itemType;
         private ItemPolicy? _itemPolicy;
         private ItemBorrowStatus? _itemBorrowStatus;
         private string? _itemLocation;
         private bool _itemActive;
 
-        public Item(ItemDetail itemDetail
-                    ,string? itemLocation = null
-                    ,ItemPolicy? itemPolicy = null
-                    ,ItemBorrowStatus? itemBorrowStatus = null
-                    ,int? itemId = null)
+        public Item (string itemTitle
+                     ,string itemDescription
+                     ,ItemType itemType
+                     ,ItemPolicy? itemPolicy = null
+                     ,ItemBorrowStatus? itemBorrowStatus = null
+                     ,string? itemLocation = null   
+                     ,int? itemId = null)
         {
-            _itemDetail = itemDetail;
+            _itemTitle = itemTitle;
+            _itemDescription = itemDescription;
+            _itemType = itemType;
             _itemLocation = itemLocation;
             _itemPolicy = itemPolicy;
             _itemBorrowStatus = itemBorrowStatus;
@@ -27,10 +33,20 @@
         {
             get { return _itemId; }
         }
-        public ItemDetail ItemDetail
+        public string ItemTitle
         {
-            get { return _itemDetail; }
-            set { _itemDetail = value; }
+            get { return _itemTitle; }
+            set { _itemTitle = value; }
+        }
+        public string ItemDescription
+        {
+            get { return _itemDescription; }
+            set { _itemDescription = value; }
+        }
+        public ItemType ItemType
+        {
+            get { return _itemType; }
+            set { _itemType = value; }
         }
         public ItemPolicy? ItemPolicy
         {

@@ -1,4 +1,3 @@
-using LibraryInventory.Data.Entities.Item;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,6 +15,6 @@ namespace LibraryInventory.Data.Entities
 
 
         // Navigation properties
-        public ICollection<ItemDetailEntity>? ItemDetail { get; set; }
+        public ICollection<ItemEntity>? Item { get; set; }
     }
 }
