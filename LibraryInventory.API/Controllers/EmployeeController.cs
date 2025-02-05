@@ -97,7 +97,7 @@ namespace LibraryInventory.API.Controllers
                 return BadRequest(MessageHelper<Employee>.MismatchIds(employeeId, employee.EmployeeId));
             }
 
-            if (await _employeeService.EmployeeExistsAsync(employeeId) == false)
+            if (!await _employeeService.EmployeeExistsAsync(employeeId))
             {
                 return NotFound(MessageHelper<Employee>.NotFound(employeeId));
             }

@@ -1,11 +1,9 @@
 ﻿using LibraryInventory.Service.Interfaces;
 using LibraryInventory.Model.ItemModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using LibraryInventory.API.Extensions;
-using LibraryInventory.Model.PersonModels;
 using LibraryInventory.Model.RequestModels;
 namespace LibraryInventory.API.Controllers
 {
@@ -67,12 +65,12 @@ namespace LibraryInventory.API.Controllers
                 return BadRequest(MessageHelper<Item>.MismatchIds(itemId.ToString(), item.ItemId.ToString()));
             }
 
-            var updatedItem = await _itemService.UpdateItemAsync(item);
-
-            if (updatedItem == null)
+            if (await _itemService.ItemExistsAsync(itemId) == false)
             {
                 return NotFound(MessageHelper<Item>.NotFound(itemId.ToString()));
             }
+
+            var updatedItem = await _itemService.UpdateItemAsync(item);
 
             return Ok(updatedItem);
         }
@@ -81,7 +79,7 @@ namespace LibraryInventory.API.Controllers
         [Route("inactivateItem/{itemId}")]
         public async Task<ActionResult> InactivateItem(int itemId)
         {
-            if (await _itemService.ItemExistsAsync(itemId) == false)
+            if (!await _itemService.ItemExistsAsync(itemId))
             {
                 return NotFound(MessageHelper<Item>.NotFound(itemId.ToString()));
             }
@@ -95,7 +93,7 @@ namespace LibraryInventory.API.Controllers
         [Route("deleteItem/{itemId}")]
         public async Task<ActionResult> DeleteItem(int itemId)
         {
-            if (await _itemService.ItemExistsAsync(itemId) == false)
+            if (!await _itemService.ItemExistsAsync(itemId))
             {
                 return NotFound(MessageHelper<Item>.NotFound(itemId.ToString()));
             }
@@ -124,12 +122,78 @@ namespace LibraryInventory.API.Controllers
         }
 
         [HttpGet]
-        [Route("getItemPolicy/{itemId}")]
+        [Route("getPolicyForItem/{itemId}")]
         public async Task<ActionResult> GetPolicyForItem(int itemId)
         {
-            var policy = await _itemService.GetItemPolicyAsync(itemId);
+            var policy = await _itemService.GetPolicyForItemAsync(itemId);
+
+            if(policy == null)
+            {
+                return NotFound(MessageHelper<ItemPolicy>.NotFound(itemId.ToString()));
+            }
 
             return Ok(policy);
+        }
+
+        [HttpGet]
+        [Route("getItemPolicy/{itemId}")]
+        public async Task<ActionResult> GetItemPolicy(int itemPolicyId)
+        {
+            var policy = await _itemService.GetItemPolicyAsync(itemPolicyId);
+
+            if (policy == null)
+            {
+                return NotFound(MessageHelper<ItemPolicy>.NotFound(itemPolicyId.ToString()));
+            }
+
+            return Ok(policy);
+        }
+
+        [HttpPost]
+        [Route("createItemPolicyAsync")]
+        public async Task<ActionResult> CreateItemPolicyAsync([FromBody] ItemPolicy itemPolicy)
+        {
+            if (itemPolicy == null)
+            {
+                return BadRequest(MessageHelper<ItemPolicy>.ObjectNull());
+            }
+
+            var policy = await _itemService.CreateItemPolicyAsync(itemPolicy);
+
+            return Ok(policy);
+        }
+
+        [HttpPut]
+        [Route("updateItemPolicy/{itemPolicyId}")]
+        public async Task<ActionResult> UpdateItemPolicy(int itemPolicyId, [FromBody] ItemPolicy itemPolicy)
+        {
+            if (itemPolicyId != itemPolicy.ItemPolicyId)
+            {
+                return BadRequest(MessageHelper<ItemPolicy>.MismatchIds(itemPolicyId.ToString(), itemPolicy.ItemPolicyId.ToString()));
+            }
+
+            if (!await _itemService.ItemExistsAsync(itemPolicyId))
+            {
+                return NotFound(MessageHelper<Item>.NotFound(itemPolicyId.ToString()));
+            }
+
+            var updatedPolicy = await _itemService.UpdateItemPolicyAsync(itemPolicy);
+
+            return Ok(updatedPolicy);
+        }
+
+        [HttpDelete]
+        [Route("deleteItemPolicy/{itemPolicyId}")]
+        public async Task<ActionResult> DeleteItemPolicy(int itemPolicyId)
+        {
+            if (await _itemService.ItemPolicyExistsAsync(itemPolicyId) == false)
+            {
+                return NotFound(MessageHelper<ItemPolicy>.NotFound(itemPolicyId.ToString()));
+            }
+
+            await _itemService.DeleteItemPolicyAsync(itemPolicyId);
+
+            return Ok(MessageHelper<ItemPolicy>.Success());
         }
     }
 }

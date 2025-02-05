@@ -1,64 +1,150 @@
 ﻿using LibraryInventory.Data.Entities;
 using LibraryInventory.Data.Entities.Item;
 using LibraryInventory.Data.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryInventory.Data.Repositories
 {
     public class ItemRepository : IItemRepository
     {
-        public Task<ItemEntity> AddItemAsync(ItemEntity Item)
+        private readonly LibraryInventoryDbContext _context;
+
+        public ItemRepository(LibraryInventoryDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task DeleteItemAsync(int itemId)
+        public async Task<ItemEntity> AddItemAsync(ItemEntity item)
         {
-            throw new NotImplementedException();
+            _context.Items.Add(item);
+            await _context.SaveChangesAsync();
+            return item;
         }
 
-        public Task<ItemEntity> GetItemAsync(int itemId)
+        public async Task<ItemEntity?> GetItemAsync(int itemId)
         {
-            throw new NotImplementedException();
+            return await _context.Items
+                .Include(i => i.ItemDetail)
+                .Include(i => i.ItemPolicy)
+                .Include(i => i.ItemBorrowStatus)
+                .FirstOrDefaultAsync(i => i.ItemId == itemId);
         }
 
-        public Task<ItemBorrowStatusEntity> GetItemBorrowStatusAsync(int itemId)
+        public async Task<ItemBorrowStatusEntity?> GetItemBorrowStatusAsync(int itemId)
         {
-            throw new NotImplementedException();
+            var item = await _context.Items
+                .Include(i => i.ItemBorrowStatus)
+                .FirstOrDefaultAsync(i => i.ItemId == itemId);
+
+            return item?.ItemBorrowStatus;
         }
 
-        public Task<ItemDetailEntity> GetItemDetailAsync(int itemId)
+        public async Task<ItemDetailEntity> GetItemDetailAsync(int itemId)
         {
-            throw new NotImplementedException();
+            var item = await _context.Items
+                .Include(i => i.ItemDetail)
+                .FirstOrDefaultAsync(i => i.ItemId == itemId);
+
+            if (item == null)
+            {
+                throw new KeyNotFoundException($"Item {itemId} was not found");
+            }
+
+            if (item.ItemDetail == null)
+            {
+                throw new InvalidOperationException($"Item {itemId} does not have any details");
+            }
+
+            return item.ItemDetail;
         }
 
-        public Task<ItemPolicyEntity> GetItemPolicyAsync(int itemId)
+        public async Task<ItemPolicyEntity> GetItemPolicyAsync(int itemId)
         {
-            throw new NotImplementedException();
+            var item = await _context.Items
+                .Include(i => i.ItemPolicy)
+                .FirstOrDefaultAsync(i => i.ItemId == itemId);
+
+            return item?.ItemPolicy;
         }
 
-        public Task InactivateItemAsync(int itemId)
+        public async Task<ItemPolicyEntity> CreateItemPolicyAsync(ItemPolicyEntity itemPolicy)
         {
-            throw new NotImplementedException();
+            _context.ItemPolicies.Add(itemPolicy);
+            await _context.SaveChangesAsync();
+            return itemPolicy;
         }
 
-        public Task<bool> ItemExistsAsync(int itemId)
+        public async Task DeleteItemAsync(int itemId)
         {
-            throw new NotImplementedException();
+            var item = await _context.Items.FindAsync(itemId);
+
+            if (item != null)
+            {
+                _context.Items.Remove(item);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task<IEnumerable<ItemEntity>> SearchItemsAsync(string searchTerm)
+        public async Task DeleteItemPolicyAsync(int itemPolicyId)
         {
-            throw new NotImplementedException();
+            var itemPolicy = await _context.ItemPolicies.FindAsync(itemPolicyId);
+
+            if (itemPolicy != null)
+            {
+                _context.ItemPolicies.Remove(itemPolicy);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task<ItemEntity> UpdateItemAsync(ItemEntity Item)
+        public async Task InactivateItemAsync(int itemId)
         {
-            throw new NotImplementedException();
+            var item = await _context.Items.FindAsync(itemId);
+
+            if (item != null)
+            {
+                item.IsActive = false;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<bool> ItemExistsAsync(int itemId)
+        {
+            return await _context.Items.AnyAsync(i => i.ItemId == itemId);
+        }
+
+        public async Task<IEnumerable<ItemEntity>> SearchItemsAsync(string searchTerm)
+        {
+            return await _context.Items
+                .Where(i => i.ItemDetail.ItemTitle.Contains(searchTerm) || i.ItemDetail.ItemDescription.Contains(searchTerm))
+                .ToListAsync();
+        }
+
+        public async Task<ItemEntity> UpdateItemAsync(ItemEntity item)
+        {
+            _context.Items.Update(item);
+            await _context.SaveChangesAsync();
+            return item;
+        }
+
+        public async Task<ItemPolicyEntity> UpdateItemPolicyAsync(ItemPolicyEntity itemPolicy)
+        {
+            _context.ItemPolicies.Update(itemPolicy);
+            await _context.SaveChangesAsync();
+            return itemPolicy;
+        }
+
+        public async Task<ItemPolicyEntity?> GetPolicyForItemAsync(int itemId)
+        {
+            var item = await _context.Items
+                .Include(i => i.ItemPolicy)
+                .FirstOrDefaultAsync(i => i.ItemId == itemId);
+
+            return item?.ItemPolicy;
+        }
+
+        public async Task<bool> ItemPolicyExistsAsync(int itemPolicyId)
+        {
+            return await _context.ItemPolicies.AnyAsync(ip => ip.ItemPolicyId == itemPolicyId);
         }
     }
 }

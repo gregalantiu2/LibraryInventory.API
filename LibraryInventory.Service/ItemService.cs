@@ -1,58 +1,105 @@
-﻿using LibraryInventory.Model.ItemModels;
+﻿using AutoMapper;
+using LibraryInventory.Data.Entities;
+using LibraryInventory.Data.Repositories.Interfaces;
+using LibraryInventory.Model.ItemModels;
 using LibraryInventory.Service.Interfaces;
 
 namespace LibraryInventory.Service
 {
     public class ItemService : IItemService
     {
-        public Task<Item> AddItemAsync(Item Item)
+        private readonly IItemRepository _itemRepository;
+        private readonly IMapper _mapper;
+
+        public ItemService(IItemRepository itemRepository, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _itemRepository = itemRepository;
+            _mapper = mapper;
         }
 
-        public Task DeleteItemAsync(int itemId)
+        public async Task<Item> AddItemAsync(Item item)
         {
-            throw new NotImplementedException();
+            var result = await _itemRepository.AddItemAsync(_mapper.Map<ItemEntity>(item));
+            return _mapper.Map<Item>(result);
         }
 
-        public Task<Item> GetItemAsync(int itemId)
+        public async Task<ItemPolicy> CreateItemPolicyAsync(ItemPolicy itemPolicy)
         {
-            throw new NotImplementedException();
+            var result = await _itemRepository.CreateItemPolicyAsync(_mapper.Map<ItemPolicyEntity>(itemPolicy));
+            return _mapper.Map<ItemPolicy>(result);
         }
 
-        public Task<ItemBorrowStatus> GetItemBorrowStatusAsync(int itemId)
+        public async Task DeleteItemAsync(int itemId)
         {
-            throw new NotImplementedException();
+            await _itemRepository.DeleteItemAsync(itemId);
         }
 
-        public Task<ItemDetail> GetItemDetailAsync(int itemId)
+        public async Task DeleteItemPolicyAsync(int itemPolicyId)
         {
-            throw new NotImplementedException();
+            await _itemRepository.DeleteItemPolicyAsync(itemPolicyId);
         }
 
-        public Task<ItemPolicy> GetItemPolicyAsync(int itemId)
+        public async Task<Item> GetItemAsync(int itemId)
         {
-            throw new NotImplementedException();
+            var result = await _itemRepository.GetItemAsync(itemId);
+            return _mapper.Map<Item>(result);
         }
 
-        public Task InactivateItemAsync(int itemId)
+        public async Task<ItemBorrowStatus> GetItemBorrowStatusAsync(int itemId)
         {
-            throw new NotImplementedException();
+            var result = await _itemRepository.GetItemBorrowStatusAsync(itemId);
+            return _mapper.Map<ItemBorrowStatus>(result);
         }
 
-        public Task<bool> ItemExistsAsync(int itemId)
+        public async Task<ItemDetail> GetItemDetailAsync(int itemId)
         {
-            throw new NotImplementedException();
+            var result = await _itemRepository.GetItemDetailAsync(itemId);
+            return _mapper.Map<ItemDetail>(result);
         }
 
-        public Task<IEnumerable<Item>> SearchItemsAsync(string searchTerm)
+        public async Task<ItemPolicy> GetItemPolicyAsync(int itemId)
         {
-            throw new NotImplementedException();
+            var result = await _itemRepository.GetItemPolicyAsync(itemId);
+            return _mapper.Map<ItemPolicy>(result);
         }
 
-        public Task<Item> UpdateItemAsync(Item Item)
+        public async Task<ItemPolicy> GetPolicyForItemAsync(int itemId)
         {
-            throw new NotImplementedException();
+            var result = await _itemRepository.GetPolicyForItemAsync(itemId);
+            return _mapper.Map<ItemPolicy>(result);
+        }
+
+        public async Task InactivateItemAsync(int itemId)
+        {
+            await _itemRepository.InactivateItemAsync(itemId);
+        }
+
+        public async Task<bool> ItemExistsAsync(int itemId)
+        {
+            return await _itemRepository.ItemExistsAsync(itemId);
+        }
+
+        public async Task<bool> ItemPolicyExistsAsync(int itemPolicyId)
+        {
+            return await _itemRepository.ItemPolicyExistsAsync(itemPolicyId);
+        }
+
+        public async Task<IEnumerable<Item>> SearchItemsAsync(string searchTerm)
+        {
+            var result = await _itemRepository.SearchItemsAsync(searchTerm);
+            return _mapper.Map<IEnumerable<Item>>(result);
+        }
+
+        public async Task<Item> UpdateItemAsync(Item item)
+        {
+            var result = await _itemRepository.UpdateItemAsync(_mapper.Map<ItemEntity>(item));
+            return _mapper.Map<Item>(result);
+        }
+
+        public async Task<ItemPolicy> UpdateItemPolicyAsync(ItemPolicy itemPolicy)
+        {
+            var result = await _itemRepository.UpdateItemPolicyAsync(_mapper.Map<ItemPolicyEntity>(itemPolicy));
+            return _mapper.Map<ItemPolicy>(result);
         }
     }
 }

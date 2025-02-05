@@ -71,12 +71,12 @@ namespace LibraryInventory.API.Controllers
                 return BadRequest($"{memberId} query param does not match memberId in resource object");
             }
 
-            var updatedMember = await _memberService.UpdateMemberAsync(_mapper.Map<Member>(member));
-
-            if (updatedMember == null)
+            if (await _memberService.MemberExistsAsync(memberId) == false)
             {
                 return NotFound(MessageHelper<Member>.NotFound(memberId));
             }
+
+            var updatedMember = await _memberService.UpdateMemberAsync(_mapper.Map<Member>(member));
 
             return Ok(updatedMember);
         }
