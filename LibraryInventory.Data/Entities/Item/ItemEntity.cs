@@ -11,8 +11,8 @@ namespace LibraryInventory.Data.Entities
         public required string ItemTitle { get; set; }
         public required string ItemDescription { get; set; }
         public int ItemTypeId { get; set; }
-        public string? Location { get; set; }
-        public bool IsActive { get; set; }
+        public string? ItemLocation { get; set; }
+        public bool ItemActive { get; set; }
         public int ItemPolicyId { get; set; }
 
 

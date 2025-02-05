@@ -1,8 +1,5 @@
 ﻿using LibraryInventory.Data.Entities;
-using LibraryInventory.Data.Entities.Item;
 using LibraryInventory.Data.Repositories.Interfaces;
-using LibraryInventory.Model.ItemModels;
-using LibraryInventory.Model.PersonModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryInventory.Data.Repositories
@@ -38,14 +35,18 @@ namespace LibraryInventory.Data.Repositories
 
             _context.Items.Add(item);
             await _context.SaveChangesAsync();
+
             return item;
         }
 
         public async Task<ItemEntity?> GetItemAsync(int itemId)
         {
             return await _context.Items
+                .Include(i => i.ItemType)
                 .Include(i => i.ItemPolicy)
                 .Include(i => i.ItemBorrowStatus)
+                .Include(i => i.ItemType)
+                .ThenInclude(i => i.ItemTypeProperties)
                 .FirstOrDefaultAsync(i => i.ItemId == itemId);
         }
 
@@ -60,7 +61,9 @@ namespace LibraryInventory.Data.Repositories
 
         public async Task<ItemPolicyEntity?> GetItemPolicyAsync(int itemPolicyId)
         {
-            var policy = await _context.ItemPolicies.Include(p => p.ItemFineOccurenceType).FirstOrDefaultAsync(i => i.ItemPolicyId == itemPolicyId);
+            var policy = await _context.ItemPolicies
+                .Include(p => p.ItemFineOccurenceType)
+                .FirstOrDefaultAsync(i => i.ItemPolicyId == itemPolicyId);
 
             return policy;
         }
@@ -109,7 +112,7 @@ namespace LibraryInventory.Data.Repositories
 
             if (item != null)
             {
-                item.IsActive = false;
+                item.ItemActive = false;
                 await _context.SaveChangesAsync();
             }
         }

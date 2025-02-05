@@ -4,6 +4,7 @@ using LibraryInventory.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryInventory.Data.Migrations
 {
     [DbContext(typeof(LibraryInventoryDbContext))]
-    partial class LibraryInvetoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250205153837_AddedNavigation")]
+    partial class AddedNavigation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,14 +150,11 @@ namespace LibraryInventory.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("ItemActive")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("ItemDescription")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ItemLocation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ItemPolicyId")
@@ -166,6 +166,9 @@ namespace LibraryInventory.Data.Migrations
 
                     b.Property<int>("ItemTypeId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(150)

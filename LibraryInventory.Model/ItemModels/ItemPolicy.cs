@@ -16,7 +16,7 @@
         }
 
         public ItemPolicy(string itemPolicyName
-                           , bool allowedToCheckout
+                           ,bool allowedToCheckout
                            ,int maxRenewalsAllowed
                            ,int checkoutDays
                            ,decimal fineAmount

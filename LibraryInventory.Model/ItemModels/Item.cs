@@ -15,13 +15,15 @@
                     ,string itemDescription
                     ,ItemType itemType
                     ,ItemPolicy? itemPolicy = null
-                    ,string? itemLocation = null)
+                    ,string? itemLocation = null
+                    ,int? itemId = null)
         {
             _itemTitle = itemTitle;
             _itemDescription = itemDescription;
             _itemType = itemType;
             _itemPolicy = itemPolicy;
             _itemLocation = itemLocation;
+            _itemId = itemId;
         }
 
         public Item (int itemId
