@@ -23,9 +23,9 @@ namespace LibraryInventory.Service
             return _mapper.Map<Item>(result);
         }
 
-        public async Task<ItemPolicy> CreateItemPolicyAsync(ItemPolicy itemPolicy)
+        public async Task<ItemPolicy> AddtemPolicyAsync(ItemPolicy itemPolicy)
         {
-            var result = await _itemRepository.CreateItemPolicyAsync(_mapper.Map<ItemPolicyEntity>(itemPolicy));
+            var result = await _itemRepository.AddtemPolicyAsync(_mapper.Map<ItemPolicyEntity>(itemPolicy));
             return _mapper.Map<ItemPolicy>(result);
         }
 

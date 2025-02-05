@@ -1,7 +1,10 @@
-﻿namespace LibraryInventory.Model.RequestModels
+﻿using System.ComponentModel;
+
+namespace LibraryInventory.Model.RequestModels.Person
 {
     public class MemberRequest
     {
+        [DefaultValue(null)]
         public string? MemberId { get; set; }
         public required string FirstName { get; set; }
         public string? MiddleName { get; set; }

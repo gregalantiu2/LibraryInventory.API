@@ -2,7 +2,7 @@
 using LibraryInventory.API.Extensions;
 using LibraryInventory.Model.ItemModels;
 using LibraryInventory.Model.PersonModels;
-using LibraryInventory.Model.RequestModels;
+using LibraryInventory.Model.RequestModels.Person;
 using LibraryInventory.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

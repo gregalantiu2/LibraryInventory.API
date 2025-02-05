@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LibraryInventory.API.Extensions;
 using LibraryInventory.Model.PersonModels;
-using LibraryInventory.Model.RequestModels;
+using LibraryInventory.Model.RequestModels.Person;
 using LibraryInventory.Model.SharedModels;
 using LibraryInventory.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -25,12 +25,6 @@ namespace LibraryInventory.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        [Route("search")]
-        public async Task<ActionResult> SearchEmployees()
-        {
-            return Ok();
-        }
 
         [HttpGet]
         [Route("getEmployee/{employeeId}")]

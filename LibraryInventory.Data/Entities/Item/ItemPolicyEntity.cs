@@ -1,3 +1,4 @@
+using LibraryInventory.Data.Entities.Item;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,12 +19,12 @@ namespace LibraryInventory.Data.Entities
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal FineAmount { get; set; }
-        public int FineOccurrence { get; set; }
-
-        public int ItemId { get; set; }
+        public int ItemFineOccurenceTypeId { get; set; }
 
 
         // Navigation properties
+        [ForeignKey("ItemFineOccurenceTypeId")]
+        public required ItemFineOccurenceTypeEntity ItemFineOccurenceType { get; set; }
         public ICollection<ItemEntity>? Item { get; set; }
     }
 }

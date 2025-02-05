@@ -3,7 +3,7 @@ using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Data.Entities.Shared;
 using LibraryInventory.Model.ItemModels;
 using LibraryInventory.Model.PersonModels;
-using LibraryInventory.Model.RequestModels;
+using LibraryInventory.Model.RequestModels.Person;
 using LibraryInventory.Model.SharedModels;
 using System.Text.Json;
 

@@ -15,9 +15,9 @@ namespace LibraryInventory.Data.Repositories.Interfaces
         Task<bool> ItemPolicyExistsAsync(int itemPolicyId);
         Task<bool> ItemExistsAsync(int itemId);
         Task<ItemBorrowStatusEntity?> GetItemBorrowStatusAsync(int itemId);
-        Task<ItemPolicyEntity> CreateItemPolicyAsync(ItemPolicyEntity itemPolicy);
+        Task<ItemPolicyEntity> AddtemPolicyAsync(ItemPolicyEntity itemPolicy);
         Task<ItemPolicyEntity> UpdateItemPolicyAsync(ItemPolicyEntity itemPolicy);
         Task DeleteItemPolicyAsync(int itemPolicyId);
-        Task<ItemPolicyEntity> GetItemPolicyAsync(int itemId);
+        Task<ItemPolicyEntity?> GetItemPolicyAsync(int itemId);
     }
 }

@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using LibraryInventory.API.Extensions;
-using LibraryInventory.Model.RequestModels;
 using AutoMapper;
+using LibraryInventory.Model.RequestModels.Item;
 namespace LibraryInventory.API.Controllers
 {
     [Authorize]
@@ -131,7 +131,7 @@ namespace LibraryInventory.API.Controllers
         }
 
         [HttpGet]
-        [Route("getItemPolicy/{itemId}")]
+        [Route("getItemPolicy/{itemPolicyId}")]
         public async Task<ActionResult> GetItemPolicy(int itemPolicyId)
         {
             var policy = await _itemService.GetItemPolicyAsync(itemPolicyId);
@@ -145,34 +145,34 @@ namespace LibraryInventory.API.Controllers
         }
 
         [HttpPost]
-        [Route("createItemPolicyAsync")]
-        public async Task<ActionResult> CreateItemPolicyAsync([FromBody] ItemPolicy itemPolicy)
+        [Route("addItemPolicy")]
+        public async Task<ActionResult> AddtemPolicyAsync([FromBody] ItemPolicyRequest itemPolicy)
         {
             if (itemPolicy == null)
             {
                 return BadRequest(MessageHelper<ItemPolicy>.ObjectNull());
             }
 
-            var policy = await _itemService.CreateItemPolicyAsync(itemPolicy);
+            var policy = await _itemService.AddtemPolicyAsync(_mapper.Map<ItemPolicy>(itemPolicy));
 
             return Ok(policy);
         }
 
         [HttpPut]
         [Route("updateItemPolicy/{itemPolicyId}")]
-        public async Task<ActionResult> UpdateItemPolicy(int itemPolicyId, [FromBody] ItemPolicy itemPolicy)
+        public async Task<ActionResult> UpdateItemPolicy(int itemPolicyId, [FromBody] ItemPolicyRequest itemPolicy)
         {
             if (itemPolicyId != itemPolicy.ItemPolicyId)
             {
                 return BadRequest(MessageHelper<ItemPolicy>.MismatchIds(itemPolicyId.ToString(), itemPolicy.ItemPolicyId.ToString()));
             }
 
-            if (!await _itemService.ItemExistsAsync(itemPolicyId))
+            if (!await _itemService.ItemPolicyExistsAsync(itemPolicyId))
             {
                 return NotFound(MessageHelper<Item>.NotFound(itemPolicyId.ToString()));
             }
 
-            var updatedPolicy = await _itemService.UpdateItemPolicyAsync(itemPolicy);
+            var updatedPolicy = await _itemService.UpdateItemPolicyAsync(_mapper.Map<ItemPolicy>(itemPolicy));
 
             return Ok(updatedPolicy);
         }

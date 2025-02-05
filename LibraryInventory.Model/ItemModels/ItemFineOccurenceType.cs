@@ -2,24 +2,27 @@
 {
     public class ItemFineOccurenceType
     {
-        private readonly int? _itemPolicyFineTypeId;
-        private string _itemPolicyFineTypeName;
+        private readonly int? _itemFineOccurenceTypeId;
+        private string? _itemFineOccurenceTypeDescription;
 
-        public ItemFineOccurenceType(string itemPolicyFineTypeName, int? itemPolicyFineTypeId = null)
+        public ItemFineOccurenceType (int itemFineOccurenceTypeId)
         {
-            _itemPolicyFineTypeId = itemPolicyFineTypeId;
-            _itemPolicyFineTypeName = itemPolicyFineTypeName;
+            _itemFineOccurenceTypeId = itemFineOccurenceTypeId;
+        }
+        public ItemFineOccurenceType (string itemFineOccurenceTypeDescription)
+        {
+            _itemFineOccurenceTypeDescription = itemFineOccurenceTypeDescription;
         }
 
-        public int? ItemPolicyFineTypeId
+        public int? ItemFineOccurenceTypeId
         {
-            get { return _itemPolicyFineTypeId; }
+            get { return _itemFineOccurenceTypeId; }
         }
 
-        public string ItemPolicyFineTypeName
+        public string? ItemFineOccurenceTypeDescription
         {
-            get { return _itemPolicyFineTypeName; }
-            set { _itemPolicyFineTypeName = value; }
+            get { return _itemFineOccurenceTypeDescription; }
+            set { _itemFineOccurenceTypeDescription = value; }
         }
     }
 }

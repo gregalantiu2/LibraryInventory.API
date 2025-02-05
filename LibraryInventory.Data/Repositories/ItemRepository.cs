@@ -1,6 +1,8 @@
 ﻿using LibraryInventory.Data.Entities;
 using LibraryInventory.Data.Entities.Item;
 using LibraryInventory.Data.Repositories.Interfaces;
+using LibraryInventory.Model.ItemModels;
+using LibraryInventory.Model.PersonModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryInventory.Data.Repositories
@@ -16,6 +18,24 @@ namespace LibraryInventory.Data.Repositories
 
         public async Task<ItemEntity> AddItemAsync(ItemEntity item)
         {
+            var policyType = await _context.ItemPolicies.FirstOrDefaultAsync(i => i.ItemPolicyId == item.ItemPolicyId);
+
+            if (policyType == null)
+            {
+                throw new InvalidOperationException($"ItemPolicy {item.ItemPolicyId} not found");
+            }
+
+            item.ItemPolicy = policyType;
+
+            var itemType = await _context.ItemTypes.FirstOrDefaultAsync(i => i.ItemTypeId == item.ItemTypeId);
+
+            if (itemType == null)
+            {
+                throw new InvalidOperationException($"ItemType {item.ItemTypeId} not found");
+            }
+
+            item.ItemType = itemType;
+
             _context.Items.Add(item);
             await _context.SaveChangesAsync();
             return item;
@@ -38,17 +58,24 @@ namespace LibraryInventory.Data.Repositories
             return item?.ItemBorrowStatus;
         }
 
-        public async Task<ItemPolicyEntity> GetItemPolicyAsync(int itemId)
+        public async Task<ItemPolicyEntity?> GetItemPolicyAsync(int itemPolicyId)
         {
-            var item = await _context.Items
-                .Include(i => i.ItemPolicy)
-                .FirstOrDefaultAsync(i => i.ItemId == itemId);
+            var policy = await _context.ItemPolicies.Include(p => p.ItemFineOccurenceType).FirstOrDefaultAsync(i => i.ItemPolicyId == itemPolicyId);
 
-            return item?.ItemPolicy;
+            return policy;
         }
 
-        public async Task<ItemPolicyEntity> CreateItemPolicyAsync(ItemPolicyEntity itemPolicy)
+        public async Task<ItemPolicyEntity> AddtemPolicyAsync(ItemPolicyEntity itemPolicy)
         {
+            var fineOccurence = await _context.ItemFineOccurenceTypes.FirstOrDefaultAsync(i => i.ItemFineOccurenceTypeId == itemPolicy.ItemFineOccurenceTypeId);
+
+            if (fineOccurence == null)
+            {
+                throw new InvalidOperationException($"ItemFineOccurenceType {itemPolicy.ItemFineOccurenceTypeId} not found");
+            }
+
+            itemPolicy.ItemFineOccurenceType = fineOccurence;
+
             _context.ItemPolicies.Add(itemPolicy);
             await _context.SaveChangesAsync();
             return itemPolicy;
@@ -101,6 +128,24 @@ namespace LibraryInventory.Data.Repositories
 
         public async Task<ItemEntity> UpdateItemAsync(ItemEntity item)
         {
+            var policyType = await _context.ItemPolicies.FirstOrDefaultAsync(i => i.ItemPolicyId == item.ItemPolicyId);
+
+            if (policyType == null)
+            {
+                throw new InvalidOperationException($"ItemPolicy {item.ItemPolicyId} not found");
+            }
+
+            item.ItemPolicy = policyType;
+
+            var itemType = await _context.ItemTypes.FirstOrDefaultAsync(i => i.ItemTypeId == item.ItemTypeId);
+
+            if (itemType == null)
+            {
+                throw new InvalidOperationException($"ItemType {item.ItemTypeId} not found");
+            }
+
+            item.ItemType = itemType;
+
             _context.Items.Update(item);
             await _context.SaveChangesAsync();
             return item;
@@ -108,9 +153,29 @@ namespace LibraryInventory.Data.Repositories
 
         public async Task<ItemPolicyEntity> UpdateItemPolicyAsync(ItemPolicyEntity itemPolicy)
         {
-            _context.ItemPolicies.Update(itemPolicy);
+            var currentPolicy = await _context.ItemPolicies.FirstOrDefaultAsync(i => i.ItemPolicyId == itemPolicy.ItemPolicyId);
+
+            if (currentPolicy == null)
+            {
+                throw new InvalidOperationException($"ItemPolicy {itemPolicy.ItemPolicyId} not found");
+            }
+
+            var fineOccurence = await _context.ItemFineOccurenceTypes.FirstOrDefaultAsync(i => i.ItemFineOccurenceTypeId == itemPolicy.ItemFineOccurenceTypeId);
+
+            if (fineOccurence == null)
+            {
+                throw new InvalidOperationException($"ItemFineOccurenceType {itemPolicy.ItemFineOccurenceTypeId} not found");
+            }
+
+            currentPolicy.ItemPolicyName = itemPolicy.ItemPolicyName;
+            currentPolicy.FineAmount = itemPolicy.FineAmount;
+            currentPolicy.AllowedToCheckout = itemPolicy.AllowedToCheckout;
+            currentPolicy.MaxRenewalsAllowed = itemPolicy.MaxRenewalsAllowed;
+            currentPolicy.CheckoutDays = itemPolicy.CheckoutDays;
+            currentPolicy.ItemFineOccurenceTypeId = fineOccurence.ItemFineOccurenceTypeId;
+
             await _context.SaveChangesAsync();
-            return itemPolicy;
+            return currentPolicy;
         }
 
         public async Task<ItemPolicyEntity?> GetPolicyForItemAsync(int itemId)

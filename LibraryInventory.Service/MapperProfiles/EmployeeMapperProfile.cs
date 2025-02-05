@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Model.PersonModels;
-using LibraryInventory.Model.RequestModels;
+using LibraryInventory.Model.RequestModels.Person;
 using LibraryInventory.Model.SharedModels;
 
 namespace LibraryInventory.Service.MapperProfiles

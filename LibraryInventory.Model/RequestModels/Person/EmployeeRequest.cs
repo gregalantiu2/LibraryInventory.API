@@ -1,9 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel;
 
-namespace LibraryInventory.Model.RequestModels
+namespace LibraryInventory.Model.RequestModels.Person
 {
     public class EmployeeRequest
     {
+        [DefaultValue(null)]
         public string? EmployeeId { get; set; }
         public required int EmployeeTypeId { get; set; }
         public required string FirstName { get; set; }

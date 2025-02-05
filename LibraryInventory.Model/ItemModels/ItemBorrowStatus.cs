@@ -28,6 +28,7 @@
         {
             get { return _itemBorrowStatusId; }
         }
+
         public bool IsCheckedOut
         {
             get { return _isCheckedOut; }

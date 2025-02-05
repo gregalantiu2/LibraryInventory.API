@@ -11,14 +11,28 @@
         private string? _itemLocation;
         private bool _itemActive;
 
-        public Item (string itemTitle
+        public Item(string itemTitle
+                    ,string itemDescription
+                    ,ItemType itemType
+                    ,ItemPolicy? itemPolicy = null
+                    ,string? itemLocation = null)
+        {
+            _itemTitle = itemTitle;
+            _itemDescription = itemDescription;
+            _itemType = itemType;
+            _itemPolicy = itemPolicy;
+            _itemLocation = itemLocation;
+        }
+
+        public Item (int itemId
+                     ,string itemTitle
                      ,string itemDescription
                      ,ItemType itemType
                      ,ItemPolicy? itemPolicy = null
                      ,ItemBorrowStatus? itemBorrowStatus = null
-                     ,string? itemLocation = null   
-                     ,int? itemId = null)
+                     ,string? itemLocation = null)
         {
+            _itemId = itemId;
             _itemTitle = itemTitle;
             _itemDescription = itemDescription;
             _itemType = itemType;
@@ -26,7 +40,6 @@
             _itemPolicy = itemPolicy;
             _itemBorrowStatus = itemBorrowStatus;
             _itemActive = true;
-            _itemId = itemId;
         }
 
         public int? ItemId

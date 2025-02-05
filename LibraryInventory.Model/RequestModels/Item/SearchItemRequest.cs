@@ -1,4 +1,4 @@
-﻿namespace LibraryInventory.Model.RequestModels
+﻿namespace LibraryInventory.Model.RequestModels.Item
 {
     public record SearchItemRequest : SearchRequest
     {

@@ -8,6 +8,6 @@ namespace LibraryInventory.Data.Entities.Item
     {
         [Key]
         public int ItemFineOccurenceTypeId { get; set; }
-        public required string FineOccurenceTypeName { get; set; }
+        public required string ItemFineOccurenceTypeDescription { get; set; }
     }
 }

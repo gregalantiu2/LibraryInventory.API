@@ -15,7 +15,7 @@ namespace LibraryInventory.Service.Interfaces
         Task<ItemPolicy> GetPolicyForItemAsync(int itemId);
         Task<ItemPolicy> GetItemPolicyAsync(int itemId);
         Task<ItemPolicy> UpdateItemPolicyAsync(ItemPolicy itemPolicy);
-        Task<ItemPolicy> CreateItemPolicyAsync(ItemPolicy itemPolicy);
+        Task<ItemPolicy> AddtemPolicyAsync(ItemPolicy itemPolicy);
         Task DeleteItemPolicyAsync(int itemPolicyId);
         Task<bool> ItemPolicyExistsAsync(int itemPolicyId);
     }

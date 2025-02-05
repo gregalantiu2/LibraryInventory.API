@@ -3,28 +3,33 @@
     public class ItemPolicy
     {
         private readonly int? _itemPolicyId;
-        private string _policyName;
-        private bool _allowedToCheckout;
-        private int _maxRenewalsAllowed;
-        private int _checkoutDays;
-        private decimal _fineAmount;
-        private ItemFineOccurenceType _fineOccurrence;
+        private string? _itemPolicyName;
+        private bool? _allowedToCheckout;
+        private int? _maxRenewalsAllowed;
+        private int? _checkoutDays;
+        private decimal? _fineAmount;
+        private ItemFineOccurenceType? _itemFineOccurenceType;
 
-        public ItemPolicy(string policyName
-                           ,bool allowedToCheckout
+        public ItemPolicy(int itemPolicyId)
+        {
+            _itemPolicyId = itemPolicyId;
+        }
+
+        public ItemPolicy(string itemPolicyName
+                           , bool allowedToCheckout
                            ,int maxRenewalsAllowed
                            ,int checkoutDays
                            ,decimal fineAmount
-                           ,ItemFineOccurenceType fineOccurrence
-                           ,int? itemPolicyId = null)
+                           ,ItemFineOccurenceType itemFineOccurenceType
+                           ,int? itemPolicyId)
         {
 
-            _policyName = policyName;
+            _itemPolicyName = itemPolicyName;
             _allowedToCheckout = allowedToCheckout;
             _maxRenewalsAllowed = maxRenewalsAllowed;
             _checkoutDays = checkoutDays;
             _fineAmount = fineAmount;
-            _fineOccurrence = fineOccurrence;
+            _itemFineOccurenceType = itemFineOccurenceType;
             _itemPolicyId = itemPolicyId;
         }
 
@@ -33,37 +38,37 @@
             get { return _itemPolicyId; }
         }
 
-        public string PolicyName
+        public string? ItemPolicyName
         {
-            get { return _policyName; }
-            set { _policyName = value; }
+            get { return _itemPolicyName; }
+            set { _itemPolicyName = value; }
         }
 
-        public bool AllowedToCheckout
+        public bool? AllowedToCheckout
         {
             get { return _allowedToCheckout; }
             set { _allowedToCheckout = value; }
         }
-        public int MaxRenewalsAllowed
+        public int? MaxRenewalsAllowed
         {
             get { return _maxRenewalsAllowed; }
             set { _maxRenewalsAllowed = value; }
         }
-        public int CheckoutDays
+        public int? CheckoutDays
         {
             get { return _checkoutDays; }
             set { _checkoutDays = value; }
         }
-        public decimal FineAmount
+        public decimal? FineAmount
         {
             get { return _fineAmount; }
             set { _fineAmount = value; }
         }
 
-        public ItemFineOccurenceType FineOccurrence
+        public ItemFineOccurenceType? ItemFineOccurenceType
         {
-            get { return _fineOccurrence; }
-            set { _fineOccurrence = value; }
+            get { return _itemFineOccurenceType; }
+            set { _itemFineOccurenceType = value; }
         }
     }
 }

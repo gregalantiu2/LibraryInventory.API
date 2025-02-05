@@ -2,7 +2,7 @@
 using LibraryInventory.Data.Entities;
 using LibraryInventory.Data.Entities.Item;
 using LibraryInventory.Model.ItemModels;
-using LibraryInventory.Model.RequestModels;
+using LibraryInventory.Model.RequestModels.Item;
 
 namespace LibraryInventory.Service.MapperProfiles
 {
@@ -10,10 +10,16 @@ namespace LibraryInventory.Service.MapperProfiles
     {
         public ItemMapperProfile()
         {
-            CreateMap<ItemRequest, ItemType>()
-                .ForCtorParam("itemTypeId", opt => opt.MapFrom(src => src.ItemTypeId));
+            CreateMap<ItemPolicyRequest, ItemFineOccurenceType>()
+                .ForMember(dest => dest.ItemFineOccurenceTypeId, opt => opt.MapFrom(src => src.ItemFineOccurenceTypeId));
 
-            CreateMap<ItemRequest, ItemPolicy>()
+            CreateMap<ItemPolicyRequest, ItemPolicy>()
+                .ForCtorParam("itemPolicyName", opt => opt.MapFrom(src => src.ItemPolicyName))
+                .ForCtorParam("allowedToCheckout", opt => opt.MapFrom(src => src.AllowedToCheckout))
+                .ForCtorParam("maxRenewalsAllowed", opt => opt.MapFrom(src => src.MaxRenewalsAllowed))
+                .ForCtorParam("checkoutDays", opt => opt.MapFrom(src => src.CheckoutDays))
+                .ForCtorParam("fineAmount", opt => opt.MapFrom(src => src.FineAmount))
+                .ForCtorParam("itemFineOccurenceType", opt => opt.MapFrom(src => src))
                 .ForCtorParam("itemPolicyId", opt => opt.MapFrom(src => src.ItemPolicyId));
 
             CreateMap<ItemRequest, Item>()
@@ -24,15 +30,21 @@ namespace LibraryInventory.Service.MapperProfiles
                 .ForCtorParam("itemLocation", opt => opt.MapFrom(src => src.ItemLocation))
                 .ForCtorParam("itemId", opt => opt.MapFrom(src => src.ItemId));
 
+            CreateMap<ItemRequest, ItemType>()
+                .ForMember(dest => dest.ItemTypeId, opt => opt.MapFrom(src => src.ItemTypeId));
+
             CreateMap<ItemType, ItemTypeEntity>();
 
-            CreateMap<ItemPolicy, ItemPolicyEntity>();
+            CreateMap<ItemPolicy, ItemPolicyEntity>()
+                .ForMember(dest => dest.ItemFineOccurenceTypeId, opt => opt.MapFrom(src => src.ItemFineOccurenceType.ItemFineOccurenceTypeId));
 
-            CreateMap<ItemFineOccurenceType, ItemFineOccurenceTypeEntity>();
+            CreateMap<ItemPolicyEntity, ItemPolicy>();
 
-            CreateMap<ItemBorrowStatus, ItemBorrowStatusEntity>();
+            CreateMap<ItemFineOccurenceType, ItemFineOccurenceTypeEntity>().ReverseMap();
 
-            CreateMap<Item, ItemEntity>();
+            CreateMap<ItemBorrowStatus, ItemBorrowStatusEntity>().ReverseMap();
+
+            CreateMap<Item, ItemEntity>().ReverseMap();
         }
     }
 }
