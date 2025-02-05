@@ -1,10 +1,8 @@
 ﻿using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Data.Entities.Shared;
 using LibraryInventory.Data.Repositories.Interfaces;
+using LibraryInventory.Model.PersonModels;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LibraryInventory.Data.Repositories
 {
@@ -34,8 +32,8 @@ namespace LibraryInventory.Data.Repositories
 
         public async Task DeleteEmployeeAsync(string employeeId)
         {
-            var employee = await _context.Employees.FindAsync(employeeId);
-            
+            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
+
             if (employee != null)
             {
                 _context.Employees.Remove(employee);
@@ -70,20 +68,52 @@ namespace LibraryInventory.Data.Repositories
 
         public async Task InactivateEmployeeAsync(string employeeId)
         {
-            var employee = await _context.Employees.FindAsync(employeeId);
+            var rowsAffected = await _context.Employees.Where(e => e.EmployeeId == employeeId)
+                .ExecuteUpdateAsync(u =>
+                    u.SetProperty(emp => emp.Active, false));
 
-            if (employee != null)
+            if (rowsAffected == 0)
             {
-                employee.Active = false;
-
-                _context.Employees.Update(employee);
-                await _context.SaveChangesAsync();
+                throw new InvalidOperationException($"Employee {employeeId} not found");
             }
         }
 
-        public async Task<EmployeeEntity> UpdateEmployeeAsync(EmployeeEntity employee)
+        public async Task<EmployeeEntity> UpdateEmployeeAsync(EmployeeEntity updateEmployee)
         {
-            _context.Employees.Update(employee);
+            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == updateEmployee.EmployeeId);
+
+            if (employee == null)
+            {
+                throw new InvalidOperationException($"Employee {updateEmployee.EmployeeId} not found");
+            }
+
+            employee.FirstName = updateEmployee.FirstName;
+            employee.MiddleName = updateEmployee.MiddleName;
+            employee.LastName = updateEmployee.LastName;
+            employee.EmployeeTypeId = updateEmployee.EmployeeTypeId;
+
+            var contactInfo = await _context.ContactInfos.FirstOrDefaultAsync(c => c.ContactInfoId == employee.ContactInfoId);
+
+            if (contactInfo != null)
+            {
+                contactInfo.Email = updateEmployee.ContactInfo.Email;
+                contactInfo.PhoneNumber = updateEmployee.ContactInfo.PhoneNumber;
+                contactInfo.Street = updateEmployee.ContactInfo.Street;
+                contactInfo.City = updateEmployee.ContactInfo.City;
+                contactInfo.State = updateEmployee.ContactInfo.State;
+                contactInfo.ZipCode = updateEmployee.ContactInfo.ZipCode;
+                contactInfo.Country = updateEmployee.ContactInfo.Country;
+            }
+
+            var lookupEmployeeType = await _context.EmployeeTypes.FirstOrDefaultAsync(e => e.EmployeeTypeId == employee.EmployeeTypeId);
+
+            if (lookupEmployeeType == null)
+            {
+                throw new InvalidOperationException($"EmployeeType {updateEmployee.EmployeeTypeId} not found");
+            }
+
+            employee.EmployeeType = lookupEmployeeType;
+
             await _context.SaveChangesAsync();
 
             return employee;

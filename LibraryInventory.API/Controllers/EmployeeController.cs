@@ -67,6 +67,11 @@ namespace LibraryInventory.API.Controllers
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<ActionResult> AddEmployee([FromBody] EmployeeRequest newEmployee)
         {
+            if (newEmployee.EmployeeId is not null && await _employeeService.EmployeeExistsAsync(newEmployee.EmployeeId))
+            {
+                return BadRequest(MessageHelper<Employee>.ObjectNull());
+            }
+
             if (newEmployee == null)
             {
                 return BadRequest(MessageHelper<Employee>.ObjectNull());
@@ -107,7 +112,7 @@ namespace LibraryInventory.API.Controllers
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<ActionResult> InactivateEmployee(string employeeId)
         {
-            if (await _employeeService.EmployeeExistsAsync(employeeId) == false)
+            if (!await _employeeService.EmployeeExistsAsync(employeeId))
             {
                 return NotFound(MessageHelper<Employee>.NotFound(employeeId));
             }
@@ -122,7 +127,7 @@ namespace LibraryInventory.API.Controllers
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<ActionResult> DeleteEmployee(string employeeId)
         {
-            if (await _employeeService.EmployeeExistsAsync(employeeId) == false)
+            if (!await _employeeService.EmployeeExistsAsync(employeeId))
             {
                 return NotFound(MessageHelper<Employee>.NotFound(employeeId));
             }

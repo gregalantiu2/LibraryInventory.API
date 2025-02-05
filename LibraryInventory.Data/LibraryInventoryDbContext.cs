@@ -3,6 +3,7 @@ using LibraryInventory.Data.Entities;
 using LibraryInventory.Data.Entities.Item;
 using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Data.Entities.Shared;
+using LibraryInventory.Model.PersonModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -61,6 +62,30 @@ namespace LibraryInventory.Data
 
                 trackable.ModifiedBy = userId!;
                 trackable.ModifiedDate = DateTime.Now;
+            }
+
+            var result = await base.SaveChangesAsync(cancellationToken);
+
+            var updatedEntries = ChangeTracker.Entries().Where(e => e.Entity is EmployeeEntity || e.Entity is MemberEntity);
+
+            foreach (var entityEntry in updatedEntries)
+            {
+                if (entityEntry.Entity is EmployeeEntity employee)
+                {
+                    if (employee.EmployeeId == null)
+                    {
+                        employee.EmployeeId = employee.EmployeeKeyId.ToString();
+                        entityEntry.State = EntityState.Modified;
+                    }
+                }
+                else if (entityEntry.Entity is MemberEntity member)
+                {
+                    if (member.MemberId == null)
+                    {
+                        member.MemberId = member.MemberKeyId.ToString();
+                        entityEntry.State = EntityState.Modified;
+                    }
+                }
             }
 
             return await base.SaveChangesAsync(cancellationToken);

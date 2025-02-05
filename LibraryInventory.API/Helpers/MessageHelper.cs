@@ -12,6 +12,10 @@ namespace LibraryInventory.API.Extensions
         {
             return $"{memberName}: {typeof(T)}Id ({Id}) was not found";
         }
+        public static string EmployeeIdAssigned(string Id, [CallerMemberName] string memberName = "")
+        {
+            return $"{memberName}: {typeof(T)}Id ({Id}) has already been assigned";
+        }
         public static string MismatchIds( string Id, string? resourceId, [CallerMemberName] string memberName = "")
         {
             if (resourceId == null)

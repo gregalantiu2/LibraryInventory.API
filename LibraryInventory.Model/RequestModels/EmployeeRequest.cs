@@ -1,4 +1,6 @@
-﻿namespace LibraryInventory.Model.RequestModels
+﻿using System.Text.Json.Serialization;
+
+namespace LibraryInventory.Model.RequestModels
 {
     public class EmployeeRequest
     {
