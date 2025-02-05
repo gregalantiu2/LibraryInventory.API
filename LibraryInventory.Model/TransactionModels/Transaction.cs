@@ -5,20 +5,20 @@
         private readonly int? _transactionId;
         private TransactionType _transactionType;
         private DateTime _transactionDate;
-        private TransactionPayment? _transactionPayment;
+        private IEnumerable<TransactionPayment>? _transactionPayments;
         private int _itemId;
         private int? _memberId;
 
         public Transaction(TransactionType transactionType
                             ,DateTime transactionDate
                             ,int itemId
-                            ,TransactionPayment? transactionPayment = null
+                            ,IEnumerable<TransactionPayment>? transactionPayments = null
                             ,int? memberId = null
                             ,int? transactionId = null)
         {
             _transactionType = transactionType;
             _transactionDate = transactionDate;
-            _transactionPayment = transactionPayment;
+            _transactionPayments = transactionPayments;
             _itemId = itemId;
             _memberId = memberId;
             _transactionId = transactionId;
@@ -38,10 +38,10 @@
             get { return _transactionDate; }
             set { _transactionDate = value; }
         }
-        public TransactionPayment? TransactionPayment
+        public IEnumerable<TransactionPayment>? TransactionPayments
         {
-            get { return _transactionPayment; }
-            set { _transactionPayment = value; }
+            get { return _transactionPayments; }
+            set { _transactionPayments = value; }
         }
         public int ItemId
         {

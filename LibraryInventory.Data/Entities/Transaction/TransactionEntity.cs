@@ -25,6 +25,6 @@ namespace LibraryInventory.Data.Entities
         [ForeignKey("MemberId")]
         public MemberEntity? Member { get; set; }
 
-        public IEnumerable<TransactionPaymentEntity>? Payments { get; set; }
+        public IEnumerable<TransactionPaymentEntity>? TransactionPayments { get; set; }
     }
 }

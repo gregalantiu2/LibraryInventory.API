@@ -120,7 +120,7 @@ namespace LibraryInventory.API.Controllers
                 return NotFound(MessageHelper<Member>.NotFound(request.MemberId));
             }
 
-            await _transactionService.ReturnItemTransaction(request.ItemId, request.MemberId);
+            await _transactionService.ReturnItemTransaction(item, member);
 
             return Ok(MessageHelper<Transaction>.Success());
         }
@@ -143,7 +143,7 @@ namespace LibraryInventory.API.Controllers
                 return NotFound(MessageHelper<Member>.NotFound(request.MemberId));
             }
 
-            await _transactionService.RenewItemTransaction(request.ItemId, request.MemberId);
+            await _transactionService.RenewItemTransaction(item, member);
 
             return Ok(MessageHelper<Transaction>.Success());
         }
