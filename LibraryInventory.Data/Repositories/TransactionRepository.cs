@@ -10,14 +10,10 @@ namespace LibraryInventory.Data.Repositories
     public class TransactionRepository : ITransactionRepository
     {
         private readonly LibraryInventoryDbContext _context;
-        private readonly IMemberRepository _memberRepository;
-        private readonly IItemRepository _itemRepository;
 
-        public TransactionRepository(LibraryInventoryDbContext context, IMemberRepository memberRepository, IItemRepository itemRepository)
+        public TransactionRepository(LibraryInventoryDbContext context)
         {
             _context = context;
-            _memberRepository = memberRepository;
-            _itemRepository = itemRepository;
         }
 
         public async Task AddTransactionType(TransactionTypeEntity transactionType)
@@ -165,8 +161,30 @@ namespace LibraryInventory.Data.Repositories
             {
                 try
                 {
+                    var transactionType = await _context.TransactionTypes.FirstOrDefaultAsync(t => t.TransactionTypeName == "Payment");
+
+                    if (transactionType == null)
+                    {
+                        throw new InvalidOperationException("Transaction type Payment not found");
+                    }
+
+                    var transactionPaymentType = await _context.TransactionPaymentTypes.FindAsync(transaction.pay);
+
+                    transaction.TransactionType = transactionType;
+
                     _context.Transactions.Add(transaction);
-                    await _memberRepository.UpdateMemberAsync(member);
+
+                    var currentMember = await _context.Members.FirstOrDefaultAsync(m => m.MemberId == member.MemberId);
+
+                    if (currentMember == null)
+                    {
+                        throw new InvalidOperationException($"Member {member.MemberId} not found");
+                    }
+
+                    currentMember.FineAmountOwed = member.FineAmountOwed;
+
+                    _context.Members.Update(currentMember);
+
                     await _context.SaveChangesAsync();
 
                     await wrapTransaction.CommitAsync();

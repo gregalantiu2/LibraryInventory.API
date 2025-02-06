@@ -10,7 +10,6 @@ namespace LibraryInventory.Model.RequestModels.Transaction
     {
         public decimal Amount { get; set; }
         public required string MemberId { get; set; }
-        public int ItemId { get; set; }
         public int PaymentTypeId { get; set; }  
     }
 }
