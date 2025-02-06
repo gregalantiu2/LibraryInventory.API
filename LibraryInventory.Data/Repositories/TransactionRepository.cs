@@ -209,13 +209,21 @@ namespace LibraryInventory.Data.Repositories
             }
         }
 
-        public async Task ReturnItemTransactionAsync(TransactionEntity transaction, ItemEntity item, int? itemBorrowStatusId)
+        public async Task ReturnItemTransactionAsync(TransactionEntity transaction, int itemBorrowStatusId)
         {
             using (var wrapTransaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    await _context.Transactions.AddAsync(transaction);
+                    var transactionType = await _context.TransactionTypes.FirstOrDefaultAsync(t => t.TransactionTypeName == "Return");
+
+                    if (transactionType == null)
+                    {
+                        throw new InvalidOperationException("Transaction type Return not found");
+                    }
+
+                    transaction.TransactionType = transactionType;
+                    _context.Transactions.Add(transaction);
 
                     var borrowStatus = await _context.ItemBorrowStatuses.FindAsync(itemBorrowStatusId);
 
@@ -225,8 +233,6 @@ namespace LibraryInventory.Data.Repositories
                     }
 
                     _context.ItemBorrowStatuses.Remove(borrowStatus);
-
-                    await _itemRepository.UpdateItemAsync(item);
 
                     await _context.SaveChangesAsync();
 

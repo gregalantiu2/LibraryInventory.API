@@ -23,7 +23,7 @@ namespace LibraryInventory.Data.Repositories.Interfaces
         Task<TransactionTypeEntity> GetTransactionTypesByNameAsync(string transactionType);
         Task PaymentOfFineTransactionAsync(TransactionEntity transaction, MemberEntity member);
         Task CheckoutItemTransactionAsync(TransactionEntity transaction, ItemBorrowStatusEntity status);
-        Task ReturnItemTransactionAsync(TransactionEntity transaction, ItemEntity item, int? itemBorrowStatusId);
+        Task ReturnItemTransactionAsync(TransactionEntity transaction, int itemStatusId);
         Task RenewItemTransactionAsync(TransactionEntity transaction, ItemBorrowStatusEntity itemStatus);
     }
 }

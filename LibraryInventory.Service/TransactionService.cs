@@ -137,6 +137,7 @@ namespace LibraryInventory.Service
                 throw new ArgumentException($"Item {itemId} has reached it's max renewal count for member {member.MemberId}");
             }
 
+            // Changing status details for a renewal
             itemStatus.DueBack = itemStatus.DueBack?.AddDays((double)itemPolicy.CheckoutDays);
             itemStatus.RenewedCount++;
 
@@ -150,26 +151,23 @@ namespace LibraryInventory.Service
             await _transactionRepository.RenewItemTransactionAsync(transactionEntity, itemStatusEntity);
         }
 
-        public async Task ReturnItemTransactionAsync(Item item, Member member)
+        public async Task ReturnItemTransactionAsync(int itemId, Member member)
         {
-            if (item.ItemBorrowStatus == null)
-            {
-                throw new ArgumentException($"{item.ItemId} is not marked as checked out");
-            }
+            var borrowStatus = await _itemRepository.GetItemBorrowStatusAsync(itemId);
 
-            int? itemBorrowStatusId = item.ItemBorrowStatus.ItemBorrowStatusId;
-            item.ItemBorrowStatus = null;
+            if (borrowStatus == null)
+            {
+                throw new ArgumentException($"Item is not marked as checked out");
+            }
 
             // Creating the transaction
             var transactionType = _mapper.Map<TransactionType>(await _transactionRepository.GetTransactionTypesByNameAsync("Return"));
-            var transaction = new Transaction(transactionType, DateTime.Now, item.ItemId, null, memberId: member.MemberId);
+            var transaction = new Transaction(transactionType, DateTime.Now, itemId, null, memberId: member.MemberId);
 
             // Mapping to entities
             var transactionEntity = _mapper.Map<TransactionEntity>(transaction);
-            var itemEntity = _mapper.Map<ItemEntity>(item);
-            var memberEntity = _mapper.Map<MemberEntity>(member);
 
-            await _transactionRepository.ReturnItemTransactionAsync(transactionEntity, itemEntity, itemBorrowStatusId);
+            await _transactionRepository.ReturnItemTransactionAsync(transactionEntity, borrowStatus.ItemBorrowStatusId);
         }
     }
 }

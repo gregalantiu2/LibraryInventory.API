@@ -106,9 +106,7 @@ namespace LibraryInventory.API.Controllers
         [Route("returnItemTransaction")]
         public async Task<ActionResult> ReturnItemTransaction([FromBody] TransactionRequest request)
         {
-            var item = await _itemService.GetItemAsync(request.ItemId);
-
-            if (item == null)
+            if (!await _itemService.ItemExistsAsync(request.ItemId))
             {
                 return NotFound(MessageHelper<Item>.NotFound(request.ItemId.ToString()));
             }
@@ -120,7 +118,7 @@ namespace LibraryInventory.API.Controllers
                 return NotFound(MessageHelper<Member>.NotFound(request.MemberId));
             }
 
-            await _transactionService.ReturnItemTransactionAsync(item, member);
+            await _transactionService.ReturnItemTransactionAsync(request.ItemId, member);
 
             return Ok(MessageHelper<Transaction>.Success());
         }
@@ -133,7 +131,7 @@ namespace LibraryInventory.API.Controllers
 
             if (itemStatus == null)
             {
-                return NotFound(MessageHelper<Item>.NotFound(request.ItemId.ToString()));
+                return NotFound($"{request.ItemId} is not checked out");
             }
 
             var member = await _memberService.GetMemberbyMemberIdAsync(request.MemberId);
