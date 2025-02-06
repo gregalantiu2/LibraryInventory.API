@@ -1,5 +1,6 @@
 ﻿using LibraryInventory.Data.Entities;
 using LibraryInventory.Data.Entities.Item;
+using LibraryInventory.Data.Entities.Person;
 
 namespace LibraryInventory.Data.Repositories.Interfaces
 {

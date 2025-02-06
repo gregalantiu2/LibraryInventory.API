@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.Execution;
 using LibraryInventory.Data.Entities;
 using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Data.Repositories.Interfaces;
@@ -70,6 +69,14 @@ namespace LibraryInventory.Service
             var transactionType = _mapper.Map<TransactionType>(await _transactionRepository.GetTransactionTypesByNameAsync("Checkout"));
             var transaction = new Transaction(transactionType, DateTime.Now, item.ItemId, null, memberId: member.MemberId);
 
+            //Adding item to member's checked out collection
+            if (member.ItemsBorrowed == null)
+            {
+                member.ItemsBorrowed = new List<Item>();
+            }
+
+            member.ItemsBorrowed.Add(item);
+
             //Mapping 
             var transactionEntity = _mapper.Map<TransactionEntity>(transaction);
             var itemEntity = _mapper.Map<ItemEntity>(item);
@@ -93,7 +100,7 @@ namespace LibraryInventory.Service
 
             member.FineAmountOwed -= amount;
 
-            // Creating the transaction
+            // Creating the payment transaction
             var transactionType = _mapper.Map<TransactionType>(await _transactionRepository.GetTransactionTypesByNameAsync("Payment"));
             var paymentType = new TransactionPaymentType(paymentTypeId);
             var payment = new TransactionPayment(amount, paymentType);
@@ -104,12 +111,45 @@ namespace LibraryInventory.Service
 
         public async Task RenewItemTransactionAsync(Item item, Member member)
         {
-            throw new NotImplementedException();
+            BorrowStatusValidation(item, member);
+
+
+
         }
 
         public async Task ReturnItemTransactionAsync(Item item, Member member)
         {
-            throw new NotImplementedException();
+            BorrowStatusValidation(item, member);
+
+            // Removing item from member's checked out collection
+            member.ItemsBorrowed.Remove(item);
+
+            int? itemBorrowStatusId = item.ItemBorrowStatus.ItemBorrowStatusId;
+            item.ItemBorrowStatus = null;
+
+            // Creating the transaction
+            var transactionType = _mapper.Map<TransactionType>(await _transactionRepository.GetTransactionTypesByNameAsync("Return"));
+            var transaction = new Transaction(transactionType, DateTime.Now, item.ItemId, null, memberId: member.MemberId);
+
+            // Mapping to entities
+            var transactionEntity = _mapper.Map<TransactionEntity>(transaction);
+            var itemEntity = _mapper.Map<ItemEntity>(item);
+            var memberEntity = _mapper.Map<MemberEntity>(member);
+
+            await _transactionRepository.ReturnItemTransactionAsync(transactionEntity, itemEntity, memberEntity, itemBorrowStatusId);
+        }
+
+        private void BorrowStatusValidation(Item item, Member member)
+        {
+            if (item.ItemBorrowStatus == null)
+            {
+                throw new ArgumentException($"{item.ItemId} is not marked as checked out");
+            }
+
+            if (member.ItemsBorrowed == null || member.ItemsBorrowed.FirstOrDefault(t => t.ItemId == item.ItemId) != null)
+            {
+                throw new ArgumentException($"{item.ItemId} is not checked out by {member.MemberId}");
+            }
         }
     }
 }

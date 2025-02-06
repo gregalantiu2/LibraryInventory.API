@@ -203,5 +203,33 @@ namespace LibraryInventory.Data.Repositories
                 }
             }
         }
+
+        public async Task ReturnItemTransactionAsync(TransactionEntity transaction, ItemEntity item, MemberEntity member, int? itemBorrowStatusId)
+        {
+            using (var wrapTransaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    await _context.Transactions.AddAsync(transaction);
+
+                    var borrowStatus = await _context.ItemBorrowStatuses.FindAsync(itemBorrowStatusId);
+
+                    _context.ItemBorrowStatuses.Remove(borrowStatus);
+
+                    await _memberRepository.UpdateMemberAsync(member);
+
+                    await _itemRepository.UpdateItemAsync(item);
+
+                    await _context.SaveChangesAsync();
+
+                    await wrapTransaction.CommitAsync();
+                }
+                catch
+                {
+                    await wrapTransaction.RollbackAsync();
+                    throw;
+                }
+            }
+        }
     }
 }
