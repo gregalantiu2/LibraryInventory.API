@@ -14,6 +14,8 @@ namespace LibraryInventory.Data.Entities
 
         public int TransactionPaymentTypeId { get; set; }
 
+        public int TransactionId { get; set; }
+
 
         // Navigation properties
         [ForeignKey("TransactionPaymentTypeId")]

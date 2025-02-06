@@ -155,7 +155,7 @@ namespace LibraryInventory.Data.Repositories
             return type;
         }
 
-        public async Task PaymentOfFineTransactionAsync(TransactionEntity transaction, MemberEntity member)
+        public async Task PaymentOfFineTransactionAsync(TransactionEntity transaction, TransactionPaymentEntity transactionPayment, MemberEntity member)
         {
             using (var wrapTransaction = await _context.Database.BeginTransactionAsync())
             {
@@ -168,11 +168,14 @@ namespace LibraryInventory.Data.Repositories
                         throw new InvalidOperationException("Transaction type Payment not found");
                     }
 
-                    var transactionPaymentType = await _context.TransactionPaymentTypes.FindAsync(transaction.pay);
-
                     transaction.TransactionType = transactionType;
 
-                    _context.Transactions.Add(transaction);
+                    var transactionPaymentType = await _context.TransactionPaymentTypes.FindAsync(transactionPayment.TransactionPaymentTypeId);
+
+                    if(transactionPaymentType == null)
+                    {
+                        throw new InvalidOperationException($"{transactionPayment.TransactionPaymentTypeId} Transaction payment type not found");
+                    }
 
                     var currentMember = await _context.Members.FirstOrDefaultAsync(m => m.MemberId == member.MemberId);
 
@@ -182,6 +185,16 @@ namespace LibraryInventory.Data.Repositories
                     }
 
                     currentMember.FineAmountOwed = member.FineAmountOwed;
+
+                    transaction.TransactionType = transactionType;
+                    _context.Transactions.Add(transaction);
+
+                    await _context.SaveChangesAsync();
+
+                    transactionPayment.TransactionId = transaction.TransactionId;
+
+                    transactionPayment.TransactionPaymentType = transactionPaymentType;
+                    _context.TransactionPayments.Add(transactionPayment);
 
                     _context.Members.Update(currentMember);
 

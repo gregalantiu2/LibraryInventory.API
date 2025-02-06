@@ -108,9 +108,9 @@ namespace LibraryInventory.Service
             // Creating the payment transaction
             var paymentType = new TransactionPaymentType(paymentTypeId);
             var payment = new TransactionPayment(amount, paymentType);
-            var transaction = new Transaction(new TransactionType("Payment"), DateTime.Now, null, transactionPayments: new List<TransactionPayment>() { payment });
+            var transaction = new Transaction(new TransactionType("Payment"), DateTime.Now, null);
 
-            await _transactionRepository.PaymentOfFineTransactionAsync(_mapper.Map<TransactionEntity>(transaction), _mapper.Map<MemberEntity>(member));
+            await _transactionRepository.PaymentOfFineTransactionAsync(_mapper.Map<TransactionEntity>(transaction), _mapper.Map<TransactionPaymentEntity>(payment), _mapper.Map<MemberEntity>(member));
         }
 
         public async Task RenewItemTransactionAsync(int itemId, ItemBorrowStatus itemStatus, Member member)

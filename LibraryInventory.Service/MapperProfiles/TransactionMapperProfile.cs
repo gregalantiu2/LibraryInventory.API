@@ -23,7 +23,8 @@ namespace LibraryInventory.Service.MapperProfiles
 
             CreateMap<TransactionPayment, TransactionPaymentEntity>()
                 .ForMember(dest => dest.PaymentAmount, opt => opt.MapFrom(src => src.PaymentAmount))
-                .ForMember(dest => dest.TransactionPaymentTypeId, opt => opt.MapFrom(src => src.TransactionPaymentType.TransactionPaymentTypeId));
+                .ForMember(dest => dest.TransactionPaymentTypeId, opt => opt.MapFrom(src => src.TransactionPaymentType.TransactionPaymentTypeId))
+                .ForMember(dest => dest.TransactionId, opt => opt.MapFrom(src => src.TransactionId));
 
             CreateMap<TransactionTypeEntity, TransactionType>()
                 .ForCtorParam("transactionTypeId", opt => opt.MapFrom(src => src.TransactionTypeId))
