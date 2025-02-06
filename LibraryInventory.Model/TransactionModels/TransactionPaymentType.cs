@@ -5,15 +5,15 @@
         private readonly int? _transactionPaymentTypeId;
         private string _transactionPaymentTypeName;
 
-        public TransactionPaymentType(string transactionPaymentTypeName, int? transctionPaymentId = null)
+        public TransactionPaymentType(string transactionPaymentTypeName, int? transactionPaymentTypeId = null)
         {
             _transactionPaymentTypeName = transactionPaymentTypeName;
-            _transactionPaymentTypeId = transctionPaymentId;
+            _transactionPaymentTypeId = transactionPaymentTypeId;
         }
 
-        public TransactionPaymentType(int transctionPaymentId)
+        public TransactionPaymentType(int transactionPaymentTypeId)
         {
-            _transactionPaymentTypeId = transctionPaymentId;
+            _transactionPaymentTypeId = transactionPaymentTypeId;
         }
 
         public int? TransactionPaymentTypeId

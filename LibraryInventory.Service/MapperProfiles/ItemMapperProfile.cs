@@ -38,13 +38,15 @@ namespace LibraryInventory.Service.MapperProfiles
 
             CreateMap<ItemType, ItemTypeEntity>().ReverseMap();
 
+            CreateMap<ItemFineOccurenceType, ItemPolicyEntity>()
+                .ForMember(dest => dest.ItemFineOccurenceTypeId, opt => opt.MapFrom(src => src.ItemFineOccurenceTypeId));
+
+            CreateMap<ItemPolicyEntity, ItemPolicy>()
+                .ForCtorParam("itemPolicyId", opt => opt.MapFrom(src => src.ItemPolicyId));
+
             CreateMap<ItemPolicy, ItemPolicyEntity>()
                 .ForMember(dest => dest.ItemPolicyId, opt => opt.MapFrom(src => src.ItemPolicyId))
                 .ForMember(dest => dest.ItemFineOccurenceTypeId, opt => opt.MapFrom(src => src.ItemFineOccurenceType.ItemFineOccurenceTypeId));
-
-            CreateMap<ItemPolicyEntity, ItemPolicy>()
-                .ForCtorParam("itemPolicyId", opt => opt.MapFrom(src => src.ItemPolicyId))
-                .ReverseMap();
 
             CreateMap<ItemFineOccurenceType, ItemFineOccurenceTypeEntity>().ReverseMap();
 

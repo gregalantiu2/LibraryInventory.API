@@ -74,7 +74,7 @@ namespace LibraryInventory.Data.Repositories
 
             if (fineOccurence == null)
             {
-                throw new InvalidOperationException($"ItemFineOccurenceType {itemPolicy.ItemFineOccurenceTypeId} not found");
+                throw new InvalidOperationException($"ItemFineOccurenceTypeId {itemPolicy.ItemFineOccurenceTypeId} not found");
             }
 
             itemPolicy.ItemFineOccurenceType = fineOccurence;
