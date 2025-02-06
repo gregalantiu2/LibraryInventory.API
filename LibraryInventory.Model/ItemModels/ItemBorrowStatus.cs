@@ -9,12 +9,12 @@
         private int _renewedCount;
         private decimal _fineAmountAccrued;
 
-        public ItemBorrowStatus(int itemBorrowStatusId, 
-                                bool isCheckedOut
+        public ItemBorrowStatus(bool isCheckedOut
                                 ,DateTime? checkedOutDate
                                 ,DateTime? dueBack
                                 ,int renewedCount
-                                ,decimal fineAmountAccrued)
+                                ,decimal fineAmountAccrued
+                                ,int? itemBorrowStatusId = null)
         {
             _itemBorrowStatusId = itemBorrowStatusId;
             _isCheckedOut = isCheckedOut;

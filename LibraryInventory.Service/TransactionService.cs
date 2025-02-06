@@ -14,18 +14,11 @@ namespace LibraryInventory.Service
     public class TransactionService : ITransactionService
     {
         private readonly ITransactionRepository _transactionRepository;
-        private readonly IItemRepository _itemRepository;
-        private readonly IMemberRepository _memberRepository;
         private readonly IMapper _mapper;
 
-        public TransactionService(ITransactionRepository transactionRepository
-                                    ,IItemRepository itemRepository
-                                    ,IMemberRepository memberRepository
-                                    ,IMapper mapper)
+        public TransactionService(ITransactionRepository transactionRepository, IMapper mapper)
         {
             _transactionRepository = transactionRepository;
-            _itemRepository = itemRepository;
-            _memberRepository = memberRepository;
             _mapper = mapper;
         }
 
@@ -61,7 +54,29 @@ namespace LibraryInventory.Service
 
         public async Task CheckoutItemTransactionAsync(Item item, Member member)
         {
-            throw new NotImplementedException();
+            if (item.ItemBorrowStatus != null)
+            { 
+                throw new ArgumentException("Item is already checked out.");            
+            }
+
+            if (item.ItemPolicy == null || item.ItemPolicy.AllowedToCheckout == false || item.ItemPolicy.CheckoutDays == null)
+            {
+                throw new ArgumentException("Item is not allowed to be checked out.");
+            }
+
+            var status = new ItemBorrowStatus(true, DateTime.Now, DateTime.Now.AddDays((double)item.ItemPolicy.CheckoutDays), 0, 0);
+
+            //Creating the transaction
+            var transactionType = _mapper.Map<TransactionType>(await _transactionRepository.GetTransactionTypesByNameAsync("Checkout"));
+            var transaction = new Transaction(transactionType, DateTime.Now, item.ItemId, null, memberId: member.MemberId);
+
+            //Mapping 
+            var transactionEntity = _mapper.Map<TransactionEntity>(transaction);
+            var itemEntity = _mapper.Map<ItemEntity>(item);
+            var memberEntity = _mapper.Map<MemberEntity>(member);
+            var statusEntity = _mapper.Map<ItemBorrowStatusEntity>(status);
+
+            await _transactionRepository.CheckoutItemTransactionAsync(transactionEntity, itemEntity, memberEntity, statusEntity);
         }
 
         public async Task PaymentOfFineTransactionAsync(decimal amount, int paymentTypeId, Member member)

@@ -7,13 +7,13 @@
         private DateTime _transactionDate;
         private IEnumerable<TransactionPayment>? _transactionPayments;
         private int? _itemId;
-        private int? _memberId;
+        private string? _memberId;
 
         public Transaction(TransactionType transactionType
                             ,DateTime transactionDate
                             ,int? itemId
                             ,IEnumerable<TransactionPayment>? transactionPayments = null
-                            ,int? memberId = null
+                            ,string? memberId = null
                             ,int? transactionId = null)
         {
             _transactionType = transactionType;
@@ -48,7 +48,7 @@
             get { return _itemId; }
             set { _itemId = value; }
         }
-        public int? MemberId
+        public string? MemberId
         {
             get { return _memberId; }
             set { _memberId = value; }

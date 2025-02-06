@@ -10,11 +10,13 @@ namespace LibraryInventory.Data.Repositories
     {
         private readonly LibraryInventoryDbContext _context;
         private readonly IMemberRepository _memberRepository;
+        private readonly IItemRepository _itemRepository;
 
-        public TransactionRepository(LibraryInventoryDbContext context, IMemberRepository memberRepository)
+        public TransactionRepository(LibraryInventoryDbContext context, IMemberRepository memberRepository, IItemRepository itemRepository)
         {
             _context = context;
             _memberRepository = memberRepository;
+            _itemRepository = itemRepository;
         }
 
         public async Task AddTransactionType(TransactionTypeEntity transactionType)
@@ -164,6 +166,32 @@ namespace LibraryInventory.Data.Repositories
                 {
                     _context.Transactions.Add(transaction);
                     await _memberRepository.UpdateMemberAsync(member);
+                    await _context.SaveChangesAsync();
+
+                    await wrapTransaction.CommitAsync();
+                }
+                catch
+                {
+                    await wrapTransaction.RollbackAsync();
+                    throw;
+                }
+            }
+        }
+
+        public async Task CheckoutItemTransactionAsync(TransactionEntity transaction, ItemEntity item, MemberEntity member, ItemBorrowStatusEntity status)
+        {
+            using (var wrapTransaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    _context.Transactions.Add(transaction);
+                    _context.ItemBorrowStatuses.Add(status);
+
+                    await _memberRepository.UpdateMemberAsync(member);
+
+                    item.ItemBorrowStatus = status;
+                    await _itemRepository.UpdateItemAsync(item);
+
                     await _context.SaveChangesAsync();
 
                     await wrapTransaction.CommitAsync();

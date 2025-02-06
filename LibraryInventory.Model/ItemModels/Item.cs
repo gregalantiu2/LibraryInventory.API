@@ -1,4 +1,6 @@
-﻿namespace LibraryInventory.Model.ItemModels
+﻿using System.Runtime.CompilerServices;
+
+namespace LibraryInventory.Model.ItemModels
 {
     public class Item
     {
