@@ -14,6 +14,6 @@ namespace LibraryInventory.Service.Interfaces
         Task CheckoutItemTransactionAsync(Item item, Member member);
         Task ReturnItemTransactionAsync(Item item, Member member);
         Task RenewItemTransactionAsync(Item item, Member member);
-        Task PaymentOfFineTransactionAsync(decimal amount, int paymentTypeId, Member member);
+        Task PaymentOfFineTransactionAsync(decimal amount, int paymentTypeId);
     }
 }

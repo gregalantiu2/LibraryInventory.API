@@ -63,19 +63,11 @@ namespace LibraryInventory.Service
                 throw new ArgumentException("Item is not allowed to be checked out.");
             }
 
-            var status = new ItemBorrowStatus(true, DateTime.Now, DateTime.Now.AddDays((double)item.ItemPolicy.CheckoutDays), 0, 0);
+            var status = new ItemBorrowStatus(true, DateTime.Now, DateTime.Now.AddDays((double)item.ItemPolicy.CheckoutDays), 0, 0, member.MemberId!);
 
             //Creating the transaction
             var transactionType = _mapper.Map<TransactionType>(await _transactionRepository.GetTransactionTypesByNameAsync("Checkout"));
             var transaction = new Transaction(transactionType, DateTime.Now, item.ItemId, null, memberId: member.MemberId);
-
-            //Adding item to member's checked out collection
-            if (member.ItemsBorrowed == null)
-            {
-                member.ItemsBorrowed = new List<Item>();
-            }
-
-            member.ItemsBorrowed.Add(item);
 
             //Mapping 
             var transactionEntity = _mapper.Map<TransactionEntity>(transaction);
@@ -111,18 +103,46 @@ namespace LibraryInventory.Service
 
         public async Task RenewItemTransactionAsync(Item item, Member member)
         {
-            BorrowStatusValidation(item, member);
+            if (item.ItemBorrowStatus == null || !item.ItemBorrowStatus.IsCheckedOut)
+            {
+                throw new ArgumentException($"{item.ItemId} is not marked as checked out");
+            }
 
+            if (item.ItemBorrowStatus.MemberId != member.MemberId)
+            {
+                throw new ArgumentException($"{item.ItemId} is checked out by a different member {item.ItemBorrowStatus.MemberId}");
+            }
 
+            if (item.ItemPolicy == null)
+            {
+                throw new ArgumentException($"No policy assigned for item {item.ItemId}");
+            }
 
+            if (item.ItemBorrowStatus.RenewedCount >= item.ItemPolicy.MaxRenewalsAllowed)
+            {
+                throw new ArgumentException($"Item {item.ItemId} has reached it's max renewal count for member {member.MemberId}");
+            }
+
+            item.ItemBorrowStatus.DueBack = item.ItemBorrowStatus.DueBack?.AddDays((double)item.ItemPolicy.CheckoutDays);
+            item.ItemBorrowStatus.RenewedCount++;
+
+            // Creating the transaction
+            var transactionType = _mapper.Map<TransactionType>(await _transactionRepository.GetTransactionTypesByNameAsync("Renew"));
+            var transaction = new Transaction(transactionType, DateTime.Now, item.ItemId, null, memberId: member.MemberId);
+
+            // Mapping to entities
+            var transactionEntity = _mapper.Map<TransactionEntity>(transaction);
+            var itemEntity = _mapper.Map<ItemEntity>(item);
+
+            await _transactionRepository.RenewItemTransactionAsync(transactionEntity, itemEntity);
         }
 
         public async Task ReturnItemTransactionAsync(Item item, Member member)
         {
-            BorrowStatusValidation(item, member);
-
-            // Removing item from member's checked out collection
-            member.ItemsBorrowed.Remove(item);
+            if (item.ItemBorrowStatus == null)
+            {
+                throw new ArgumentException($"{item.ItemId} is not marked as checked out");
+            }
 
             int? itemBorrowStatusId = item.ItemBorrowStatus.ItemBorrowStatusId;
             item.ItemBorrowStatus = null;
@@ -137,19 +157,6 @@ namespace LibraryInventory.Service
             var memberEntity = _mapper.Map<MemberEntity>(member);
 
             await _transactionRepository.ReturnItemTransactionAsync(transactionEntity, itemEntity, memberEntity, itemBorrowStatusId);
-        }
-
-        private void BorrowStatusValidation(Item item, Member member)
-        {
-            if (item.ItemBorrowStatus == null)
-            {
-                throw new ArgumentException($"{item.ItemId} is not marked as checked out");
-            }
-
-            if (member.ItemsBorrowed == null || member.ItemsBorrowed.FirstOrDefault(t => t.ItemId == item.ItemId) != null)
-            {
-                throw new ArgumentException($"{item.ItemId} is not checked out by {member.MemberId}");
-            }
         }
     }
 }

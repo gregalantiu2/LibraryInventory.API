@@ -8,12 +8,14 @@
         private DateTime? _dueBack;
         private int _renewedCount;
         private decimal _fineAmountAccrued;
+        private string _memberId;
 
         public ItemBorrowStatus(bool isCheckedOut
                                 ,DateTime? checkedOutDate
                                 ,DateTime? dueBack
                                 ,int renewedCount
                                 ,decimal fineAmountAccrued
+                                ,string memberId
                                 ,int? itemBorrowStatusId = null)
         {
             _itemBorrowStatusId = itemBorrowStatusId;
@@ -22,13 +24,13 @@
             _dueBack = dueBack;
             _renewedCount = renewedCount;
             _fineAmountAccrued = fineAmountAccrued;
+            _memberId = memberId;
         }
 
         public int? ItemBorrowStatusId
         {
             get { return _itemBorrowStatusId; }
         }
-
         public bool IsCheckedOut
         {
             get { return _isCheckedOut; }
@@ -44,29 +46,30 @@
                 }
             }
         }
-
         public DateTime? CheckedOutDate
         {
             get { return _checkedOutDate; }
             set { _checkedOutDate = value; }
         }
-
         public DateTime? DueBack
         {
             get { return _dueBack; }
             set { _dueBack = value; }
         }
-
         public int RenewedCount
         {
             get { return _renewedCount; }
             set { _renewedCount = value; }
         }
-
         public decimal FineAmountAccrued
         {
             get { return _fineAmountAccrued; }
             set { _fineAmountAccrued = value; }
+        }
+        public string MemberId
+        {
+            get { return _memberId; }
+            set { _memberId = value; }
         }
     }
 }

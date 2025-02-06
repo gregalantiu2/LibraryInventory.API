@@ -1,6 +1,7 @@
 ﻿using LibraryInventory.Data.Entities;
 using LibraryInventory.Data.Entities.Person;
 using LibraryInventory.Data.Repositories.Interfaces;
+using LibraryInventory.Model.ItemModels;
 using LibraryInventory.Model.TransactionModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -214,11 +215,44 @@ namespace LibraryInventory.Data.Repositories
 
                     var borrowStatus = await _context.ItemBorrowStatuses.FindAsync(itemBorrowStatusId);
 
+                    if (borrowStatus == null)
+                    {
+                        throw new InvalidOperationException($"Item borrow status {itemBorrowStatusId} not found");
+                    }
+
                     _context.ItemBorrowStatuses.Remove(borrowStatus);
 
                     await _memberRepository.UpdateMemberAsync(member);
 
                     await _itemRepository.UpdateItemAsync(item);
+
+                    await _context.SaveChangesAsync();
+
+                    await wrapTransaction.CommitAsync();
+                }
+                catch
+                {
+                    await wrapTransaction.RollbackAsync();
+                    throw;
+                }
+            }
+        }
+
+        public async Task RenewItemTransactionAsync(TransactionEntity transaction, ItemEntity item)
+        {
+            using (var wrapTransaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    _context.Transactions.Add(transaction);
+                    _context.Items.Update(item);
+
+                    if(item.ItemBorrowStatus == null)
+                    {
+                        throw new InvalidOperationException($"Item {item.ItemId} has no status to update");
+                    }
+
+                    _context.ItemBorrowStatuses.Update(item.ItemBorrowStatus);
 
                     await _context.SaveChangesAsync();
 

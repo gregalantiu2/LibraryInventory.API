@@ -97,7 +97,7 @@ namespace LibraryInventory.API.Controllers
                 return NotFound(MessageHelper<Member>.NotFound(memberId));
             }
 
-            await _transactionService.CheckoutItemTransaction(item, member);
+            await _transactionService.CheckoutItemTransactionAsync(item, member);
 
             return Ok(MessageHelper<Transaction>.Success());
         }
@@ -120,7 +120,7 @@ namespace LibraryInventory.API.Controllers
                 return NotFound(MessageHelper<Member>.NotFound(request.MemberId));
             }
 
-            await _transactionService.ReturnItemTransaction(item, member);
+            await _transactionService.ReturnItemTransactionAsync(item, member);
 
             return Ok(MessageHelper<Transaction>.Success());
         }
@@ -143,14 +143,14 @@ namespace LibraryInventory.API.Controllers
                 return NotFound(MessageHelper<Member>.NotFound(request.MemberId));
             }
 
-            await _transactionService.RenewItemTransaction(item, member);
+            await _transactionService.RenewItemTransactionAsync(item, member);
 
             return Ok(MessageHelper<Transaction>.Success());
         }
 
         [HttpPost]
         [Route("paymentOfFineTransaction")]
-        public async Task<ActionResult> PaymentOfFineTransaction(TransactionPaymenetRequest request)
+        public async Task<ActionResult> PaymentOfFineTransaction(TransactionPaymentRequest request)
         {
             var member = await _memberService.GetMemberbyMemberIdAsync(request.MemberId);
 
@@ -159,7 +159,7 @@ namespace LibraryInventory.API.Controllers
                 return NotFound(MessageHelper<Member>.NotFound(request.MemberId));
             }
 
-            await _transactionService.PaymentOfFineTransaction(request.Amount, member);
+            await _transactionService.PaymentOfFineTransactionAsync(request.Amount, request.PaymentTypeId, member);
 
             return Ok(MessageHelper<Transaction>.Success());
         }

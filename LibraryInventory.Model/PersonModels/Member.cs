@@ -6,30 +6,21 @@ namespace LibraryInventory.Model.PersonModels
     public class Member : Person
     {
         private readonly string? _memberId;
-        private ICollection<Item>? _itemsBorrowed; 
         private decimal _fineAmountOwed;
 
         public Member(string firstName
                         ,string lastName
                         ,ContactInfo contactinfo
                         ,decimal fineAmountOwed = 0.0m
-                        ,string? memberId = null
-                        ,ICollection<Item>? itemsBorrowed = null) : base(firstName, lastName, contactinfo)
+                        ,string? memberId = null) : base(firstName, lastName, contactinfo)
         {
             _memberId = memberId;
-            _itemsBorrowed = itemsBorrowed;
             _fineAmountOwed = fineAmountOwed;
         }
 
         public string? MemberId
         {
             get { return _memberId; }
-        }
-
-        public ICollection<Item>? ItemsBorrowed
-        {
-            get { return _itemsBorrowed; }
-            set { _itemsBorrowed = value; }
         }
 
         public decimal FineAmountOwed

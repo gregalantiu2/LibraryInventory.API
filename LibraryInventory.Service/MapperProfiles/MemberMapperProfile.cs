@@ -34,8 +34,7 @@ namespace LibraryInventory.Service.MapperProfiles
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.MiddleName, opt => opt.MapFrom(src => src.MiddleName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
-                .ForMember(dest => dest.Active, opt => opt.MapFrom(src => src.Active))
-                .ForMember(dest => dest.ItemsBorrowed, opt => opt.Ignore());
+                .ForMember(dest => dest.Active, opt => opt.MapFrom(src => src.Active));
 
             CreateMap<Member, MemberEntity>()
                 .ForMember(dest => dest.MemberId, opt => opt.MapFrom(src => src.MemberId))
