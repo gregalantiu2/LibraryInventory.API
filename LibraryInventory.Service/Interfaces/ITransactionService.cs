@@ -13,7 +13,7 @@ namespace LibraryInventory.Service.Interfaces
         Task<IEnumerable<Transaction>> GetTransactionsByTypeAsync(int transactionTypeId, int? daysToLookBack = null);
         Task CheckoutItemTransactionAsync(Item item, Member member);
         Task ReturnItemTransactionAsync(Item item, Member member);
-        Task RenewItemTransactionAsync(Item item, Member member);
+        Task RenewItemTransactionAsync(int itemId, ItemBorrowStatus itemStatus, Member member);
         Task PaymentOfFineTransactionAsync(decimal amount, int paymentTypeId, Member member);
     }
 }

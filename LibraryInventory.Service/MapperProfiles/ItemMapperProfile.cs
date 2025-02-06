@@ -38,19 +38,26 @@ namespace LibraryInventory.Service.MapperProfiles
 
             CreateMap<ItemType, ItemTypeEntity>();
 
-            CreateMap<ItemFineOccurenceType, ItemPolicyEntity>()
-                .ForMember(dest => dest.ItemFineOccurenceTypeId, opt => opt.MapFrom(src => src.ItemFineOccurenceTypeId));
-
-            CreateMap<ItemPolicyEntity, ItemPolicy>()
-                .ForCtorParam("itemPolicyId", opt => opt.MapFrom(src => src.ItemPolicyId));
-
             CreateMap<ItemPolicy, ItemPolicyEntity>()
                 .ForMember(dest => dest.ItemPolicyId, opt => opt.MapFrom(src => src.ItemPolicyId))
                 .ForMember(dest => dest.ItemFineOccurenceTypeId, opt => opt.MapFrom(src => src.ItemFineOccurenceType.ItemFineOccurenceTypeId));
 
             CreateMap<ItemFineOccurenceType, ItemFineOccurenceTypeEntity>();
 
-            CreateMap<ItemBorrowStatus, ItemBorrowStatusEntity>();
+            CreateMap<ItemBorrowStatus, ItemBorrowStatusEntity>()
+                .ForMember(dest => dest.ItemBorrowStatusId, opt => opt.MapFrom(src => src.ItemBorrowStatusId))
+                .ForMember(dest => dest.CheckedOutDate, opt => opt.MapFrom(src => src.CheckedOutDate))
+                .ForMember(dest => dest.DueBack, opt => opt.MapFrom(src => src.DueBack))
+                .ForMember(dest => dest.RenewedCount, opt => opt.MapFrom(src => src.RenewedCount))
+                .ForMember(dest => dest.FineAmountAccrued, opt => opt.MapFrom(src => src.FineAmountAccrued));
+
+            CreateMap<ItemBorrowStatusEntity, ItemBorrowStatus>()
+                .ForCtorParam("isCheckedOut", opt => opt.MapFrom(src => src.CheckedOutDate.HasValue ? true : false))
+                .ForCtorParam("checkedOutDate", opt => opt.MapFrom(src => src.CheckedOutDate))
+                .ForCtorParam("dueBack", opt => opt.MapFrom(src => src.DueBack))
+                .ForCtorParam("renewedCount", opt => opt.MapFrom(src => src.RenewedCount))
+                .ForCtorParam("fineAmountAccrued", opt => opt.MapFrom(src => src.FineAmountAccrued))
+                .ForCtorParam("memberKeyId", opt => opt.MapFrom(src => src.MemberKeyId));
 
             CreateMap<Item, ItemEntity>()
                 .ForMember(dest => dest.ItemPolicyId, opt => opt.MapFrom(src => src.ItemPolicy.ItemPolicyId))
@@ -81,8 +88,6 @@ namespace LibraryInventory.Service.MapperProfiles
             CreateMap<ItemTypeEntity, ItemType>()
                 .ForCtorParam("itemTypeId", opt => opt.MapFrom(src => src.ItemTypeId))
                 .ForMember(dest => dest.ItemTypeName, opt => opt.MapFrom(src => src.ItemTypeName));
-
-
         }
     }
 }

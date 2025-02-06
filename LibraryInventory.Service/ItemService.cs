@@ -42,7 +42,33 @@ namespace LibraryInventory.Service
         public async Task<Item> GetItemAsync(int itemId)
         {
             var result = await _itemRepository.GetItemAsync(itemId);
-            return _mapper.Map<Item>(result);
+
+            var fineOccurenceType = new ItemFineOccurenceType(result.ItemPolicy.ItemFineOccurenceType.ItemFineOccurenceTypeId);
+            fineOccurenceType.ItemFineOccurenceTypeDescription = result.ItemPolicy.ItemFineOccurenceType.ItemFineOccurenceTypeDescription;
+
+            var itemType = new ItemType(result.ItemType.ItemTypeId);
+
+            var itemPolicy = new ItemPolicy(result.ItemPolicy.ItemPolicyName,
+                                            result.ItemPolicy.AllowedToCheckout
+                                            , result.ItemPolicy.MaxRenewalsAllowed
+                                            , result.ItemPolicy.CheckoutDays
+                                            , result.ItemPolicy.FineAmount
+                                            , fineOccurenceType
+                                            , result.ItemPolicy.ItemPolicyId);
+            if (result.ItemBorrowStatus != null)
+            {
+                var status = new ItemBorrowStatus(result.ItemBorrowStatus.CheckedOutDate.HasValue ? true : false
+                                  , result.ItemBorrowStatus.CheckedOutDate
+                                  , result.ItemBorrowStatus.DueBack
+                                  , result.ItemBorrowStatus.RenewedCount
+                                  , result.ItemBorrowStatus.FineAmountAccrued
+                                  , result.ItemBorrowStatus.MemberKeyId);
+
+                return new Item(result.ItemId, result.ItemTitle, result.ItemDescription, itemType, itemPolicy, status, null);
+            }
+
+            return new Item(result.ItemId, result.ItemTitle, result.ItemDescription, itemType, itemPolicy, null, null);
+            //return _mapper.Map<Item>(result);
         }
 
         public async Task<ItemBorrowStatus> GetItemBorrowStatusAsync(int itemId)

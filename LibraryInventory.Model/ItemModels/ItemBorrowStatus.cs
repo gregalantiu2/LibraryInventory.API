@@ -8,14 +8,14 @@
         private DateTime? _dueBack;
         private int _renewedCount;
         private decimal _fineAmountAccrued;
-        private string _memberId;
+        private int _memberKeyId;
 
         public ItemBorrowStatus(bool isCheckedOut
                                 ,DateTime? checkedOutDate
                                 ,DateTime? dueBack
                                 ,int renewedCount
                                 ,decimal fineAmountAccrued
-                                ,string memberId
+                                ,int memberKeyId
                                 ,int? itemBorrowStatusId = null)
         {
             _itemBorrowStatusId = itemBorrowStatusId;
@@ -24,7 +24,7 @@
             _dueBack = dueBack;
             _renewedCount = renewedCount;
             _fineAmountAccrued = fineAmountAccrued;
-            _memberId = memberId;
+            _memberKeyId = memberKeyId;
         }
 
         public int? ItemBorrowStatusId
@@ -66,10 +66,10 @@
             get { return _fineAmountAccrued; }
             set { _fineAmountAccrued = value; }
         }
-        public string MemberId
+        public int MemberkeyId
         {
-            get { return _memberId; }
-            set { _memberId = value; }
+            get { return _memberKeyId; }
+            set { _memberKeyId = value; }
         }
     }
 }

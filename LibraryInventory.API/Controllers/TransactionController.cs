@@ -129,9 +129,9 @@ namespace LibraryInventory.API.Controllers
         [Route("renewItemTranaction")]
         public async Task<ActionResult> RenewItemTransaction([FromBody] TransactionRequest request)
         {
-            var item = await _itemService.GetItemAsync(request.ItemId);
+            var itemStatus = await _itemService.GetItemBorrowStatusAsync(request.ItemId);
 
-            if (item == null)
+            if (itemStatus == null)
             {
                 return NotFound(MessageHelper<Item>.NotFound(request.ItemId.ToString()));
             }
@@ -143,7 +143,7 @@ namespace LibraryInventory.API.Controllers
                 return NotFound(MessageHelper<Member>.NotFound(request.MemberId));
             }
 
-            await _transactionService.RenewItemTransactionAsync(item, member);
+            await _transactionService.RenewItemTransactionAsync(request.ItemId, itemStatus, member);
 
             return Ok(MessageHelper<Transaction>.Success());
         }

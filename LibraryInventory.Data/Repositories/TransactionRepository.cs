@@ -179,19 +179,23 @@ namespace LibraryInventory.Data.Repositories
             }
         }
 
-        public async Task CheckoutItemTransactionAsync(TransactionEntity transaction, ItemEntity item, MemberEntity member, ItemBorrowStatusEntity status)
+        public async Task CheckoutItemTransactionAsync(TransactionEntity transaction, ItemBorrowStatusEntity status)
         {
             using (var wrapTransaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
+                    var transactionType = await _context.TransactionTypes.FirstOrDefaultAsync(t => t.TransactionTypeName == "Checkout");
+                    
+                    if (transactionType == null)
+                    {
+                        throw new InvalidOperationException("Transaction type Checkout not found");
+                    }
+
+                    transaction.TransactionType = transactionType;
                     _context.Transactions.Add(transaction);
+
                     _context.ItemBorrowStatuses.Add(status);
-
-                    await _memberRepository.UpdateMemberAsync(member);
-
-                    item.ItemBorrowStatus = status;
-                    await _itemRepository.UpdateItemAsync(item);
 
                     await _context.SaveChangesAsync();
 
@@ -205,7 +209,7 @@ namespace LibraryInventory.Data.Repositories
             }
         }
 
-        public async Task ReturnItemTransactionAsync(TransactionEntity transaction, ItemEntity item, MemberEntity member, int? itemBorrowStatusId)
+        public async Task ReturnItemTransactionAsync(TransactionEntity transaction, ItemEntity item, int? itemBorrowStatusId)
         {
             using (var wrapTransaction = await _context.Database.BeginTransactionAsync())
             {
@@ -222,8 +226,6 @@ namespace LibraryInventory.Data.Repositories
 
                     _context.ItemBorrowStatuses.Remove(borrowStatus);
 
-                    await _memberRepository.UpdateMemberAsync(member);
-
                     await _itemRepository.UpdateItemAsync(item);
 
                     await _context.SaveChangesAsync();
@@ -238,21 +240,25 @@ namespace LibraryInventory.Data.Repositories
             }
         }
 
-        public async Task RenewItemTransactionAsync(TransactionEntity transaction, ItemEntity item)
+        public async Task RenewItemTransactionAsync(TransactionEntity transaction, ItemBorrowStatusEntity itemStatus)
         {
             using (var wrapTransaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
                     _context.Transactions.Add(transaction);
-                    _context.Items.Update(item);
 
-                    if(item.ItemBorrowStatus == null)
+                    var existingBorrowStatus = await _context.ItemBorrowStatuses.FindAsync(itemStatus.ItemBorrowStatusId);
+
+                    if(existingBorrowStatus == null)
                     {
-                        throw new InvalidOperationException($"Item {item.ItemId} has no status to update");
+                        throw new InvalidOperationException($"Item borrow status {itemStatus.ItemBorrowStatusId} not found");
                     }
 
-                    _context.ItemBorrowStatuses.Update(item.ItemBorrowStatus);
+                    existingBorrowStatus.DueBack = itemStatus.DueBack;
+                    existingBorrowStatus.RenewedCount = itemStatus.RenewedCount;
+
+                    _context.ItemBorrowStatuses.Update(existingBorrowStatus);
 
                     await _context.SaveChangesAsync();
 

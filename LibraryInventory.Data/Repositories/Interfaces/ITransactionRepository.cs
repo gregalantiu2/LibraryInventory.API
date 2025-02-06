@@ -22,8 +22,8 @@ namespace LibraryInventory.Data.Repositories.Interfaces
         Task DeleteTransactionAsync(int transactionId);
         Task<TransactionTypeEntity> GetTransactionTypesByNameAsync(string transactionType);
         Task PaymentOfFineTransactionAsync(TransactionEntity transaction, MemberEntity member);
-        Task CheckoutItemTransactionAsync(TransactionEntity transaction, ItemEntity item, MemberEntity member, ItemBorrowStatusEntity status);
-        Task ReturnItemTransactionAsync(TransactionEntity transaction, ItemEntity item, MemberEntity member, int? itemBorrowStatusId);
-        Task RenewItemTransactionAsync(TransactionEntity transaction, ItemEntity item);
+        Task CheckoutItemTransactionAsync(TransactionEntity transaction, ItemBorrowStatusEntity status);
+        Task ReturnItemTransactionAsync(TransactionEntity transaction, ItemEntity item, int? itemBorrowStatusId);
+        Task RenewItemTransactionAsync(TransactionEntity transaction, ItemBorrowStatusEntity itemStatus);
     }
 }

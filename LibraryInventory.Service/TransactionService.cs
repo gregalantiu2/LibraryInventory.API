@@ -13,12 +13,19 @@ namespace LibraryInventory.Service
     public class TransactionService : ITransactionService
     {
         private readonly ITransactionRepository _transactionRepository;
+        private readonly IMemberRepository _memberRepository;
+        private readonly IItemRepository _itemRepository;
         private readonly IMapper _mapper;
 
-        public TransactionService(ITransactionRepository transactionRepository, IMapper mapper)
+        public TransactionService(ITransactionRepository transactionRepository, 
+                                    IMapper mapper,     
+                                    IMemberRepository memberRepository,
+                                    IItemRepository itemRepository)
         {
             _transactionRepository = transactionRepository;
             _mapper = mapper;
+            _memberRepository = memberRepository;
+            _itemRepository = itemRepository;
         }
 
         public async Task<Transaction> GetTransactionAsync(int transactionId)
@@ -53,6 +60,11 @@ namespace LibraryInventory.Service
 
         public async Task CheckoutItemTransactionAsync(Item item, Member member)
         {
+            if (item.ItemId == null || member.MemberId == null)
+            {
+                throw new ArgumentException("Item or member is null.");
+            }
+
             if (item.ItemBorrowStatus != null)
             { 
                 throw new ArgumentException("Item is already checked out.");            
@@ -63,19 +75,20 @@ namespace LibraryInventory.Service
                 throw new ArgumentException("Item is not allowed to be checked out.");
             }
 
-            var status = new ItemBorrowStatus(true, DateTime.Now, DateTime.Now.AddDays((double)item.ItemPolicy.CheckoutDays), 0, 0, member.MemberId!);
+            var memberEntity = await _memberRepository.GetMemberbyMemberIdAsync(member.MemberId);
+
+            var status = new ItemBorrowStatus(true, DateTime.Now, DateTime.Now.AddDays((double)item.ItemPolicy.CheckoutDays), 0, 0, memberEntity.MemberKeyId);
 
             //Creating the transaction
-            var transactionType = _mapper.Map<TransactionType>(await _transactionRepository.GetTransactionTypesByNameAsync("Checkout"));
-            var transaction = new Transaction(transactionType, DateTime.Now, item.ItemId, null, memberId: member.MemberId);
+            var transaction = new Transaction(new TransactionType("Checkout"), DateTime.Now, item.ItemId, null, memberId: member.MemberId);
 
             //Mapping 
             var transactionEntity = _mapper.Map<TransactionEntity>(transaction);
-            var itemEntity = _mapper.Map<ItemEntity>(item);
-            var memberEntity = _mapper.Map<MemberEntity>(member);
             var statusEntity = _mapper.Map<ItemBorrowStatusEntity>(status);
+            statusEntity.MemberKeyId = memberEntity.MemberKeyId;
+            statusEntity.ItemId = (int)item.ItemId!;
 
-            await _transactionRepository.CheckoutItemTransactionAsync(transactionEntity, itemEntity, memberEntity, statusEntity);
+            await _transactionRepository.CheckoutItemTransactionAsync(transactionEntity, statusEntity);
         }
 
         public async Task PaymentOfFineTransactionAsync(decimal amount, int paymentTypeId, Member member)
@@ -93,48 +106,48 @@ namespace LibraryInventory.Service
             member.FineAmountOwed -= amount;
 
             // Creating the payment transaction
-            var transactionType = _mapper.Map<TransactionType>(await _transactionRepository.GetTransactionTypesByNameAsync("Payment"));
             var paymentType = new TransactionPaymentType(paymentTypeId);
             var payment = new TransactionPayment(amount, paymentType);
-            var transaction = new Transaction(transactionType, DateTime.Now, null, transactionPayments: new List<TransactionPayment>() { payment });
+            var transaction = new Transaction(new TransactionType("Payment"), DateTime.Now, null, transactionPayments: new List<TransactionPayment>() { payment });
 
             await _transactionRepository.PaymentOfFineTransactionAsync(_mapper.Map<TransactionEntity>(transaction), _mapper.Map<MemberEntity>(member));
         }
 
-        public async Task RenewItemTransactionAsync(Item item, Member member)
+        public async Task RenewItemTransactionAsync(int itemId, ItemBorrowStatus itemStatus, Member member)
         {
-            if (item.ItemBorrowStatus == null || !item.ItemBorrowStatus.IsCheckedOut)
+            if (itemStatus == null || !itemStatus.IsCheckedOut)
             {
-                throw new ArgumentException($"{item.ItemId} is not marked as checked out");
+                throw new ArgumentException($"Item is not marked as checked out");
             }
 
-            if (item.ItemBorrowStatus.MemberId != member.MemberId)
+            if (itemStatus.MemberkeyId != member.MemberKeyId)
             {
-                throw new ArgumentException($"{item.ItemId} is checked out by a different member {item.ItemBorrowStatus.MemberId}");
+                throw new ArgumentException($"{itemId} is checked out by a different member");
             }
 
-            if (item.ItemPolicy == null)
+            var itemPolicy = await _itemRepository.GetPolicyForItemAsync(itemId);
+
+            if (itemPolicy == null)
             {
-                throw new ArgumentException($"No policy assigned for item {item.ItemId}");
+                throw new ArgumentException($"No policy assigned for item {itemId}");
             }
 
-            if (item.ItemBorrowStatus.RenewedCount >= item.ItemPolicy.MaxRenewalsAllowed)
+            if (itemStatus.RenewedCount >= itemPolicy.MaxRenewalsAllowed)
             {
-                throw new ArgumentException($"Item {item.ItemId} has reached it's max renewal count for member {member.MemberId}");
+                throw new ArgumentException($"Item {itemId} has reached it's max renewal count for member {member.MemberId}");
             }
 
-            item.ItemBorrowStatus.DueBack = item.ItemBorrowStatus.DueBack?.AddDays((double)item.ItemPolicy.CheckoutDays);
-            item.ItemBorrowStatus.RenewedCount++;
+            itemStatus.DueBack = itemStatus.DueBack?.AddDays((double)itemPolicy.CheckoutDays);
+            itemStatus.RenewedCount++;
 
             // Creating the transaction
-            var transactionType = _mapper.Map<TransactionType>(await _transactionRepository.GetTransactionTypesByNameAsync("Renew"));
-            var transaction = new Transaction(transactionType, DateTime.Now, item.ItemId, null, memberId: member.MemberId);
+            var transaction = new Transaction(new TransactionType("Renew"), DateTime.Now, itemId, null, memberId: member.MemberId);
 
             // Mapping to entities
             var transactionEntity = _mapper.Map<TransactionEntity>(transaction);
-            var itemEntity = _mapper.Map<ItemEntity>(item);
+            var itemStatusEntity = _mapper.Map<ItemBorrowStatusEntity>(itemStatus);
 
-            await _transactionRepository.RenewItemTransactionAsync(transactionEntity, itemEntity);
+            await _transactionRepository.RenewItemTransactionAsync(transactionEntity, itemStatusEntity);
         }
 
         public async Task ReturnItemTransactionAsync(Item item, Member member)
@@ -156,7 +169,7 @@ namespace LibraryInventory.Service
             var itemEntity = _mapper.Map<ItemEntity>(item);
             var memberEntity = _mapper.Map<MemberEntity>(member);
 
-            await _transactionRepository.ReturnItemTransactionAsync(transactionEntity, itemEntity, memberEntity, itemBorrowStatusId);
+            await _transactionRepository.ReturnItemTransactionAsync(transactionEntity, itemEntity, itemBorrowStatusId);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace LibraryInventory.Data.Repositories
 
         public async Task<MemberEntity> GetMemberbyMemberIdAsync(string memberId)
         {
-            var member = await _context.Members.FirstOrDefaultAsync(m => m.MemberId == memberId);
+            var member = await _context.Members.Include(m => m.ContactInfo).FirstOrDefaultAsync(m => m.MemberId == memberId);
 
             if (member == null)
             {

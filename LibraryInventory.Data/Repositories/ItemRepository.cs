@@ -44,6 +44,7 @@ namespace LibraryInventory.Data.Repositories
             return await _context.Items
                 .Include(i => i.ItemType)
                 .Include(i => i.ItemPolicy)
+                .ThenInclude(i => i.ItemFineOccurenceType)
                 .Include(i => i.ItemBorrowStatus)
                 .Include(i => i.ItemType)
                 .ThenInclude(i => i.ItemTypeProperties)
