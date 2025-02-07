@@ -55,6 +55,7 @@ namespace LibraryInventory.Service
                                             , result.ItemPolicy.FineAmount
                                             , fineOccurenceType
                                             , result.ItemPolicy.ItemPolicyId);
+
             if (result.ItemBorrowStatus != null)
             {
                 var status = new ItemBorrowStatus(result.ItemBorrowStatus.CheckedOutDate.HasValue ? true : false
