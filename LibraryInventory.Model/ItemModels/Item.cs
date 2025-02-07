@@ -17,6 +17,7 @@ namespace LibraryInventory.Model.ItemModels
                     ,string itemDescription
                     ,ItemType itemType
                     ,ItemPolicy? itemPolicy = null
+                    ,ItemBorrowStatus? itemBorrowStatus = null
                     ,string? itemLocation = null
                     ,int? itemId = null)
         {
@@ -24,25 +25,9 @@ namespace LibraryInventory.Model.ItemModels
             _itemDescription = itemDescription;
             _itemType = itemType;
             _itemPolicy = itemPolicy;
-            _itemLocation = itemLocation;
-            _itemId = itemId;
-        }
-
-        public Item (int itemId
-                     ,string itemTitle
-                     ,string itemDescription
-                     ,ItemType itemType
-                     ,ItemPolicy? itemPolicy = null
-                     ,ItemBorrowStatus? itemBorrowStatus = null
-                     ,string? itemLocation = null)
-        {
-            _itemId = itemId;
-            _itemTitle = itemTitle;
-            _itemDescription = itemDescription;
-            _itemType = itemType;
-            _itemLocation = itemLocation;
-            _itemPolicy = itemPolicy;
             _itemBorrowStatus = itemBorrowStatus;
+            _itemLocation = itemLocation;
+            _itemId = itemId;
             _itemActive = true;
         }
 

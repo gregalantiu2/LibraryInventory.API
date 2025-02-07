@@ -41,7 +41,7 @@ namespace LibraryInventory.Data.Repositories
 
         public async Task<ItemEntity?> GetItemAsync(int itemId)
         {
-            return await _context.Items
+            var item = await _context.Items
                 .Include(i => i.ItemType)
                 .Include(i => i.ItemPolicy)
                 .ThenInclude(i => i.ItemFineOccurenceType)
@@ -49,6 +49,13 @@ namespace LibraryInventory.Data.Repositories
                 .Include(i => i.ItemType)
                 .ThenInclude(i => i.ItemTypeProperties)
                 .FirstOrDefaultAsync(i => i.ItemId == itemId && i.ItemActive);
+
+            if (item == null)
+            {
+                throw new InvalidOperationException($"Item {itemId} not found");
+            }
+
+            return item;
         }
 
         public async Task<ItemBorrowStatusEntity?> GetItemBorrowStatusAsync(int itemId)

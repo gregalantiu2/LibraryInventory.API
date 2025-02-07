@@ -1,30 +1,30 @@
 --Deletions
 	DELETE FROM [LibraryInventory].[dbo].[Employee]
-	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[Employee]', RESEED, 0);
+	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[Employee]', RESEED, 1);
 	DELETE FROM [LibraryInventory].[dbo].[Item]
-	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[Item]', RESEED, 0);
+	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[Item]', RESEED, 1);
 	DELETE FROM [LibraryInventory].[dbo].[ItemBorrowStatus]
-	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[ItemBorrowStatus]', RESEED, 0);
+	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[ItemBorrowStatus]', RESEED, 1);
     DELETE FROM [LibraryInventory].[dbo].[ItemFineOccurenceType]
-	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[ItemFineOccurenceType]', RESEED, 0);
+	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[ItemFineOccurenceType]', RESEED, 1);
 	DELETE FROM [LibraryInventory].[dbo].[ItemPolicy]
-	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[ItemPolicy]', RESEED, 0);
+	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[ItemPolicy]', RESEED, 1);
 	DELETE FROM [LibraryInventory].[dbo].[ItemType]
-	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[ItemType]', RESEED, 0);
+	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[ItemType]', RESEED, 1);
 	DELETE FROM [LibraryInventory].[dbo].[Member]
-	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[Member]', RESEED, 0);
+	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[Member]', RESEED, 1);
 	DELETE FROM [LibraryInventory].[dbo].[Transaction]
-	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[Transaction]', RESEED, 0);
+	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[Transaction]', RESEED, 1);
 	DELETE FROM [LibraryInventory].[dbo].[TransactionPayment]
-	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[TransactionPayment]', RESEED, 0);
+	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[TransactionPayment]', RESEED, 1);
 	DELETE FROM [LibraryInventory].[dbo].[TransactionPaymentType]
-	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[TransactionPaymentType]', RESEED, 0);
+	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[TransactionPaymentType]', RESEED, 1);
 	DELETE FROM [LibraryInventory].[dbo].[TransactionType]
-	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[TransactionType]', RESEED, 0);
+	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[TransactionType]', RESEED, 1);
 	DELETE FROM [LibraryInventory].[dbo].[ContactInfo]
-	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[ContactInfo]', RESEED, 0);
+	DBCC CHECKIDENT ('[LibraryInventory].[dbo].[ContactInfo]', RESEED, 1);
 	DELETE FROM [LibraryInventory].[dbo].[EmployeeType]
-DBCC CHECKIDENT ('[LibraryInventory].[dbo].[EmployeeType]', RESEED, 0);
+DBCC CHECKIDENT ('[LibraryInventory].[dbo].[EmployeeType]', RESEED, 1);
 
 
 --Transaction Type

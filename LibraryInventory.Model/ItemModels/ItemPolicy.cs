@@ -21,9 +21,8 @@
                            ,int checkoutDays
                            ,decimal fineAmount
                            ,ItemFineOccurenceType itemFineOccurenceType
-                           ,int? itemPolicyId)
+                           ,int? itemPolicyId = null)
         {
-
             _itemPolicyName = itemPolicyName;
             _allowedToCheckout = allowedToCheckout;
             _maxRenewalsAllowed = maxRenewalsAllowed;

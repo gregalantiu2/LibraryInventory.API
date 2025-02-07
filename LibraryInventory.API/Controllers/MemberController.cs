@@ -59,6 +59,34 @@ namespace LibraryInventory.API.Controllers
             return Ok(member);
         }
 
+        [HttpGet]
+        [Route("getMemberContactInfo/{memberId}")]
+        public async Task<ActionResult> GetMemberContactInfo(string memberId)
+        {
+            if (memberId.IsNullOrEmpty())
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(memberId)));
+            }
+
+            var contactInfo = await _memberService.GetMemberContactInfoAsync(memberId);
+
+            return Ok(contactInfo);
+        }
+
+        [HttpGet]
+        [Route("getTotalAmountOwed/{memberId}")]
+        public async Task<ActionResult> GetTotalAmountOwed(string memberId)
+        {
+            if (memberId.IsNullOrEmpty())
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(memberId)));
+            }
+
+            var totalAmountOwed = await _memberService.GetMemberTotalAmountOwed(memberId);
+
+            return Ok(totalAmountOwed);
+        }
+
         [HttpPost]
         [Route("addMember")]
         public async Task<ActionResult> AddMember([FromBody] MemberRequest newMember)
@@ -118,34 +146,6 @@ namespace LibraryInventory.API.Controllers
             await _memberService.DeleteMemberAsync(memberId);
 
             return Ok(MessageHelper<Member>.Success());
-        }
-
-        [HttpGet]
-        [Route("getMemberContactInfo/{memberId}")]
-        public async Task<ActionResult> GetMemberContactInfo(string memberId)
-        {
-            if (memberId.IsNullOrEmpty())
-            {
-                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(memberId)));
-            }
-
-            var contactInfo = await _memberService.GetMemberContactInfoAsync(memberId);
-
-            return Ok(contactInfo);
-        }
-
-        [HttpGet]
-        [Route("getTotalAmountOwed/{memberId}")]
-        public async Task<ActionResult> GetTotalAmountOwed(string memberId)
-        {
-            if (memberId.IsNullOrEmpty())
-            {
-                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(memberId)));
-            }
-
-            var totalAmountOwed = await _memberService.GetMemberTotalAmountOwed(memberId);
-
-            return Ok(totalAmountOwed);
         }
     }
 }

@@ -64,11 +64,10 @@ namespace LibraryInventory.Service
                                   , result.ItemBorrowStatus.FineAmountAccrued
                                   , result.ItemBorrowStatus.MemberKeyId);
 
-                return new Item(result.ItemId, result.ItemTitle, result.ItemDescription, itemType, itemPolicy, status, null);
+                return new Item(result.ItemTitle, result.ItemDescription, itemType, itemPolicy, status, null, result.ItemId);
             }
 
-            return new Item(result.ItemId, result.ItemTitle, result.ItemDescription, itemType, itemPolicy, null, null);
-            //return _mapper.Map<Item>(result);
+            return new Item(result.ItemTitle, result.ItemDescription, itemType, itemPolicy, null, null, result.ItemId);
         }
 
         public async Task<ItemBorrowStatus> GetItemBorrowStatusAsync(int itemId)

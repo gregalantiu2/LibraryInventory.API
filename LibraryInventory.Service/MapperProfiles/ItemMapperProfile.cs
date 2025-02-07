@@ -68,18 +68,18 @@ namespace LibraryInventory.Service.MapperProfiles
                 .ForCtorParam("itemDescription", opt => opt.MapFrom(src => src.ItemDescription))
                 .ForCtorParam("itemType", opt => opt.MapFrom(src => src.ItemType))
                 .ForCtorParam("itemPolicy", opt => opt.MapFrom(src => src.ItemPolicy))
+                .ForCtorParam("itemBorrowStatus", opt => opt.MapFrom(src => src.ItemBorrowStatus))
                 .ForCtorParam("itemLocation", opt => opt.MapFrom(src => src.ItemLocation))
-                .ForCtorParam("itemId", opt => opt.MapFrom(src => src.ItemId))
-                .ForMember(dest => dest.ItemPolicy, opt => opt.MapFrom(src => src.ItemPolicy));
+                .ForCtorParam("itemId", opt => opt.MapFrom(src => src.ItemId));
 
             CreateMap<ItemPolicyEntity, ItemPolicy>()
-                .ForCtorParam("itemPolicyId", opt => opt.MapFrom(src => src.ItemPolicyId))
                 .ForCtorParam("itemPolicyName", opt => opt.MapFrom(src => src.ItemPolicyName))
                 .ForCtorParam("allowedToCheckout", opt => opt.MapFrom(src => src.AllowedToCheckout))
                 .ForCtorParam("maxRenewalsAllowed", opt => opt.MapFrom(src => src.MaxRenewalsAllowed))
                 .ForCtorParam("checkoutDays", opt => opt.MapFrom(src => src.CheckoutDays))
                 .ForCtorParam("fineAmount", opt => opt.MapFrom(src => src.FineAmount))
-                .ForCtorParam("itemFineOccurenceType", opt => opt.MapFrom(src => src.ItemFineOccurenceType));
+                .ForCtorParam("itemFineOccurenceType", opt => opt.MapFrom(src => src.ItemFineOccurenceType))
+                .ForCtorParam("itemPolicyId", opt => opt.MapFrom(src => src.ItemPolicyId));
 
             CreateMap<ItemFineOccurenceTypeEntity, ItemFineOccurenceType>()
                 .ForCtorParam("itemFineOccurenceTypeId", opt => opt.MapFrom(src => src.ItemFineOccurenceTypeId))
