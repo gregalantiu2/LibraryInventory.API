@@ -19,6 +19,16 @@ namespace LibraryInventory.Service
 
         public async Task<Employee> AddEmployeeAsync(Employee employee)
         {
+            if (employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee));
+            }
+
+            if (employee.EmployeeId != null)
+            {
+                throw new ArgumentException("EmployeeId should not be provided when adding a new employee", nameof(employee));
+            }
+
             var result = await _employeeRepository.AddEmployeeAsync(_mapper.Map<EmployeeEntity>(employee));
             return _mapper.Map<Employee>(result);
         }

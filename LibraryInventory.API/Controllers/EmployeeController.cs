@@ -7,6 +7,7 @@ using LibraryInventory.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibraryInventory.API.Controllers
 {
@@ -25,11 +26,15 @@ namespace LibraryInventory.API.Controllers
             _mapper = mapper;
         }
 
-
         [HttpGet]
         [Route("getEmployee/{employeeId}")]
         public async Task<ActionResult> GetEmployee(string employeeId)
         {
+            if (employeeId.IsNullOrEmpty())
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(employeeId)));
+            }
+
             var employee = await _employeeService.GetEmployeeAsync(employeeId);
 
             if (employee == null)
@@ -44,6 +49,11 @@ namespace LibraryInventory.API.Controllers
         [Route("getEmployeeContactInfo/{employeeId}")]
         public async Task<ActionResult> GetEmployeeContactInfo(string employeeId)
         {
+            if (employeeId.IsNullOrEmpty())
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(employeeId)));
+            }
+
             var contactInfo = await _employeeService.GetEmployeeContactInfo(employeeId);
 
             if (contactInfo == null)
@@ -54,21 +64,14 @@ namespace LibraryInventory.API.Controllers
             return Ok(contactInfo);
         }
 
-        // Admin level endpoints 
-
         [HttpPost]
         [Route("addEmployee")]
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<ActionResult> AddEmployee([FromBody] EmployeeRequest newEmployee)
         {
-            if (newEmployee.EmployeeId is not null && await _employeeService.EmployeeExistsAsync(newEmployee.EmployeeId))
+            if (!ModelState.IsValid)
             {
-                return BadRequest(MessageHelper<Employee>.ObjectNull());
-            }
-
-            if (newEmployee == null)
-            {
-                return BadRequest(MessageHelper<Employee>.ObjectNull());
+                return BadRequest(ModelState);
             }
 
             var employee = await _employeeService.AddEmployeeAsync(_mapper.Map<Employee>(newEmployee));
@@ -81,19 +84,14 @@ namespace LibraryInventory.API.Controllers
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<ActionResult> UpdateEmployee(string employeeId, [FromBody] EmployeeRequest employee)
         {
-            if (employee == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(MessageHelper<Employee>.ObjectNull());
+                return BadRequest(ModelState);
             }
 
             if (employeeId != employee.EmployeeId)
             {
                 return BadRequest(MessageHelper<Employee>.MismatchIds(employeeId, employee.EmployeeId));
-            }
-
-            if (!await _employeeService.EmployeeExistsAsync(employeeId))
-            {
-                return NotFound(MessageHelper<Employee>.NotFound(employeeId));
             }
 
             var updatedEmployee = await _employeeService.UpdateEmployeeAsync(_mapper.Map<Employee>(employee));
@@ -106,9 +104,9 @@ namespace LibraryInventory.API.Controllers
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<ActionResult> InactivateEmployee(string employeeId)
         {
-            if (!await _employeeService.EmployeeExistsAsync(employeeId))
+            if (employeeId.IsNullOrEmpty())
             {
-                return NotFound(MessageHelper<Employee>.NotFound(employeeId));
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(employeeId)));
             }
 
             await _employeeService.InactivateEmployeeAsync(employeeId);
@@ -121,9 +119,9 @@ namespace LibraryInventory.API.Controllers
         [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
         public async Task<ActionResult> DeleteEmployee(string employeeId)
         {
-            if (!await _employeeService.EmployeeExistsAsync(employeeId))
+            if (employeeId.IsNullOrEmpty())
             {
-                return NotFound(MessageHelper<Employee>.NotFound(employeeId));
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(employeeId)));
             }
 
             await _employeeService.DeleteEmployeeAsync(employeeId);

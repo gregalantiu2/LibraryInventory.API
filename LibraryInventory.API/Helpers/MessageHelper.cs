@@ -29,5 +29,10 @@ namespace LibraryInventory.API.Extensions
         {
             return $"{memberName}: Success";
         }
+
+        public static string RequiredParam(string nameOfParam, [CallerMemberName] string memberName = "")
+        {
+            return $"{memberName}: Required query param ({nameOfParam}) is missing";
+        }
     }
 }

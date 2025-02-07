@@ -34,13 +34,18 @@ namespace LibraryInventory.API.Controllers
 
         [HttpGet]
         [Route("getItem/{itemId}")]
-        public async Task<ActionResult> GetItem(int itemId)
+        public async Task<ActionResult> GetItem(int? itemId)
         {
-            var item = await _itemService.GetItemAsync(itemId);
+            if (itemId == null)
+            {
+                return BadRequest(MessageHelper<Item>.RequiredParam(nameof(itemId)));
+            }
+
+            var item = await _itemService.GetItemAsync(itemId.Value);
 
             if (item == null)
             {
-                return NotFound(MessageHelper<Item>.NotFound(itemId.ToString()));
+                return NotFound(MessageHelper<Item>.NotFound(itemId.Value.ToString()));
             }
 
             return Ok(item);
@@ -50,9 +55,9 @@ namespace LibraryInventory.API.Controllers
         [Route("addItem")]
         public async Task<ActionResult> AddItem([FromBody] ItemRequest newItem)
         {
-            if (newItem == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(MessageHelper<Item>.ObjectNull());
+                return BadRequest(ModelState);
             }
 
             var item = await _itemService.AddItemAsync(_mapper.Map<Item>(newItem));
@@ -64,14 +69,14 @@ namespace LibraryInventory.API.Controllers
         [Route("updateItem/{itemId}")]
         public async Task<ActionResult> UpdateItem(int itemId, [FromBody] ItemRequest item)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (itemId != item.ItemId)
             {
                 return BadRequest(MessageHelper<Item>.MismatchIds(itemId.ToString(), item.ItemId.ToString()));
-            }
-
-            if (await _itemService.ItemExistsAsync(itemId) == false)
-            {
-                return NotFound(MessageHelper<Item>.NotFound(itemId.ToString()));
             }
 
             var updatedItem = await _itemService.UpdateItemAsync(_mapper.Map<Item>(item));
@@ -81,50 +86,60 @@ namespace LibraryInventory.API.Controllers
 
         [HttpPut]
         [Route("inactivateItem/{itemId}")]
-        public async Task<ActionResult> InactivateItem(int itemId)
+        public async Task<ActionResult> InactivateItem(int? itemId)
         {
-            if (!await _itemService.ItemExistsAsync(itemId))
+            if (itemId == null)
             {
-                return NotFound(MessageHelper<Item>.NotFound(itemId.ToString()));
+                return BadRequest(MessageHelper<Item>.RequiredParam(nameof(itemId)));
             }
-
-            await _itemService.InactivateItemAsync(itemId);
+            
+            await _itemService.InactivateItemAsync(itemId.Value);
 
             return Ok(MessageHelper<Item>.Success());
         }
 
         [HttpDelete]
         [Route("deleteItem/{itemId}")]
-        public async Task<ActionResult> DeleteItem(int itemId)
+        public async Task<ActionResult> DeleteItem(int? itemId)
         {
-            if (!await _itemService.ItemExistsAsync(itemId))
+            if (itemId == null)
             {
-                return NotFound(MessageHelper<Item>.NotFound(itemId.ToString()));
+                return BadRequest(MessageHelper<Item>.RequiredParam(nameof(itemId)));
             }
 
-            await _itemService.DeleteItemAsync(itemId);
+            await _itemService.DeleteItemAsync(itemId.Value);
 
             return Ok(MessageHelper<Item>.Success());
         }
 
         [HttpGet]
         [Route("getItemBorrowStatus/{itemId}")]
-        public async Task<ActionResult> GetItemBorrowStatus(int itemId)
+        public async Task<ActionResult> GetItemBorrowStatus(int? itemId)
         {
-            var status = await _itemService.GetItemBorrowStatusAsync(itemId);
+            if (itemId == null)
+            {
+                return BadRequest(MessageHelper<Item>.RequiredParam(nameof(itemId)));
+            }
+
+            var status = await _itemService.GetItemBorrowStatusAsync(itemId.Value);
 
             return Ok(status);
         }
 
         [HttpGet]
         [Route("getPolicyForItem/{itemId}")]
-        public async Task<ActionResult> GetPolicyForItem(int itemId)
+        public async Task<ActionResult> GetPolicyForItem(int? itemId)
         {
-            var policy = await _itemService.GetPolicyForItemAsync(itemId);
+            if (itemId == null)
+            {
+                return BadRequest(MessageHelper<Item>.RequiredParam(nameof(itemId)));
+            }
+
+            var policy = await _itemService.GetPolicyForItemAsync(itemId.Value);
 
             if(policy == null)
             {
-                return NotFound(MessageHelper<ItemPolicy>.NotFound(itemId.ToString()));
+                return NotFound(MessageHelper<ItemPolicy>.NotFound(itemId.Value.ToString()));
             }
 
             return Ok(policy);
@@ -132,13 +147,18 @@ namespace LibraryInventory.API.Controllers
 
         [HttpGet]
         [Route("getItemPolicy/{itemPolicyId}")]
-        public async Task<ActionResult> GetItemPolicy(int itemPolicyId)
+        public async Task<ActionResult> GetItemPolicy(int? itemPolicyId)
         {
-            var policy = await _itemService.GetItemPolicyAsync(itemPolicyId);
+            if (itemPolicyId == null)
+            {
+                return BadRequest(MessageHelper<Item>.RequiredParam(nameof(itemPolicyId)));
+            }
+
+            var policy = await _itemService.GetItemPolicyAsync(itemPolicyId.Value);
 
             if (policy == null)
             {
-                return NotFound(MessageHelper<ItemPolicy>.NotFound(itemPolicyId.ToString()));
+                return NotFound(MessageHelper<ItemPolicy>.NotFound(itemPolicyId.Value.ToString()));
             }
 
             return Ok(policy);
@@ -148,9 +168,9 @@ namespace LibraryInventory.API.Controllers
         [Route("addItemPolicy")]
         public async Task<ActionResult> AddtemPolicyAsync([FromBody] ItemPolicyRequest itemPolicy)
         {
-            if (itemPolicy == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(MessageHelper<ItemPolicy>.ObjectNull());
+                return BadRequest(ModelState);
             }
 
             var policy = await _itemService.AddtemPolicyAsync(_mapper.Map<ItemPolicy>(itemPolicy));
@@ -167,9 +187,9 @@ namespace LibraryInventory.API.Controllers
                 return BadRequest(MessageHelper<ItemPolicy>.MismatchIds(itemPolicyId.ToString(), itemPolicy.ItemPolicyId.ToString()));
             }
 
-            if (!await _itemService.ItemPolicyExistsAsync(itemPolicyId))
+            if (!ModelState.IsValid)
             {
-                return NotFound(MessageHelper<Item>.NotFound(itemPolicyId.ToString()));
+                return BadRequest(ModelState);
             }
 
             var updatedPolicy = await _itemService.UpdateItemPolicyAsync(_mapper.Map<ItemPolicy>(itemPolicy));
@@ -179,14 +199,14 @@ namespace LibraryInventory.API.Controllers
 
         [HttpDelete]
         [Route("deleteItemPolicy/{itemPolicyId}")]
-        public async Task<ActionResult> DeleteItemPolicy(int itemPolicyId)
+        public async Task<ActionResult> DeleteItemPolicy(int? itemPolicyId)
         {
-            if (await _itemService.ItemPolicyExistsAsync(itemPolicyId) == false)
+            if (itemPolicyId == null)
             {
-                return NotFound(MessageHelper<ItemPolicy>.NotFound(itemPolicyId.ToString()));
+                return BadRequest(MessageHelper<Item>.RequiredParam(nameof(itemPolicyId)));
             }
 
-            await _itemService.DeleteItemPolicyAsync(itemPolicyId);
+            await _itemService.DeleteItemPolicyAsync(itemPolicyId.Value);
 
             return Ok(MessageHelper<ItemPolicy>.Success());
         }

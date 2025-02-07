@@ -1,5 +1,4 @@
-﻿using AutoMapper.Execution;
-using LibraryInventory.API.Extensions;
+﻿using LibraryInventory.API.Extensions;
 using LibraryInventory.Model.ItemModels;
 using LibraryInventory.Model.PersonModels;
 using LibraryInventory.Model.RequestModels.Transaction;
@@ -7,8 +6,8 @@ using LibraryInventory.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
-using System.Transactions;
 using Member = LibraryInventory.Model.PersonModels.Member;
+using Transaction = LibraryInventory.Model.TransactionModels.Transaction;
 
 namespace LibraryInventory.API.Controllers
 {
@@ -31,13 +30,18 @@ namespace LibraryInventory.API.Controllers
 
         [HttpGet]
         [Route("getTransaction/{transactionId}")]
-        public async Task<ActionResult> GetTransaction(int transactionId)
+        public async Task<ActionResult> GetTransaction(int? transactionId)
         {
-            var transaction = await _transactionService.GetTransactionAsync(transactionId);
+            if (transactionId == null)
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(transactionId)));
+            }
+
+            var transaction = await _transactionService.GetTransactionAsync(transactionId.Value);
 
             if (transaction == null)
             {
-                return NotFound(MessageHelper<Transaction>.NotFound(transactionId.ToString()));
+                return NotFound(MessageHelper<Transaction>.NotFound(transactionId.Value.ToString()));
             }
 
             return Ok(transaction);
@@ -45,18 +49,28 @@ namespace LibraryInventory.API.Controllers
 
         [HttpGet]
         [Route("getTransactionsByMember/{memberId}")]
-        public async Task<ActionResult> GetTransactionsByMember(int memberId, int? daysToLookBack = null)
+        public async Task<ActionResult> GetTransactionsByMember(int? memberId, int? daysToLookBack = null)
         {
-            var transactions = await _transactionService.GetTransactionsByMemberAsync(memberId, daysToLookBack);
+            if (memberId == null)
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(memberId)));
+            }
+
+            var transactions = await _transactionService.GetTransactionsByMemberAsync(memberId.Value, daysToLookBack);
 
             return Ok(transactions);
         }
 
         [HttpGet]
         [Route("getTransactionsByItem/{itemId}")]
-        public async Task<ActionResult> GetTransactionsByItem(int itemId, int? daysToLookBack = null)
+        public async Task<ActionResult> GetTransactionsByItem(int? itemId, int? daysToLookBack = null)
         {
-            var transactions = await _transactionService.GetTransactionsByItemAsync(itemId, daysToLookBack);
+            if (itemId == null)
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(itemId)));
+            }
+
+            var transactions = await _transactionService.GetTransactionsByItemAsync(itemId.Value, daysToLookBack);
 
             return Ok(transactions);
         }
@@ -72,22 +86,37 @@ namespace LibraryInventory.API.Controllers
 
         [HttpGet]
         [Route("getTransactionsByType/{transactionTypeId}")]
-        public async Task<ActionResult> GetTransactionsByType(int transactionTypeId, int? daysToLookBack = null)
+        public async Task<ActionResult> GetTransactionsByType(int? transactionTypeId, int? daysToLookBack = null)
         {
-            var transactions = await _transactionService.GetTransactionsByTypeAsync(transactionTypeId, daysToLookBack);
+            if (transactionTypeId == null)
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(transactionTypeId)));
+            }
+
+            var transactions = await _transactionService.GetTransactionsByTypeAsync(transactionTypeId.Value, daysToLookBack);
 
             return Ok(transactions);
         }
 
         [HttpPost]
         [Route("checkoutItemTransaction")]
-        public async Task<ActionResult> CheckoutItemTransaction(int itemId, string memberId)
+        public async Task<ActionResult> CheckoutItemTransaction(int? itemId, string memberId)
         {
-            var item = await _itemService.GetItemAsync(itemId);
+            if (itemId == null)
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(itemId)));
+            }
+
+            if (memberId == null)
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(memberId)));
+            }
+
+            var item = await _itemService.GetItemAsync(itemId.Value);
 
             if (item == null)
             {
-                return NotFound(MessageHelper<Item>.NotFound(itemId.ToString()));
+                return NotFound(MessageHelper<Item>.NotFound(itemId.Value.ToString()));
             }
 
             var member = await _memberService.GetMemberbyMemberIdAsync(memberId);
@@ -106,9 +135,9 @@ namespace LibraryInventory.API.Controllers
         [Route("returnItemTransaction")]
         public async Task<ActionResult> ReturnItemTransaction([FromBody] TransactionRequest request)
         {
-            if (!await _itemService.ItemExistsAsync(request.ItemId))
+            if (!ModelState.IsValid)
             {
-                return NotFound(MessageHelper<Item>.NotFound(request.ItemId.ToString()));
+                return BadRequest(ModelState);
             }
 
             var member = await _memberService.GetMemberbyMemberIdAsync(request.MemberId);
@@ -127,6 +156,11 @@ namespace LibraryInventory.API.Controllers
         [Route("renewItemTranaction")]
         public async Task<ActionResult> RenewItemTransaction([FromBody] TransactionRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var itemStatus = await _itemService.GetItemBorrowStatusAsync(request.ItemId);
 
             if (itemStatus == null)
@@ -150,6 +184,11 @@ namespace LibraryInventory.API.Controllers
         [Route("paymentOfFineTransaction")]
         public async Task<ActionResult> PaymentOfFineTransaction(TransactionPaymentRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var member = await _memberService.GetMemberbyMemberIdAsync(request.MemberId);
 
             if (member == null)

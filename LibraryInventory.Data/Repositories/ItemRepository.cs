@@ -89,33 +89,40 @@ namespace LibraryInventory.Data.Repositories
         {
             var item = await _context.Items.FindAsync(itemId);
 
-            if (item != null)
+            if (item == null)
             {
-                _context.Items.Remove(item);
-                await _context.SaveChangesAsync();
+                throw new InvalidOperationException($"Item {itemId} not found");
+
             }
+
+            _context.Items.Remove(item);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteItemPolicyAsync(int itemPolicyId)
         {
             var itemPolicy = await _context.ItemPolicies.FindAsync(itemPolicyId);
 
-            if (itemPolicy != null)
+            if (itemPolicy == null)
             {
-                _context.ItemPolicies.Remove(itemPolicy);
-                await _context.SaveChangesAsync();
+                throw new InvalidOperationException($"Item policy {itemPolicyId} not found");
             }
+
+            _context.ItemPolicies.Remove(itemPolicy);
+            await _context.SaveChangesAsync();
         }
 
         public async Task InactivateItemAsync(int itemId)
         {
             var item = await _context.Items.FindAsync(itemId);
 
-            if (item != null)
+            if (item == null)
             {
-                item.ItemActive = false;
-                await _context.SaveChangesAsync();
+                throw new InvalidOperationException($"Item {itemId} not found");
             }
+
+            item.ItemActive = false;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> ItemExistsAsync(int itemId)

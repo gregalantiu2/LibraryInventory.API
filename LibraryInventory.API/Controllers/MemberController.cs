@@ -7,6 +7,7 @@ using LibraryInventory.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LibraryInventory.API.Controllers
 {
@@ -29,6 +30,11 @@ namespace LibraryInventory.API.Controllers
         [Route("search/{searchTerm}")]
         public async Task<ActionResult> SearchMembers(string searchTerm)
         {
+            if (searchTerm.IsNullOrEmpty())
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(searchTerm)));
+            }
+
             var result = await _memberService.SearchMembersAsync(searchTerm);
 
             return Ok(result);
@@ -38,6 +44,11 @@ namespace LibraryInventory.API.Controllers
         [Route("getMember/{memberId}")]
         public async Task<ActionResult> GetMemberByMemberId(string memberId)
         {
+            if (memberId.IsNullOrEmpty())
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(memberId)));
+            }
+
             var member = await _memberService.GetMemberbyMemberIdAsync(memberId);
 
             if (member == null)
@@ -52,9 +63,9 @@ namespace LibraryInventory.API.Controllers
         [Route("addMember")]
         public async Task<ActionResult> AddMember([FromBody] MemberRequest newMember)
         {
-            if (newMember == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(MessageHelper<Member>.ObjectNull());
+                return BadRequest(ModelState);
             }
 
             var member = await _memberService.AddMemberAsync(_mapper.Map<Member>(newMember));
@@ -66,14 +77,14 @@ namespace LibraryInventory.API.Controllers
         [Route("updateMember/{memberId}")]
         public async Task<ActionResult> UpdateMember(string memberId, [FromBody] MemberRequest member)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (memberId != member.MemberId)
             {
                 return BadRequest($"{memberId} query param does not match memberId in resource object");
-            }
-
-            if (await _memberService.MemberExistsAsync(memberId) == false)
-            {
-                return NotFound(MessageHelper<Member>.NotFound(memberId));
             }
 
             var updatedMember = await _memberService.UpdateMemberAsync(_mapper.Map<Member>(member));
@@ -85,9 +96,9 @@ namespace LibraryInventory.API.Controllers
         [Route("inactivateMember/{memberId}")]
         public async Task<ActionResult> InactivateMember(string memberId)
         {
-            if (await _memberService.MemberExistsAsync(memberId) == false)
+            if (memberId.IsNullOrEmpty())
             {
-                return NotFound(MessageHelper<Member>.NotFound(memberId));
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(memberId)));
             }
 
             await _memberService.InactivateMemberAsync(memberId);
@@ -99,9 +110,9 @@ namespace LibraryInventory.API.Controllers
         [Route("deleteMember/{memberId}")]
         public async Task<ActionResult> DeleteMember(string memberId)
         {
-            if (await _memberService.MemberExistsAsync(memberId) == false)
+            if (memberId.IsNullOrEmpty())
             {
-                return NotFound(MessageHelper<Member>.NotFound(memberId));
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(memberId)));
             }
 
             await _memberService.DeleteMemberAsync(memberId);
@@ -113,6 +124,11 @@ namespace LibraryInventory.API.Controllers
         [Route("getMemberContactInfo/{memberId}")]
         public async Task<ActionResult> GetMemberContactInfo(string memberId)
         {
+            if (memberId.IsNullOrEmpty())
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(memberId)));
+            }
+
             var contactInfo = await _memberService.GetMemberContactInfoAsync(memberId);
 
             return Ok(contactInfo);
@@ -122,6 +138,11 @@ namespace LibraryInventory.API.Controllers
         [Route("getTotalAmountOwed/{memberId}")]
         public async Task<ActionResult> GetTotalAmountOwed(string memberId)
         {
+            if (memberId.IsNullOrEmpty())
+            {
+                return BadRequest(MessageHelper<Employee>.RequiredParam(nameof(memberId)));
+            }
+
             var totalAmountOwed = await _memberService.GetMemberTotalAmountOwed(memberId);
 
             return Ok(totalAmountOwed);
