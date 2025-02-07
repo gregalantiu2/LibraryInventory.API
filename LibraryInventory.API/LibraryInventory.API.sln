@@ -3,17 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryInventory.API", "LibraryInventory.API.csproj", "{649B4821-2466-4845-90D0-B2621057A71B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryInventory.API", "LibraryInventory.API.csproj", "{649B4821-2466-4845-90D0-B2621057A71B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryInventory.Service", "..\LibraryInventory.Service\LibraryInventory.Service.csproj", "{D27FCE84-570C-40BD-98F8-C7833AD29DED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryInventory.Service", "..\LibraryInventory.Service\LibraryInventory.Service.csproj", "{D27FCE84-570C-40BD-98F8-C7833AD29DED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryInventory.Model", "..\LibraryInventory.Model\LibraryInventory.Model.csproj", "{4C286169-AB22-4422-B828-E3CA4F6F0B9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryInventory.Model", "..\LibraryInventory.Model\LibraryInventory.Model.csproj", "{4C286169-AB22-4422-B828-E3CA4F6F0B9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryInventory.Data", "..\LibraryInventory.Data\LibraryInventory.Data.csproj", "{9FC5AE96-4A61-427C-8F4E-B68C08735561}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryInventory.Data", "..\LibraryInventory.Data\LibraryInventory.Data.csproj", "{9FC5AE96-4A61-427C-8F4E-B68C08735561}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryInventory.Test", "..\LibraryInventory.Test\LibraryInventory.Test.csproj", "{8A8E2C45-F6DF-41A3-965D-4AF7F0902A7A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryInventory.Proxy", "..\LibraryInventory.Proxy\LibraryInventory.Proxy.csproj", "{AC0E2C2A-2C0B-4458-AFDC-7FF5FA1BD714}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryInventory.Test", "..\LibraryInventory.Test\LibraryInventory.Test.csproj", "{8A8E2C45-F6DF-41A3-965D-4AF7F0902A7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +39,6 @@ Global
 		{8A8E2C45-F6DF-41A3-965D-4AF7F0902A7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A8E2C45-F6DF-41A3-965D-4AF7F0902A7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A8E2C45-F6DF-41A3-965D-4AF7F0902A7A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC0E2C2A-2C0B-4458-AFDC-7FF5FA1BD714}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC0E2C2A-2C0B-4458-AFDC-7FF5FA1BD714}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC0E2C2A-2C0B-4458-AFDC-7FF5FA1BD714}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC0E2C2A-2C0B-4458-AFDC-7FF5FA1BD714}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
