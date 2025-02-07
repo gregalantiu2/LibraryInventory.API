@@ -18,13 +18,13 @@ namespace LibraryInventory.API.Middleware
         {
             if (context.User?.Identity?.IsAuthenticated == true)
             {
-                var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId))
+                var userName = context.User.FindFirst("name")?.Value;
+                if (string.IsNullOrEmpty(userName))
                 {
-                    _logger.LogError("User Id claim not found.");
+                    _logger.LogError("User name not found.");
                     throw new InvalidOperationException("User Id claim not found.");
                 }
-                userContextService.UserId = userId;
+                userContextService.UserId = userName;
             }
             else
             {
