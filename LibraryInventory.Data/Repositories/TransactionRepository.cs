@@ -73,69 +73,63 @@ namespace LibraryInventory.Data.Repositories
 
         public async Task<IEnumerable<TransactionEntity>> GetTransactionsByItemAsync(int itemId, int? daysToLookBack = null)
         {
-            var query = _context.Transactions
-                .Include(t => t.TransactionType)
-                .Include(t => t.Item)
-                .Include(t => t.Member)
-                .Where(t => t.ItemId == itemId);
-
-            if (daysToLookBack == null)
+            if (daysToLookBack != null)
             {
                 var pastDate = DateTime.UtcNow.AddDays(-daysToLookBack.Value);
 
-                return _context.Transactions
+                return await _context.Transactions
                             .Include(t => t.TransactionType)
                             .Include(t => t.Item)
                             .Include(t => t.Member)
-                            .Where(t => t.ItemId == itemId && t.CreatedDate >= pastDate);
+                            .Where(t => t.ItemId == itemId && t.CreatedDate >= pastDate).ToListAsync();
             }
 
-            return _context.Transactions
+            return await _context.Transactions
                         .Include(t => t.TransactionType)
                         .Include(t => t.Item)
                         .Include(t => t.Member)
-                        .Where(t => t.ItemId == itemId);
+                        .Where(t => t.ItemId == itemId).ToListAsync();
         }
 
         public async Task<IEnumerable<TransactionEntity>> GetTransactionsByMemberAsync(int memberId, int? daysToLookBack = null)
         {
-            if (daysToLookBack == null)
+            if (daysToLookBack != null)
             {
                 var pastDate = DateTime.UtcNow.AddDays(-daysToLookBack.Value);
 
-                return _context.Transactions
+                return await _context.Transactions
                             .Include(t => t.TransactionType)
                             .Include(t => t.Item)
                             .Include(t => t.Member)
-                            .Where(t => t.MemberId == memberId && t.CreatedDate >= pastDate);
+                            .Where(t => t.MemberId == memberId && t.CreatedDate >= pastDate).ToListAsync();
             }
 
-            return _context.Transactions
+            return await _context.Transactions
                         .Include(t => t.TransactionType)
                         .Include(t => t.Item)
                         .Include(t => t.Member)
-                        .Where(t => t.MemberId == memberId);
+                        .Where(t => t.MemberId == memberId).ToListAsync();
         }
 
         public async Task<IEnumerable<TransactionEntity>> GetTransactionsByTypeAsync(int transactionTypeId, int? daysToLookBack = null)
         {
 
-            if (daysToLookBack == null)
+            if (daysToLookBack != null)
             {
                 var pastDate = DateTime.UtcNow.AddDays(-daysToLookBack.Value);
 
-                return _context.Transactions
+                return await _context.Transactions
                     .Include(t => t.TransactionType)
                     .Include(t => t.Item)
                     .Include(t => t.Member)
-                    .Where(t => t.TransactionTypeId == transactionTypeId && t.CreatedDate >= pastDate);
+                    .Where(t => t.TransactionTypeId == transactionTypeId && t.CreatedDate >= pastDate).ToListAsync();
             }
 
-            return _context.Transactions
+            return await _context.Transactions
                 .Include(t => t.TransactionType)
                 .Include(t => t.Item)
                 .Include(t => t.Member)
-                .Where(t => t.TransactionTypeId == transactionTypeId);
+                .Where(t => t.TransactionTypeId == transactionTypeId).ToListAsync();
         }
 
         public async Task<IEnumerable<TransactionTypeEntity>> GetTransactionTypesAsync()
